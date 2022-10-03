@@ -69,6 +69,28 @@ char generate_random(int &remainder){
     return itoc(random);
 }
 
+char scoring(char &knocked, char arr[][2], int totals[], int i, int j){
+    totals[i - 1] += char_to_int(knocked);
+    totals[10] += char_to_int(knocked);
+    
+    if(char_to_int(knocked) == 10 && j == 0){
+        arr[(i - 1)][j] = 'X';
+        arr[(i - 1)][j + 1] = ' ';
+        return 'x';
+    }else if(char_to_int(knocked) + char_to_int(arr[i - 1][j - 1]) == 10 && j == 1){
+        arr[(i - 1)][j - 1] = '/';
+        arr[(i - 1)][j] = ' ';
+        return 's';
+    }else if(char_to_int(knocked) == 0){
+         arr[(i - 1)][j] = '-';
+         return 'g';
+    }else{
+         arr[(i - 1)][j] = knocked;
+    }
+
+    return ' ';
+}
+
 void rolling(int i, char arr[][2], int totals[]){
     int remainder = 0;
 
@@ -81,7 +103,20 @@ void rolling(int i, char arr[][2], int totals[]){
 
         char knocked = generate_random(remainder);
 
-        arr[(i - 1)][j] = knocked;
+        char score = scoring(knocked, arr, totals, i, j);
+
+        if(score == 'x'){
+            std::cout << "You knocked down " << knocked << " pins. You got a Strike!\n\n";
+            print_frame(arr, totals);
+            break;
+        }
+        else if(score == 's'){
+            std::cout << "You knocked down " << knocked << " pins. You got a spare!\n\n";
+        }else if(score == 'g'){
+            std::cout << "You knocked down " << knocked << " pins. You guttered the ball.\n\n";
+        } else{
+            std::cout << "You knocked down " << knocked << " pins.\n\n";
+        }
 
         print_frame(arr, totals);
     } 
