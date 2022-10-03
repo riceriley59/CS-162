@@ -157,22 +157,51 @@ void print_frame(char pins[][3], int totals[]){
     std::cout << "---------------------------------------------------------------------------\n\n";
 }
 
+bool playagain(){
+    bool play = false;
+    char input = '\0';
+
+    std::cout << "\n\nDo you want to play again(y/n)?: ";
+
+    do{
+        input = '\0';
+        std::cin >> input;
+        if(input == 'y' ){
+            std::cout << "\n\nPlaying Again! \n\n";
+            std::cin.clear();
+            return true;
+        }else if(input == 'n'){
+            std::cout << "\n\nThanks for playing!";
+            return false;   
+        }else{
+            std::cout << "\n\nInvalid Input, Try Again: ";
+            std::cin.clear();
+            std::cin.ignore();
+            play = false;
+        }
+    }while(!play);
+
+    return false;
+}
+
 int main(){
     srand(time(NULL));
 
     char pins[10][3];
-    populate_char_array(pins);
-
     int totals[11];
-    populate_int_array(totals);
+     char name[MAX];
 
-    char name[MAX];
-    intro(name);
-    
-    for(int i = 0; i < 10; i++){
-        int result = 0;
-        rolling((i + 1), pins, totals);
-    }
+    do{
+        populate_char_array(pins);
+        populate_int_array(totals);
+
+        intro(name);
+        
+        for(int i = 0; i < 10; i++){
+            int result = 0;
+            rolling((i + 1), pins, totals);
+        }
+    }while(playagain());
 
     return 0;
 }
