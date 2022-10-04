@@ -97,7 +97,11 @@ char scoring(char &knocked, char arr[][3], int totals[], int i, int j){
 
 void pin_prompt(char score, char knocked){
     if(score == 's'){
-        std::cout << "You knocked down " << knocked << " pins. You got a spare!\n\n";
+        if(knocked == ':'){
+            std::cout << "You knocked down 10 pins. You got a spare!\n\n";
+        }else{
+            std::cout << "You knocked down " << knocked << " pins. You got a spare!\n\n";
+        }
     }else if(score == 'g'){
         std::cout << "You knocked down " << knocked << " pins. You guttered the ball.\n\n";
     } else{
@@ -120,14 +124,16 @@ void rolling(int i, char arr[][3], int totals[]){
             std::cout << "Frame " << i << "...\n";
         }
 
+        char score = '\0';
+
         press_enter();
 
         char knocked = generate_random(remainder);
 
-        char score = scoring(knocked, arr, totals, i, j);
+        score = scoring(knocked, arr, totals, i, j);
 
         if(score == 'x'){
-            std::cout << "You knocked down " << knocked << " pins. You got a Strike!\n\n";
+            std::cout << "You knocked down 10 pins. You got a Strike!\n\n";
             print_frame(arr, totals);
             break;
         }
