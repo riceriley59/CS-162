@@ -56,8 +56,14 @@ void populate_int_array(int arr[]){
 }
 
 int char_to_int(char integer){
-    int stoint = (int(integer) - 48);
-    return stoint;
+    if(integer == '-'){
+        return 0;
+    }else if(integer == 'X'){
+        return 10;
+    }
+    else{
+        return (int(integer) - 48);
+    }
 }
 
 char itoc(int i){
@@ -70,20 +76,20 @@ char generate_random(int &remainder){
 
     remainder += random;
 
-    return itoc(random);
+    //return itoc(random);
+    return itoc(10);  
 }
 
 char scoring(char &knocked, char arr[][3], int totals[], int i, int j){
-    totals[i - 1] += char_to_int(knocked);
     totals[10] += char_to_int(knocked);
+    totals[i - 1] = totals[10];
     
     if(char_to_int(knocked) == 10 && j == 0){
         arr[(i - 1)][j] = 'X';
         arr[(i - 1)][j + 1] = ' ';
         return 'x';
     }else if(char_to_int(knocked) + char_to_int(arr[i - 1][j - 1]) == 10 && j == 1){
-        arr[(i - 1)][j - 1] = '/';
-        arr[(i - 1)][j] = ' ';
+        arr[(i - 1)][j] = '/';
         return 's';
     }else if(char_to_int(knocked) == 0){
          arr[(i - 1)][j] = '-';
@@ -97,7 +103,7 @@ char scoring(char &knocked, char arr[][3], int totals[], int i, int j){
 
 void pin_prompt(char score, char knocked){
     if(score == 's'){
-        if(knocked == ':'){
+        if(char_to_int(knocked) == 10){
             std::cout << "You knocked down 10 pins. You got a spare!\n\n";
         }else{
             std::cout << "You knocked down " << knocked << " pins. You got a spare!\n\n";
@@ -129,6 +135,18 @@ void rolling(int i, char arr[][3], int totals[]){
         press_enter();
 
         char knocked = generate_random(remainder);
+
+        if(arr[i - 2][0] == 'X'){
+            totals[i - 2] += char_to_int(knocked);
+            totals[10] += char_to_int(knocked);
+            if(arr[i - 3][0] == 'X'){
+                totals[i - 3] += 10;
+                totals[10] += 10;
+            }
+        } else if(arr[i - 2][0] == '/' && j == 0){
+            totals[i - 2] += char_to_int(knocked);
+            totals[10] += char_to_int(knocked);
+        }
 
         score = scoring(knocked, arr, totals, i, j);
 
@@ -163,6 +181,7 @@ void print_frame(char pins[][3], int totals[]){
     std::cout << "---------------------------------------------------------------------------\n\n";
 }
 
+
 bool playagain(){
     bool play = false;
     char input = '\0';
@@ -190,12 +209,18 @@ bool playagain(){
     return false;
 }
 
+void get_started(char pins[][3], int totals[]){
+    for(int i = 0; i < 10; i++){
+        rolling((i + 1), pins, totals);
+    }
+}
+
 int main(){
     srand(time(NULL));
 
     char pins[10][3];
     int totals[11];
-     char name[MAX];
+    char name[MAX];
 
     do{
         populate_char_array(pins);
@@ -203,10 +228,9 @@ int main(){
 
         intro(name);
         
-        for(int i = 0; i < 10; i++){
-            int result = 0;
-            rolling((i + 1), pins, totals);
-        }
+        get_started(pins, totals);
+
+        std::cout << name << "'s total score was: " << totals[10];
     }while(playagain());
 
     return 0;
