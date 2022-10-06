@@ -136,14 +136,15 @@ void rolling(int i, char arr[][3], int totals[]){
 
         char knocked = generate_random(remainder);
 
-        if(arr[i - 2][0] == 'X'){
+        if(arr[i - 2][0] == 'X' && i <= 9){
             totals[i - 2] += char_to_int(knocked);
             totals[10] += char_to_int(knocked);
             if(arr[i - 3][0] == 'X'){
                 totals[i - 3] += 10;
                 totals[10] += 10;
-            }
-        } else if(arr[i - 2][0] == '/' && j == 0){
+            } 
+        }
+        else if(arr[i - 2][0] == '/' && j == 0){
             totals[i - 2] += char_to_int(knocked);
             totals[10] += char_to_int(knocked);
         }
