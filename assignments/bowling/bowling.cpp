@@ -61,6 +61,9 @@ int char_to_int(char integer){
     }else if(integer == 'X'){
         return 10;
     }
+    else if(integer == ':'){
+        return 10;
+    }
     else{
         return (int(integer) - 48);
     }
@@ -76,17 +79,16 @@ char generate_random(int &remainder){
 
     remainder += random;
 
-    //return itoc(random);
-    return itoc(10);  
+    return itoc(random);
+    //return itoc(10);  
 }
 
-char scoring(char &knocked, char arr[][3], int totals[], int i, int j){
+char scoring(char knocked, char arr[][3], int totals[], int i, int j){
     totals[10] += char_to_int(knocked);
     totals[i - 1] = totals[10];
     
     if(char_to_int(knocked) == 10 && j == 0){
         arr[(i - 1)][j] = 'X';
-        arr[(i - 1)][j + 1] = ' ';
         return 'x';
     }else if(char_to_int(knocked) + char_to_int(arr[i - 1][j - 1]) == 10 && j == 1){
         arr[(i - 1)][j] = '/';
@@ -96,6 +98,23 @@ char scoring(char &knocked, char arr[][3], int totals[], int i, int j){
          return 'g';
     }else{
          arr[(i - 1)][j] = knocked;
+    }
+
+    return ' ';
+}
+
+char last_scoring(char knocked, char arr[][3], int totals[], int j){
+    totals[10] += char_to_int(knocked);
+    totals[9] = totals[10];
+    
+    if(char_to_int(knocked) == 10){
+        arr[9][j] = 'X';
+        return 'x';
+    }else if(char_to_int(knocked) == 0){
+         arr[9][j] = '-';
+         return 'g';
+    }else{
+         arr[9][j] = knocked;
     }
 
     return ' ';
@@ -122,6 +141,97 @@ void press_enter(){
     std::cin.getline(input, MAX, '\n');
 }
 
+void last_strike(char arr[][3], int totals[]){
+    int remainder = 0;
+    char xscore = '\0';
+
+    std::cout << "You got a strike and two more rolls!!\n";
+    print_frame(arr, totals);
+    
+    for(int k = 0; k < 2; k++){
+        press_enter();
+
+        char knocked = generate_random(remainder);
+
+        xscore = last_scoring(knocked, arr, totals, (k+1));
+        
+        if(xscore == 'x'){
+            std::cout << "You knocked down 10 pins. You got a Strike!\n\n";
+            print_frame(arr, totals);
+        }
+        else {
+            pin_prompt(xscore, knocked);
+            print_frame(arr, totals);
+        }
+    }
+}
+
+void last_spare(char arr[][3], int totals[]){
+    int remainder = 0;
+    char score = '\0';
+
+    std::cout << "You got a spare and one more roll!!\n";
+    print_frame(arr, totals);
+    
+    press_enter();
+
+    char knocked = generate_random(remainder);
+
+    score = last_scoring(knocked, arr, totals, 2);
+    
+    if(score == 'x'){
+        std::cout << "You knocked down 10 pins. You got a Strike!\n\n";
+        print_frame(arr, totals);
+    }
+    else {
+        pin_prompt(score, knocked);
+        print_frame(arr, totals);
+    }
+}
+
+bool handle_last_frame(char arr[][3], int totals[], int i){
+    if(arr[9][0] == 'X' && i == 10){
+        last_strike(arr, totals);
+        return true;
+    }
+    else if(arr[9][1] == '/' && i == 10){
+        last_spare(arr, totals);
+        return true;
+    }
+
+    return false;
+}
+
+void consecutive_strikes(int i, int j, char arr[][3], int totals[], char knocked){
+    if(arr[i - 2][0] == 'X' && i <= 9){
+        totals[i - 2] += char_to_int(knocked);
+        totals[10] += char_to_int(knocked);
+        if(arr[i - 3][0] == 'X'){
+            totals[i - 3] += 10;
+            totals[10] += 10;
+        } 
+    }
+    else if(arr[i - 2][1] == '/' && j == 0){
+        totals[i - 2] += char_to_int(knocked);
+        totals[10] += char_to_int(knocked);
+    }
+}
+
+bool check_for_strike(char arr[][3], int totals[], char score, char knocked, bool ready){
+     if(score == 'x' && !ready){
+            std::cout << "You knocked down 10 pins. You got a Strike!\n\n";
+            print_frame(arr, totals);
+            return true;
+        }
+        else if(score != 'x' && !ready) {
+            pin_prompt(score, knocked);
+            print_frame(arr, totals);
+            return false;
+        }
+
+        return false;
+}
+
 void rolling(int i, char arr[][3], int totals[]){
     int remainder = 0;
 
@@ -136,50 +246,94 @@ void rolling(int i, char arr[][3], int totals[]){
 
         char knocked = generate_random(remainder);
 
-        if(arr[i - 2][0] == 'X' && i <= 9){
-            totals[i - 2] += char_to_int(knocked);
-            totals[10] += char_to_int(knocked);
-            if(arr[i - 3][0] == 'X'){
-                totals[i - 3] += 10;
-                totals[10] += 10;
-            } 
-        }
-        else if(arr[i - 2][0] == '/' && j == 0){
-            totals[i - 2] += char_to_int(knocked);
-            totals[10] += char_to_int(knocked);
-        }
+        consecutive_strikes(i, j, arr, totals, knocked);
 
         score = scoring(knocked, arr, totals, i, j);
 
-        if(score == 'x'){
-            std::cout << "You knocked down 10 pins. You got a Strike!\n\n";
-            print_frame(arr, totals);
-            break;
-        }
-        else {
-            pin_prompt(score, knocked);
-        }
+        bool ready = handle_last_frame(arr, totals, i);
 
-        print_frame(arr, totals);
+        if(check_for_strike(arr, totals, score, knocked, ready)){
+            break;
+        };
+
+        if(ready){
+            j++;
+        }
     } 
 }
 
+void format_extra_frames(int totals[]){
+     if(totals[9] != 0){
+        if(totals[9] > 9 && totals[9] <= 99){
+            std::cout << " " << totals[9] << "     |";
+        }
+        else if(totals[9] >= 100){
+            std::cout << " " << totals[9] << "    |";
+        }
+    }
+    else if(totals[9] == 0){
+        std::cout << "        |";
+    }
+}
+
+void format_totals(int totals[]){
+     for(int j = 0; j < 10; j++){
+        if(j == 9){
+           format_extra_frames(totals);
+        }
+        else if(totals[j] == 0){
+            std::cout << "     |";
+        }
+        else if(totals[j] <= 9){
+            std::cout << "  " << totals[j] << "  |";
+        }
+        else if(totals[j] > 9 && totals[j] <= 99){
+            std::cout << " " << totals[j] << "  |";
+        }
+        else if(totals[j] >= 100){
+            std::cout << " " << totals[j] << " |";
+        }
+    }
+}
+
 void print_frame(char pins[][3], int totals[]){
-    std::cout << "Name    |  1  |  2  |  3  |  4  |  5  |  6  |  7  |  8  |  9  |  10  |Total\n";
-    std::cout << "---------------------------------------------------------------------------\n";
-    std::cout << "Player1 | " 
+    std::cout << "Name    |  1  |  2  |  3  |  4  |  5  |  6  |  7  |  8  |  9  |   10   | Total\n";
+    std::cout << "------------------------------------------------------------------------------\n" << "Player1 | ";
 
-    << pins[0][0] << " " << pins[0][1] << " | " << pins[1][0] << " " << pins[1][1] << " | " 
-    << pins[2][0] << " " << pins[2][1] << " | " << pins[3][0] << " " << pins[3][1] << " | " 
-    << pins[4][0] << " " << pins[4][1] << " | " << pins[5][0] << " " << pins[5][1] << " | " 
-    << pins[6][0] << " " << pins[6][1] << " | " << pins[7][0] << " " << pins[7][1] << " | " 
-    << pins[8][0] << " " << pins[8][1] << " | " << pins[9][0] << " " << pins[9][1] << "  |  " << totals[10] << "\n";
+    for(int k = 0; k < 10; k++){
+        if(k == 9){
+            std::cout << pins[k][0] << " " << pins[k][1] << " " << pins[k][2] << "  | ";
+        }
+        else{
+            std::cout << pins[k][0] << " " << pins[k][1] << " | ";
+        }
+    }
+    
+    std::cout << " " << totals[10] << "\n" << "        |";
 
-    std::cout << "        |   " << totals[0] << " |   " << totals[1] << 
-    " |   " << totals[2] << " |   " << totals[3] << " |   " << totals[4] << 
-    " |   " << totals[5] << " |   " << totals[6] << " |   " << totals[7] << 
-    " |   " << totals[8] << " |   " << totals[9] << "  |  \n";
-    std::cout << "---------------------------------------------------------------------------\n\n";
+    format_totals(totals);
+
+    std::cout << "      \n------------------------------------------------------------------------------\n\n";
+}
+
+bool play_error(bool play, char input){
+    do{
+        std::cin >> input;
+        if(input == 'y' ){
+            std::cout << "\n\nPlaying Again! \n\n";
+            std::cin.ignore(1000, '\n');
+            return true;
+        }else if(input == 'n'){
+            std::cout << "\n\nThanks for playing!\n";
+            return false;   
+        }else{
+            std::cout << "\n\nInvalid Input, Try Again: ";
+            std::cin.ignore(1000, '\n');
+            play = false;
+        }
+    }while(!play);
+
+    return false;
 }
 
 
@@ -189,25 +343,7 @@ bool playagain(){
 
     std::cout << "\n\nDo you want to play again(y/n)?: ";
 
-    do{
-        input = '\0';
-        std::cin >> input;
-        if(input == 'y' ){
-            std::cout << "\n\nPlaying Again! \n\n";
-            std::cin.clear();
-            return true;
-        }else if(input == 'n'){
-            std::cout << "\n\nThanks for playing!";
-            return false;   
-        }else{
-            std::cout << "\n\nInvalid Input, Try Again: ";
-            std::cin.clear();
-            std::cin.ignore();
-            play = false;
-        }
-    }while(!play);
-
-    return false;
+    return play_error(play, input);
 }
 
 void get_started(char pins[][3], int totals[]){
