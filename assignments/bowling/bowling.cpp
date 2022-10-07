@@ -1,35 +1,34 @@
-#define MAX 255
-
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
 
-void print_frame(char pins[][3], int totals[]);
+bool is_string(char name[]);
+int char_to_int(char integer);
+char itoc(int i);
+
+void populate_char_array(char arr[][3]);
+void populate_int_array(int arr[]);
+
 void get_started(char pins[][3], int totals[]);
-bool playagain();
-bool play_error(bool play, char input);
+void rolling(int i, char arr[][3], int totals[]);
+void press_enter();
+char generate_random(int &remainder);
+void consecutive_strikes(int i, int j, char arr[][3], int totals[], char knocked);
+char scoring(char knocked, char arr[][3], int totals[], int i, int j);
+bool handle_last_frame(char arr[][3], int totals[], int i);
+void handle_perfect_game(int i, int totals[]);
+void last_strike(char arr[][3], int totals[]);
+void last_spare(char arr[][3], int totals[]);
+char last_scoring(char knocked, char arr[][3], int totals[], int j);
+bool check_for_strike(char arr[][3], int totals[], char score, char knocked, bool ready);
+
+void pin_prompt(char score, char knocked);
 void print_frame(char pins[][3], int totals[]);
 void format_totals(int totals[]);
 void format_extra_frames(int totals[]);
-void rolling(int i, char arr[][3], int totals[]);
-bool check_for_strike(char arr[][3], int totals[], char score, char knocked, bool ready);
-void consecutive_strikes(int i, int j, char arr[][3], int totals[], char knocked);
-bool handle_last_frame(char arr[][3], int totals[], int i);
-void last_spare(char arr[][3], int totals[]);
-void last_strike(char arr[][3], int totals[]);
-void press_enter();
-void pin_prompt(char score, char knocked);
-char last_scoring(char knocked, char arr[][3], int totals[], int j);
-char scoring(char knocked, char arr[][3], int totals[], int i, int j);
-char generate_random(int &remainder);
-char itoc(int i);
-int char_to_int(char integer);
-void populate_int_array(int arr[]);
-void populate_char_array(char arr[][3]);
 void intro(char name[]);
-bool is_string(char name[]);
-
-
+bool playagain();
+bool play_error(bool play, char input);
 
 bool is_string(char name[]){
     if(name[0] == '\0'){
@@ -116,8 +115,8 @@ void rolling(int i, char arr[][3], int totals[]){
 void press_enter(){
     std::cout << "Press enter to roll.\n";
 
-    char input[MAX];
-    std::cin.getline(input, MAX, '\n');
+    char input[255];
+    std::cin.getline(input, 255, '\n');
 }
 
 char generate_random(int &remainder){
@@ -126,15 +125,15 @@ char generate_random(int &remainder){
 
     remainder += random;
 
-    return itoc(random);
-    //return itoc(10);  
+    return itoc(random); 
+    //return itoc(10);
 }
 
 void consecutive_strikes(int i, int j, char arr[][3], int totals[], char knocked){
-    if(arr[i - 2][0] == 'X' && i <= 9){
+    if(arr[i - 2][0] == 'X' && i >= 2){
         totals[i - 2] += char_to_int(knocked);
         totals[10] += char_to_int(knocked);
-        if(arr[i - 3][0] == 'X'){
+        if(arr[i - 3][0] == 'X' && i >= 3){
             totals[i - 3] += 10;
             totals[10] += 10;
         } 
@@ -142,6 +141,19 @@ void consecutive_strikes(int i, int j, char arr[][3], int totals[], char knocked
     else if(arr[i - 2][1] == '/' && j == 0){
         totals[i - 2] += char_to_int(knocked);
         totals[10] += char_to_int(knocked);
+    }
+
+    handle_perfect_game(i, totals);
+}
+
+void handle_perfect_game(int i, int totals[]){
+    if(totals[0] == 30 && i == 3){
+        totals[1] += 10;
+        totals[10] += 10;
+    } 
+    
+    if(totals[7] == 240 && i == 10){
+        totals[8] += 10;
     }
 }
 
@@ -333,7 +345,7 @@ void intro(char name[]){
     
     do{
         std::cout << "Enter your name: ";
-        std::cin.getline(name, MAX, '\n');
+        std::cin.getline(name, 255, '\n');
 
         if(!is_string(name)){
             input = false;
@@ -381,7 +393,7 @@ int main(){
 
     char pins[10][3];
     int totals[11];
-    char name[MAX];
+    char name[255];
 
     do{
         populate_char_array(pins);
