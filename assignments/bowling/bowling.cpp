@@ -77,23 +77,6 @@ void populate_int_array(int arr[]){
     }
 }
 
-char last_scoring(char knocked, char arr[][3], int totals[], int j){
-    totals[10] += char_to_int(knocked);
-    totals[9] = totals[10];
-    
-    if(char_to_int(knocked) == 10){
-        arr[9][j] = 'X';
-        return 'x';
-    }else if(char_to_int(knocked) == 0){
-         arr[9][j] = '-';
-         return 'g';
-    }else{
-         arr[9][j] = knocked;
-    }
-
-    return ' ';
-}
-
 void get_started(char pins[][3], int totals[]){
     for(int i = 0; i < 10; i++){
         rolling((i + 1), pins, totals);
@@ -241,6 +224,23 @@ void last_spare(char arr[][3], int totals[]){
         pin_prompt(score, knocked);
         print_frame(arr, totals);
     }
+}
+
+char last_scoring(char knocked, char arr[][3], int totals[], int j){
+    totals[10] += char_to_int(knocked);
+    totals[9] = totals[10];
+    
+    if(char_to_int(knocked) == 10){
+        arr[9][j] = 'X';
+        return 'x';
+    }else if(char_to_int(knocked) == 0){
+         arr[9][j] = '-';
+         return 'g';
+    }else{
+         arr[9][j] = knocked;
+    }
+
+    return ' ';
 }
 
 bool check_for_strike(char arr[][3], int totals[], char score, char knocked, bool ready){
