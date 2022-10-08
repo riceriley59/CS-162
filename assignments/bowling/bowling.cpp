@@ -251,9 +251,9 @@ void consecutive_strikes(int i, int j, char arr[][3], int totals[], char knocked
     if(arr[i - 2][0] == 'X'){
         totals[i - 2] += char_to_int(knocked);
         totals[10] += char_to_int(knocked);
-        if(arr[i - 3][0] == 'X' && char_to_int(knocked) == 10){
-            totals[i - 3] += 10;
-            totals[10] += 10;
+        if(arr[i - 3][0] == 'X' && j == 0){
+            totals[i - 3] += char_to_int(knocked);
+            totals[10] += char_to_int(knocked);
         } 
     }
     else if(arr[i - 2][1] == '/' && j == 0){
@@ -651,13 +651,13 @@ bool play_error(bool play, char input){
 ** which it will break out the loop and return 0 because there were no errors.
 *********************************************************************/
 int main(){
-    srand(time(NULL));
-
     char pins[10][3];
     int totals[11];
     char name[255];
 
     do{
+        srand(time(NULL));
+
         populate_char_array(pins);
         populate_int_array(totals);
 
