@@ -42,7 +42,7 @@ void populate_student_db_info(student* students, int numstudents, ifstream& file
     }
 }
 
-void delete_student_db_info(student *students){
+void delete_student_db_info(student **students, int size){
     delete [] students;
     students = NULL;
 }

@@ -16,7 +16,7 @@ struct student{
 
 student* create_student_db(int);
 void populate_student_db_info(student *, int, ifstream &);
-void delete_student_db_info(student *);
+void delete_student_db_info(student **, int);
 string get_file_name();
 
 void file(ifstream&);

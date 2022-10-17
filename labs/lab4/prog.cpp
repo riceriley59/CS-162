@@ -12,7 +12,7 @@ int main(){
 
     student* students = create_student_db(num_of_students);
     populate_student_db_info(students, num_of_students, fileinput);
-    delete_student_db_info(students);
+    delete_student_db_info(&students, num_of_students);
 
     fileinput.close();
 
