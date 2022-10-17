@@ -20,5 +20,8 @@ void delete_student_db_info(student **, int);
 string get_file_name();
 
 void file(ifstream&);
+void choose_options(student* students, int num, ofstream& fileoutput);
+void searchname(student* students, int num, ofstream& fileoutput);
+void searchmajor(student* students, int num, ofstream& fileoutput);
 
 #endif
