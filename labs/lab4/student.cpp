@@ -7,7 +7,7 @@ void file(ifstream& fileinput){
     do{
         file_name = get_file_name();
 
-        fileinput.open(file_name, ios::in);
+        fileinput.open(file_name.c_str(), ios::in);
 
         if(!fileinput.is_open()){
             inputgood = false;
@@ -45,7 +45,7 @@ void populate_student_db_info(student* students, int numstudents, ifstream& file
     }
 }
 
-void delete_student_db_info(student* *students){
+void delete_student_db_info(student** students, int size){
     delete [] *students;
     *students = NULL;
 }
@@ -73,7 +73,7 @@ void choose_options(student* students, int num, ofstream& fileoutput){
 }
 
 void searchmajor(student* students, int num, ofstream& fileoutput){
-    int counter;
+    int counter = 0;
 
     for(int i = 0; i < num; i++){
         for(int j = 0; j < num; j++){
@@ -83,7 +83,7 @@ void searchmajor(student* students, int num, ofstream& fileoutput){
         }
     }
 
-    fileoutput << "NUMBER OF UNIQUE MAJORS: " << (num - counter);
+    fileoutput << "NUMBER OF UNIQUE MAJORS: " << (num - counter) << endl;
 }
 
 void searchname(student* students, int num, ofstream& fileoutput){
@@ -93,8 +93,8 @@ void searchname(student* students, int num, ofstream& fileoutput){
     cin >> name;
 
     for(int i = 0; i < num; i++){
-        if(students[i].last_name == name){
-                fileoutput << students[i].id<< students[i].first_name << students[i].last_name << students[i].major << endl;
+        if(students[i].last_name.upper == name){
+                fileoutput << students[i].id << " " << students[i].first_name << " " << students[i].last_name <<  " " << students[i].major << endl;
                 cout << "Found a match put it in Outputs.txt\n";
         }
     }
