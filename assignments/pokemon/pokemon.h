@@ -30,7 +30,7 @@ void delete_info(Pokedex &);
 
 void intro(string&);
 void options(Pokedex&, ofstream&, string);
-void get_options(Pokedex&, ofstream&, string);
+void get_options(Pokedex&, ofstream&, string, int);
 
 void search_by_dex(Pokedex&, ofstream&, string);
 void search_by_name(Pokedex&, ofstream&, string);
@@ -54,5 +54,6 @@ bool no_duplicate_dex(Pokedex& pokedex);
 bool no_duplicate_name(Pokedex& pokedex);
 
 string to_lowercase(string str);
+void error_handle_new_pokemon(Pokedex& pokedex);
 
 #endif

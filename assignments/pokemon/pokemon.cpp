@@ -51,13 +51,13 @@ void options(Pokedex& pokedex, ofstream& outputfile, string input_file_name){
     cout << "1. Search by Dex number\n" << "2. Search by Name\n" << "3. Search by Type\n";
     cout << "4. Add new Pokemon\n" << "5. Quit\n" << "what would you like to do: ";
 
-    get_options(pokedex, outputfile, input_file_name);
-}
-
-void get_options(Pokedex& pokedex, ofstream& outputfile, string input_file_name){
     int option = 0;
     cin >> option;
 
+    get_options(pokedex, outputfile, input_file_name, option);
+}
+
+void get_options(Pokedex& pokedex, ofstream& outputfile, string input_file_name, int option){
     if(option == 1){
         search_by_dex(pokedex, outputfile, input_file_name);
     }else if(option == 2){
@@ -119,9 +119,8 @@ bool is_str(string str){
 }
 
 void search_by_dex(Pokedex& pokedex, ofstream& outputfile, string input_file_name){
-    int output_option = get_output_type();
+    int output_option = get_output_type(), count = 0, dex_number = 0;
     string dex_number_str;
-    int count = 0, dex_number = 0;
 
     do{
         cout << "What dex number do you want to search for:";
@@ -147,9 +146,8 @@ void search_by_dex(Pokedex& pokedex, ofstream& outputfile, string input_file_nam
 }
 
 void search_by_name(Pokedex& pokedex, ofstream& outputfile, string input_file_name){
-    int output_option = get_output_type();
+    int output_option = get_output_type(), count = 0;
     string name;
-    int count = 0;
 
     do{
         cout << "What name do you want to search for: ";
@@ -173,9 +171,8 @@ void search_by_name(Pokedex& pokedex, ofstream& outputfile, string input_file_na
 }
 
 void search_by_type(Pokedex& pokedex, ofstream& outputfile, string input_file_name){
-    int output_option = get_output_type();
+    int output_option = get_output_type(), count = 0;
     string type;
-    int count = 0;
 
     do{
         cout << "What type do you want to search for: ";
@@ -238,20 +235,25 @@ bool no_duplicate_name(Pokedex& pokedex){
     return true;
 }
 
-void add_new_pokemon_to_dex(Pokedex& pokedex){
+void error_handle_new_pokemon(Pokedex& pokedex){
     do{
         cout << "\nWhats the dex number of the Pokemon: ";
         cin >> pokedex.dex[pokedex.num_pokemon - 1].dex_num;
     }while(!no_duplicate_dex(pokedex));
     do{
-        cout << "\nWhats the name of the pokemon: ";
+        cout << "\nWhats the name of the Pokemon: ";
         cin >> pokedex.dex[pokedex.num_pokemon - 1].name;
     }while(!no_duplicate_name(pokedex));
+}
+
+//needs to be refactored
+void add_new_pokemon_to_dex(Pokedex& pokedex){
+    error_handle_new_pokemon(pokedex);
     cout << "\nWhats the Pokemons's type: ";
     cin >> pokedex.dex[pokedex.num_pokemon - 1].type;
-    cout << "\nHow many moves does the pokemon have: ";
+    cout << "\nHow many moves does the Pokemon have: ";
     cin >> pokedex.dex[pokedex.num_pokemon - 1].num_moves;
-    cout << "\nWhat are the names of the moves that the pokemon have: \n";
+    cout << "\nWhat are the names of the moves that the Pokemon have: \n";
     pokedex.dex[pokedex.num_pokemon - 1].moves = create_moves(pokedex.dex[pokedex.num_pokemon - 1].num_moves);
     for(int i = 0; i < pokedex.dex[pokedex.num_pokemon - 1].num_moves; i++){
         cout <<"Enter move " << (i + 1) << " of " << pokedex.dex[pokedex.num_pokemon - 1].num_moves << ": ";
