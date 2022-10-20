@@ -21,12 +21,13 @@ int main(){
     pokedex.num_pokemon = number;
 
     pokedex.dex = create_pokemons(number);
-
     populate_pokedex_data(pokedex, inputfile);
 
-    options();
-
+    options(pokedex, outputfile, file_name);
+    
     delete_info(pokedex);
     inputfile.close();
+    outputfile.close();
+
     return 0;
 }
