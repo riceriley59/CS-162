@@ -135,7 +135,9 @@ void search_by_dex(Pokedex& pokedex, ofstream& outputfile, string input_file_nam
             if(output_option == 1){
                 print_to_screen(pokedex, i);
             }else if(output_option == 2){
-                get_output_file(outputfile);
+                if(i == 0){
+                    get_output_file(outputfile);
+                }
                 print_to_output_file(outputfile, pokedex, i);
             }
             count++;
@@ -160,7 +162,9 @@ void search_by_name(Pokedex& pokedex, ofstream& outputfile, string input_file_na
             if(output_option == 1){
                 print_to_screen(pokedex, i);
             }else if(output_option == 2){
-                get_output_file(outputfile);
+                if(i == 0){
+                    get_output_file(outputfile);
+                }
                 print_to_output_file(outputfile, pokedex, i);
             }
             count++;
@@ -185,7 +189,9 @@ void search_by_type(Pokedex& pokedex, ofstream& outputfile, string input_file_na
             if(output_option == 1){
                 print_to_screen(pokedex, i);
             }else if(output_option == 2){
-                get_output_file(outputfile);
+                if(i == 0){
+                    get_output_file(outputfile);
+                }
                 print_to_output_file(outputfile, pokedex, i);
             }
             count++;
