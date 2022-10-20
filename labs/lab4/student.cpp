@@ -28,11 +28,19 @@ string get_file_name(){
 
 }
 
+/*
+    Im goind to creat a student array of our integer size on the heap and then return that
+*/
 student* create_student_db(int size){
     student* p = new student[size];
     return p;
 }
 
+/*
+    I use a while loop and read in the data while we aren't at the end of the file
+    and when I get all the info i need for one struct I will iterate I to occupy the next object 
+    in the array
+*/
 void populate_student_db_info(student* students, int numstudents, ifstream& fileinput){
     int i = 0;
 
@@ -45,7 +53,11 @@ void populate_student_db_info(student* students, int numstudents, ifstream& file
     }
 }
 
-void delete_student_db_info(student** students, int size){
+/*
+    delete the student array on the heap by passing it by reference making it a double 
+    pointer and then dereferencing it
+*/
+void delete_student_db_info(student* *students, int size){
     delete [] *students;
     *students = NULL;
 }
@@ -59,7 +71,7 @@ void choose_options(student* students, int num, ofstream& fileoutput){
         cin >> option;
 
         if(option == 1){
-            searchname(students, num, fileoutput);
+            searchname(students, num, fileoutput    );
             inputgood = true;
         } else if(option == 2){
             searchmajor(students, num, fileoutput);
@@ -83,7 +95,7 @@ void searchmajor(student* students, int num, ofstream& fileoutput){
         }
     }
 
-    fileoutput << "NUMBER OF UNIQUE MAJORS: " << (num - counter) << endl;
+    fileoutput << "NUMBER OF UNIQUE MAJORS: " << num - counter << endl;
 }
 
 void searchname(student* students, int num, ofstream& fileoutput){
@@ -93,8 +105,8 @@ void searchname(student* students, int num, ofstream& fileoutput){
     cin >> name;
 
     for(int i = 0; i < num; i++){
-        if(students[i].last_name.upper == name){
-                fileoutput << students[i].id << " " << students[i].first_name << " " << students[i].last_name <<  " " << students[i].major << endl;
+        if(students[i].last_name == name){
+                fileoutput << students[i].id << " " << students[i].first_name << " " << students[i].last_name << " " << students[i].major << endl;
                 cout << "Found a match put it in Outputs.txt\n";
         }
     }
