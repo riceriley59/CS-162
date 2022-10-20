@@ -55,5 +55,8 @@ bool no_duplicate_name(Pokedex& pokedex);
 
 string to_lowercase(string str);
 void error_handle_new_pokemon(Pokedex& pokedex);
+void string_to_int(string num, int& value);
+
+int pow(int base, int exponent);
 
 #endif

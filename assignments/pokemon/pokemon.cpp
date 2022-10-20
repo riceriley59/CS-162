@@ -104,6 +104,33 @@ bool is_int(string num) {
     return false;
 }
 
+int pow(int base, int exponent){
+    int total = 1;
+
+    for(int i = 0; i < exponent; i++){
+        total *= base;
+    }
+
+    return total;
+}
+
+void string_to_int(string num, int& value) {
+	value = 0; // set the value equal to 0 to get rid of any garbage value stored in their
+
+	//iterate through each character of the given string
+   	for(int i = 0; i < num.length(); i++){
+	   	//if the character is a valid ASCII integer value
+		if((int(num[i]) - 48) >= 0 && (int(num[i]) - 48) <= 9){
+	   		//as the string is iterated multiply the integer value by a power of 10 that is decremented as the for loop increments then add that to value variable	   
+	   		value += pow(10, (num.length() - 1) - i) * (int(num[i]) - 48);
+			//if the first character is a - value and the whole string has already been converted then multiply the value by -1 to make the integer a negative
+			if(num[0] == '-' && i == num.length() - 1){
+				value *= -1;
+			}
+		}
+	}
+}
+
 bool is_str(string str){
     for(int i = 0; i < str.length(); i++){
         if(!((int(str[i]) >= 65 && int(str[i]) <= 90) || (int(str[i]) >= 97 && int(str[i]) <= 122))){
@@ -123,12 +150,12 @@ void search_by_dex(Pokedex& pokedex, ofstream& outputfile, string input_file_nam
     string dex_number_str;
 
     do{
-        cout << "What dex number do you want to search for:";
+        cout << "What dex number do you want to search for: ";
         cin >> dex_number_str;
         cout << "\n"; 
     }while(!is_int(dex_number_str));  
 
-    dex_number = stoi(dex_number_str);
+    string_to_int(dex_number_str, dex_number);
 
     for(int i = 0; i < pokedex.num_pokemon; i++){
         if(dex_number == pokedex.dex[i].dex_num){
@@ -252,7 +279,6 @@ void error_handle_new_pokemon(Pokedex& pokedex){
     }while(!no_duplicate_name(pokedex));
 }
 
-//needs to be refactored
 void add_new_pokemon_to_dex(Pokedex& pokedex){
     error_handle_new_pokemon(pokedex);
     cout << "\nWhats the Pokemons's type: ";
