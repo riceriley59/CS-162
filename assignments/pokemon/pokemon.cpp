@@ -132,15 +132,15 @@ void search_by_dex(Pokedex& pokedex, ofstream& outputfile, string input_file_nam
 
     for(int i = 0; i < pokedex.num_pokemon; i++){
         if(dex_number == pokedex.dex[i].dex_num){
+            count++;
             if(output_option == 1){
                 print_to_screen(pokedex, i);
             }else if(output_option == 2){
-                if(i == 0){
+                if(count == 1){
                     get_output_file(outputfile);
                 }
                 print_to_output_file(outputfile, pokedex, i);
             }
-            count++;
         }
     }
 
@@ -159,15 +159,15 @@ void search_by_name(Pokedex& pokedex, ofstream& outputfile, string input_file_na
 
     for(int i = 0; i < pokedex.num_pokemon; i++){
         if(to_lowercase(name) == to_lowercase(pokedex.dex[i].name)){
+            count++;
             if(output_option == 1){
                 print_to_screen(pokedex, i);
             }else if(output_option == 2){
-                if(i == 0){
+                if(count == 1){
                     get_output_file(outputfile);
                 }
                 print_to_output_file(outputfile, pokedex, i);
             }
-            count++;
         }
     }
 
@@ -186,15 +186,15 @@ void search_by_type(Pokedex& pokedex, ofstream& outputfile, string input_file_na
 
     for(int i = 0; i < pokedex.num_pokemon; i++){
         if(to_lowercase(type) == to_lowercase(pokedex.dex[i].type)){
+            count++;
             if(output_option == 1){
                 print_to_screen(pokedex, i);
             }else if(output_option == 2){
-                if(i == 0){
+                if(count == 1){
                     get_output_file(outputfile);
                 }
                 print_to_output_file(outputfile, pokedex, i);
             }
-            count++;
         }
     }
 
