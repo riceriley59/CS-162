@@ -1,4 +1,5 @@
-#pragma once
+#ifndef POKEMON_H
+#define POKEMON_H
 
 #include <fstream>
 #include <string>
@@ -21,11 +22,29 @@ struct Pokedex {
 };
 
 Pokemon* create_pokemons(int);
-
 void populate_pokedex_data(Pokedex & , ifstream &);
-
 string* create_moves(int);
-
 void populate_pokemon(Pokemon &, ifstream &);
+void delete_info(Pokedex &);
 
-void delete_info(Pokemon &);
+
+void intro(string&);
+void options(Pokedex&, ofstream&, string);
+void get_options(Pokedex&, ofstream&, string);
+
+void search_by_dex(Pokedex&, ofstream&, string);
+void search_by_name(Pokedex&, ofstream&, string);
+void search_by_type(Pokedex&, ofstream&, string);
+void add_new_pokemon(Pokedex&, string, ofstream&);
+
+int get_output_type();
+
+void print_to_screen(Pokedex&, int i);
+void print_to_output_file(ofstream&, Pokedex&, int i);
+void get_output_file(ofstream&);
+
+void add_one_to_pokedex(Pokedex&);
+
+void handle_going_again(Pokedex&, ofstream&, int, string);
+
+#endif
