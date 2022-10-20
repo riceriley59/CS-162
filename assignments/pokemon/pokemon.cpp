@@ -265,6 +265,10 @@ bool no_duplicate_name(Pokedex& pokedex){
         }
     }
 
+    if(!is_str(pokedex.dex[pokedex.num_pokemon - 1].name)){
+        return false;
+    }
+
     return true;
 }
 
