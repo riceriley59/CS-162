@@ -46,5 +46,13 @@ void get_output_file(ofstream&);
 void add_one_to_pokedex(Pokedex&);
 
 void handle_going_again(Pokedex&, ofstream&, int, string);
+void add_new_pokemon_to_dex(Pokedex&);
+void rewrite_dex(Pokedex&, string, ofstream&);
+
+void initialize_last_index(Pokedex&);
+bool no_duplicate_dex(Pokedex& pokedex);
+bool no_duplicate_name(Pokedex& pokedex);
+
+string to_lowercase(string str);
 
 #endif

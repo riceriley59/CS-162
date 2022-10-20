@@ -76,24 +76,67 @@ void get_options(Pokedex& pokedex, ofstream& outputfile, string input_file_name)
     }
 }
 
+string to_lowercase(string str){
+    for(int i = 0; i < str.length(); i++){
+        if(int(str[i]) >= 97 && int(str[i]) <= 122){
+            continue;
+        }else if(int(str[i]) >= 65 && int(str[i]) <= 90){
+            str[i] = char(int(str[i]) + 32);
+        }
+    }
+
+    return str;
+}
+
+bool is_int(string num) {
+	for (int i = 0; i < num.length(); i++) { //iterate through each character of the string
+		//if the character of the string isn't an ASCII integer value or the character is . then return false because it isn't numbers or it's a float with a dot
+		if(!((int(num[i]) - 48) <= 9 && (int(num[i] - 48)) >= 0) || num[i] == '.'){
+			cout << "That dex number is invalid please try again!\n";
+            return false;
+		}
+		//if the whole string was iterated and it didn't return false then return true because it's an integer
+		else if(i == num.length() - 1) {
+			return true;
+		}
+	}
+
+    return false;
+}
+
+bool is_str(string str){
+    for(int i = 0; i < str.length(); i++){
+        if(!((int(str[i]) >= 65 && int(str[i]) <= 90) || (int(str[i]) >= 97 && int(str[i]) <= 122))){
+            cout << "You can't have numbers or special characters in the name or type,\nPlease try again!\n";
+            return false;
+        }
+        if(i == (str.length() - 1)){
+            return true;       
+        }
+    }
+
+    return true;
+}
+
 void search_by_dex(Pokedex& pokedex, ofstream& outputfile, string input_file_name){
     int output_option = get_output_type();
-    int dex_number;
-    int count = 0;
+    string dex_number_str;
+    int count = 0, dex_number = 0;
 
-    cout << "What dex number do you want to search for:";
-    cin >> dex_number;
-    cout << "\n";
+    do{
+        cout << "What dex number do you want to search for:";
+        cin >> dex_number_str;
+        cout << "\n"; 
+    }while(!is_int(dex_number_str));  
 
-    if(output_option == 2){
-        get_output_file(outputfile);
-    }
+    dex_number = stoi(dex_number_str);
 
     for(int i = 0; i < pokedex.num_pokemon; i++){
         if(dex_number == pokedex.dex[i].dex_num){
             if(output_option == 1){
                 print_to_screen(pokedex, i);
             }else if(output_option == 2){
+                get_output_file(outputfile);
                 print_to_output_file(outputfile, pokedex, i);
             }
             count++;
@@ -108,19 +151,18 @@ void search_by_name(Pokedex& pokedex, ofstream& outputfile, string input_file_na
     string name;
     int count = 0;
 
-    cout << "What name do you want to search for: ";
-    cin >> name;
-    cout << '\n';
-
-    if(output_option == 2){
-        get_output_file(outputfile);
-    }
+    do{
+        cout << "What name do you want to search for: ";
+        cin >> name;
+        cout << '\n';
+    }while(!is_str(name));
 
     for(int i = 0; i < pokedex.num_pokemon; i++){
-        if(name == pokedex.dex[i].name){
+        if(to_lowercase(name) == to_lowercase(pokedex.dex[i].name)){
             if(output_option == 1){
                 print_to_screen(pokedex, i);
             }else if(output_option == 2){
+                get_output_file(outputfile);
                 print_to_output_file(outputfile, pokedex, i);
             }
             count++;
@@ -135,19 +177,18 @@ void search_by_type(Pokedex& pokedex, ofstream& outputfile, string input_file_na
     string type;
     int count = 0;
 
-    cout << "What type do you want to search for: ";
-    cin >> type;
-    cout << '\n';
-
-    if(output_option == 2){
-        get_output_file(outputfile);
-    }
+    do{
+        cout << "What type do you want to search for: ";
+        cin >> type;
+        cout << '\n';
+    }while(!is_str(type));
 
     for(int i = 0; i < pokedex.num_pokemon; i++){
-        if(type == pokedex.dex[i].type){
+        if(to_lowercase(type) == to_lowercase(pokedex.dex[i].type)){
             if(output_option == 1){
                 print_to_screen(pokedex, i);
             }else if(output_option == 2){
+                get_output_file(outputfile);
                 print_to_output_file(outputfile, pokedex, i);
             }
             count++;
@@ -158,11 +199,76 @@ void search_by_type(Pokedex& pokedex, ofstream& outputfile, string input_file_na
 }
 
 void add_new_pokemon(Pokedex& pokedex, string file_name, ofstream& outputfile){
-    int count = 0;
-    
     add_one_to_pokedex(pokedex);
+    
+    cout << "\nAdding new Pokemon to the Pokedex...\n";  
+    
+    add_new_pokemon_to_dex(pokedex);
 
-    handle_going_again(pokedex, outputfile, count, file_name);
+    rewrite_dex(pokedex, file_name, outputfile);
+
+    cout << "\nWrote that pokemon to the Dex!!\n\n";
+
+    options(pokedex, outputfile, file_name);
+}
+
+bool no_duplicate_dex(Pokedex& pokedex){
+    for(int i = 0; i < pokedex.num_pokemon; i++){
+        for(int j = 0; j < pokedex.num_pokemon; j++){
+            if(pokedex.dex[i].dex_num == pokedex.dex[j].dex_num && i != j){
+                cout << "\nYou can't have a duplicate dex number, Try Again!\n";
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
+bool no_duplicate_name(Pokedex& pokedex){
+    for(int i = 0; i < pokedex.num_pokemon; i++){
+        for(int j = 0; j < pokedex.num_pokemon; j++){
+            if(to_lowercase(pokedex.dex[i].name) == to_lowercase(pokedex.dex[j].name) && i != j){
+                cout << "\nYou can't have a duplicate name, Try Again!\n";
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
+void add_new_pokemon_to_dex(Pokedex& pokedex){
+    do{
+        cout << "\nWhats the dex number of the Pokemon: ";
+        cin >> pokedex.dex[pokedex.num_pokemon - 1].dex_num;
+    }while(!no_duplicate_dex(pokedex));
+    do{
+        cout << "\nWhats the name of the pokemon: ";
+        cin >> pokedex.dex[pokedex.num_pokemon - 1].name;
+    }while(!no_duplicate_name(pokedex));
+    cout << "\nWhats the Pokemons's type: ";
+    cin >> pokedex.dex[pokedex.num_pokemon - 1].type;
+    cout << "\nHow many moves does the pokemon have: ";
+    cin >> pokedex.dex[pokedex.num_pokemon - 1].num_moves;
+    cout << "\nWhat are the names of the moves that the pokemon have: \n";
+    pokedex.dex[pokedex.num_pokemon - 1].moves = create_moves(pokedex.dex[pokedex.num_pokemon - 1].num_moves);
+    for(int i = 0; i < pokedex.dex[pokedex.num_pokemon - 1].num_moves; i++){
+        cout <<"Enter move " << (i + 1) << " of " << pokedex.dex[pokedex.num_pokemon - 1].num_moves << ": ";
+        cin >> pokedex.dex[pokedex.num_pokemon - 1].moves[i];
+    }
+}
+
+void rewrite_dex(Pokedex& pokedex, string file_name, ofstream& outputfile){
+    outputfile.open(file_name.c_str(), ios::trunc);
+
+    outputfile << pokedex.num_pokemon << '\n';
+
+    for(int i = 0; i < pokedex.num_pokemon; i++){
+        print_to_output_file(outputfile, pokedex, i);
+    }
+
+    outputfile.close();
 }
 
 void add_one_to_pokedex(Pokedex& pokedex){
@@ -183,7 +289,16 @@ void add_one_to_pokedex(Pokedex& pokedex){
     
     delete_info(pokedex);
 
+    pokedex.num_pokemon += 1;
     pokedex.dex = temp;
+    initialize_last_index(pokedex);
+}
+
+void initialize_last_index(Pokedex& pokedex){
+    pokedex.dex[pokedex.num_pokemon - 1].dex_num = 0;
+    pokedex.dex[pokedex.num_pokemon - 1].name = " ";
+    pokedex.dex[pokedex.num_pokemon - 1].type = " ";
+    pokedex.dex[pokedex.num_pokemon - 1].num_moves = 0;
 }
 
 void handle_going_again(Pokedex& pokedex, ofstream& outputfile, int count, string input_file_name){
