@@ -1,5 +1,21 @@
+/*********************************************************************
+** Program Filename:
+** Author:
+** Date:
+** Description:
+** Input:
+** Output:
+*********************************************************************/
+
 #include "pokemon.h"
 
+/*********************************************************************
+** Function:
+** Description:
+** Parameters:
+** Pre-Conditions:
+** Post-Conditions:
+*********************************************************************/
 int main(){
     string file_name;
     ifstream inputfile;

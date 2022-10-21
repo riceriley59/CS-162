@@ -1,28 +1,72 @@
+/*********************************************************************
+** Program Filename:
+** Author:
+** Date:
+** Description:
+** Input:
+** Output:
+*********************************************************************/
+
 #include "pokemon.h"
 
+/*********************************************************************
+** Function:
+** Description:
+** Parameters:
+** Pre-Conditions:
+** Post-Conditions:
+*********************************************************************/
 void intro(string& filename){
     cout << "Welcome to the CLI Pokedex!! Please enter an input file: ";
     cin >> filename;
 }
 
+/*********************************************************************
+** Function:
+** Description:
+** Parameters:
+** Pre-Conditions:
+** Post-Conditions:
+*********************************************************************/
 Pokemon* create_pokemons(int size){
     Pokemon* p;
     p = new Pokemon[size];
     return p;
 }
 
+/*********************************************************************
+** Function:
+** Description:
+** Parameters:
+** Pre-Conditions:
+** Post-Conditions:
+*********************************************************************/
 void populate_pokedex_data(Pokedex &pokedex, ifstream &inputfile){
     for(int i = 0; i < pokedex.num_pokemon; i++){
         populate_pokemon(pokedex.dex[i], inputfile);
     }
 }
 
+/*********************************************************************
+** Function:
+** Description:
+** Parameters:
+** Pre-Conditions:
+** Post-Conditions:
+*********************************************************************/
 string* create_moves(int size){
     string* p;
     p = new string[size];
     return p;
 }
 
+/*********************************************************************
+** Function:
+** Description:
+** Parameters:
+** Pre-Conditions:
+** Post-Conditions:
+*********************************************************************/
 void populate_pokemon(Pokemon &pokemon, ifstream &inputfile){
     inputfile >> pokemon.dex_num; 
     inputfile >> pokemon.name; 
@@ -36,6 +80,13 @@ void populate_pokemon(Pokemon &pokemon, ifstream &inputfile){
     }
 }
 
+/*********************************************************************
+** Function:
+** Description:
+** Parameters:
+** Pre-Conditions:
+** Post-Conditions:
+*********************************************************************/
 void delete_info(Pokedex &pokedex){
     for(int i = 0; i < pokedex.num_pokemon; i++){
         delete [] pokedex.dex[i].moves;
@@ -46,6 +97,13 @@ void delete_info(Pokedex &pokedex){
     pokedex.dex = NULL;
 }
 
+/*********************************************************************
+** Function:
+** Description:
+** Parameters:
+** Pre-Conditions:
+** Post-Conditions:
+*********************************************************************/
 void options(Pokedex& pokedex, ofstream& outputfile, string input_file_name){
     cout << "Here are the available options for searching or adding to the PokeDex: \n";
     cout << "1. Search by Dex number\n" << "2. Search by Name\n" << "3. Search by Type\n";
@@ -57,6 +115,13 @@ void options(Pokedex& pokedex, ofstream& outputfile, string input_file_name){
     get_options(pokedex, outputfile, input_file_name, option);
 }
 
+/*********************************************************************
+** Function:
+** Description:
+** Parameters:
+** Pre-Conditions:
+** Post-Conditions:
+*********************************************************************/
 void get_options(Pokedex& pokedex, ofstream& outputfile, string input_file_name, int option){
     if(option == 1){
         search_by_dex(pokedex, outputfile, input_file_name);
@@ -76,6 +141,13 @@ void get_options(Pokedex& pokedex, ofstream& outputfile, string input_file_name,
     }
 }
 
+/*********************************************************************
+** Function:
+** Description:
+** Parameters:
+** Pre-Conditions:
+** Post-Conditions:
+*********************************************************************/
 string to_lowercase(string str){
     for(int i = 0; i < str.length(); i++){
         if(int(str[i]) >= 97 && int(str[i]) <= 122){
@@ -88,6 +160,13 @@ string to_lowercase(string str){
     return str;
 }
 
+/*********************************************************************
+** Function:
+** Description:
+** Parameters:
+** Pre-Conditions:
+** Post-Conditions:
+*********************************************************************/
 bool is_int(string num) {
 	for (int i = 0; i < num.length(); i++) { //iterate through each character of the string
 		//if the character of the string isn't an ASCII integer value or the character is . then return false because it isn't numbers or it's a float with a dot
@@ -104,6 +183,13 @@ bool is_int(string num) {
     return false;
 }
 
+/*********************************************************************
+** Function:
+** Description:
+** Parameters:
+** Pre-Conditions:
+** Post-Conditions:
+*********************************************************************/
 int pow(int base, int exponent){
     int total = 1;
 
@@ -114,6 +200,13 @@ int pow(int base, int exponent){
     return total;
 }
 
+/*********************************************************************
+** Function:
+** Description:
+** Parameters:
+** Pre-Conditions:
+** Post-Conditions:
+*********************************************************************/
 void string_to_int(string num, int& value) {
 	value = 0; // set the value equal to 0 to get rid of any garbage value stored in their
 
@@ -131,6 +224,13 @@ void string_to_int(string num, int& value) {
 	}
 }
 
+/*********************************************************************
+** Function:
+** Description:
+** Parameters:
+** Pre-Conditions:
+** Post-Conditions:
+*********************************************************************/
 bool is_str(string str){
     for(int i = 0; i < str.length(); i++){
         if(!((int(str[i]) >= 65 && int(str[i]) <= 90) || (int(str[i]) >= 97 && int(str[i]) <= 122))){
@@ -145,6 +245,13 @@ bool is_str(string str){
     return true;
 }
 
+/*********************************************************************
+** Function:
+** Description:
+** Parameters:
+** Pre-Conditions:
+** Post-Conditions:
+*********************************************************************/
 bool is_str_with_under(string str){
     for(int i = 0; i < str.length(); i++){
         if(!((int(str[i]) >= 65 && int(str[i]) <= 90) || (int(str[i]) >= 97 && int(str[i]) <= 122) || int(str[i]) == 95)){
@@ -159,6 +266,13 @@ bool is_str_with_under(string str){
     return true;
 }
 
+/*********************************************************************
+** Function:
+** Description:
+** Parameters:
+** Pre-Conditions:
+** Post-Conditions:
+*********************************************************************/
 void search_by_dex(Pokedex& pokedex, ofstream& outputfile, string input_file_name){
     int output_option = get_output_type(), count = 0, dex_number = 0;
     string dex_number_str;
@@ -187,6 +301,13 @@ void search_by_dex(Pokedex& pokedex, ofstream& outputfile, string input_file_nam
    handle_going_again(pokedex, outputfile, count, input_file_name);
 }
 
+/*********************************************************************
+** Function:
+** Description:
+** Parameters:
+** Pre-Conditions:
+** Post-Conditions:
+*********************************************************************/
 void search_by_name(Pokedex& pokedex, ofstream& outputfile, string input_file_name){
     int output_option = get_output_type(), count = 0;
     string name;
@@ -213,6 +334,13 @@ void search_by_name(Pokedex& pokedex, ofstream& outputfile, string input_file_na
     handle_going_again(pokedex, outputfile, count, input_file_name);
 }
 
+/*********************************************************************
+** Function:
+** Description:
+** Parameters:
+** Pre-Conditions:
+** Post-Conditions:
+*********************************************************************/
 void search_by_type(Pokedex& pokedex, ofstream& outputfile, string input_file_name){
     int output_option = get_output_type(), count = 0;
     string type;
@@ -239,6 +367,13 @@ void search_by_type(Pokedex& pokedex, ofstream& outputfile, string input_file_na
     handle_going_again(pokedex, outputfile, count, input_file_name);
 }
 
+/*********************************************************************
+** Function:
+** Description:
+** Parameters:
+** Pre-Conditions:
+** Post-Conditions:
+*********************************************************************/
 void add_new_pokemon(Pokedex& pokedex, string file_name, ofstream& outputfile){
     add_one_to_pokedex(pokedex);
     
@@ -253,6 +388,13 @@ void add_new_pokemon(Pokedex& pokedex, string file_name, ofstream& outputfile){
     options(pokedex, outputfile, file_name);
 }
 
+/*********************************************************************
+** Function:
+** Description:
+** Parameters:
+** Pre-Conditions:
+** Post-Conditions:
+*********************************************************************/
 bool no_duplicate_dex(Pokedex& pokedex, string dex_str){
     if(!is_int(dex_str)){
         return false;
@@ -272,6 +414,13 @@ bool no_duplicate_dex(Pokedex& pokedex, string dex_str){
     return true;
 }
 
+/*********************************************************************
+** Function:
+** Description:
+** Parameters:
+** Pre-Conditions:
+** Post-Conditions:
+*********************************************************************/
 bool no_duplicate_name(Pokedex& pokedex){
     if(!is_str(pokedex.dex[pokedex.num_pokemon - 1].name)){
         return false;
@@ -289,6 +438,13 @@ bool no_duplicate_name(Pokedex& pokedex){
     return true;
 }
 
+/*********************************************************************
+** Function:
+** Description:
+** Parameters:
+** Pre-Conditions:
+** Post-Conditions:
+*********************************************************************/
 void error_handle_new_pokemon(Pokedex& pokedex){
     string dex_str;
 
@@ -302,6 +458,13 @@ void error_handle_new_pokemon(Pokedex& pokedex){
     }while(!no_duplicate_name(pokedex));
 }
 
+/*********************************************************************
+** Function:
+** Description:
+** Parameters:
+** Pre-Conditions:
+** Post-Conditions:
+*********************************************************************/
 void error_handle_new_type(Pokedex& pokedex){
     bool good = false;
 
@@ -317,6 +480,13 @@ void error_handle_new_type(Pokedex& pokedex){
     }while(!good);
 }
 
+/*********************************************************************
+** Function:
+** Description:
+** Parameters:
+** Pre-Conditions:
+** Post-Conditions:
+*********************************************************************/
 void error_handle_new_nummoves(Pokedex& pokedex){
     string num_moves;
     bool good = false;
@@ -334,6 +504,13 @@ void error_handle_new_nummoves(Pokedex& pokedex){
     }while(!good);
 }
 
+/*********************************************************************
+** Function:
+** Description:
+** Parameters:
+** Pre-Conditions:
+** Post-Conditions:
+*********************************************************************/
 void error_handle_moves(Pokedex& pokedex){
     bool good = false;
 
@@ -353,6 +530,13 @@ void error_handle_moves(Pokedex& pokedex){
     }
 }
 
+/*********************************************************************
+** Function:
+** Description:
+** Parameters:
+** Pre-Conditions:
+** Post-Conditions:
+*********************************************************************/
 void add_new_pokemon_to_dex(Pokedex& pokedex){
     error_handle_new_pokemon(pokedex);
     error_handle_new_type(pokedex);
@@ -360,6 +544,13 @@ void add_new_pokemon_to_dex(Pokedex& pokedex){
     error_handle_moves(pokedex);
 }
 
+/*********************************************************************
+** Function:
+** Description:
+** Parameters:
+** Pre-Conditions:
+** Post-Conditions:
+*********************************************************************/
 void rewrite_dex(Pokedex& pokedex, string file_name, ofstream& outputfile){
     outputfile.open(file_name.c_str(), ios::trunc);
 
@@ -372,6 +563,13 @@ void rewrite_dex(Pokedex& pokedex, string file_name, ofstream& outputfile){
     outputfile.close();
 }
 
+/*********************************************************************
+** Function:
+** Description:
+** Parameters:
+** Pre-Conditions:
+** Post-Conditions:
+*********************************************************************/
 void add_one_to_pokedex(Pokedex& pokedex){
     Pokemon* temp = create_pokemons((pokedex.num_pokemon + 1));
 
@@ -395,6 +593,13 @@ void add_one_to_pokedex(Pokedex& pokedex){
     initialize_last_index(pokedex);
 }
 
+/*********************************************************************
+** Function:
+** Description:
+** Parameters:
+** Pre-Conditions:
+** Post-Conditions:
+*********************************************************************/
 void initialize_last_index(Pokedex& pokedex){
     pokedex.dex[pokedex.num_pokemon - 1].dex_num = 0;
     pokedex.dex[pokedex.num_pokemon - 1].name = " ";
@@ -402,6 +607,13 @@ void initialize_last_index(Pokedex& pokedex){
     pokedex.dex[pokedex.num_pokemon - 1].num_moves = 0;
 }
 
+/*********************************************************************
+** Function:
+** Description:
+** Parameters:
+** Pre-Conditions:
+** Post-Conditions:
+*********************************************************************/
 void handle_going_again(Pokedex& pokedex, ofstream& outputfile, int count, string input_file_name){
     if(count == 0){
         cout << "\nFound no matches" << endl << endl;
@@ -413,6 +625,13 @@ void handle_going_again(Pokedex& pokedex, ofstream& outputfile, int count, strin
     options(pokedex, outputfile, input_file_name);
 }
 
+/*********************************************************************
+** Function:
+** Description:
+** Parameters:
+** Pre-Conditions:
+** Post-Conditions:
+*********************************************************************/
 void print_to_screen(Pokedex& pokemon, int i){
     cout << pokemon.dex[i].dex_num << " " << pokemon.dex[i].name << " " << pokemon.dex[i].type << " " << pokemon.dex[i].num_moves << endl;
     for(int j = 0; j < pokemon.dex[i].num_moves; j++){
@@ -421,6 +640,13 @@ void print_to_screen(Pokedex& pokemon, int i){
     cout << "\n";
 }
 
+/*********************************************************************
+** Function:
+** Description:
+** Parameters:
+** Pre-Conditions:
+** Post-Conditions:
+*********************************************************************/
 void print_to_output_file(ofstream& outputfile, Pokedex& pokemon, int i){
     outputfile << pokemon.dex[i].dex_num << " " << pokemon.dex[i].name << " " << pokemon.dex[i].type << " " << pokemon.dex[i].num_moves << endl;
     for(int j = 0; j < pokemon.dex[i].num_moves; j++){
@@ -429,6 +655,13 @@ void print_to_output_file(ofstream& outputfile, Pokedex& pokemon, int i){
     outputfile << "\n";
 }
 
+/*********************************************************************
+** Function:
+** Description:
+** Parameters:
+** Pre-Conditions:
+** Post-Conditions:
+*********************************************************************/
 void get_output_file(ofstream& outputfile){
     string outputfile_name;
 
@@ -438,6 +671,13 @@ void get_output_file(ofstream& outputfile){
     outputfile.open(outputfile_name.c_str(), ios::app);
 }
 
+/*********************************************************************
+** Function:
+** Description:
+** Parameters:
+** Pre-Conditions:
+** Post-Conditions:
+*********************************************************************/
 int get_output_type(){
     int option;
 

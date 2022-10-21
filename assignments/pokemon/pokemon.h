@@ -1,3 +1,12 @@
+/*********************************************************************
+** Filename: pokemon.h
+** Author: Riley Rice
+** Date: 10-20-2022
+** Description:
+** Input:
+** Output:
+*********************************************************************/
+
 #ifndef POKEMON_H
 #define POKEMON_H
 
