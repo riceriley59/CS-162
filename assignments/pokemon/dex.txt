@@ -12,5 +12,4 @@ Flame_Burst
 54 Psyduck Water 4
 Soak Confusion Zen_Headbutt Water_Sport 
 133 Eevee Normal 2
-Helping_Hand Sand_Attack
- 
+Helping_Hand Sand_Attack 

@@ -50,13 +50,19 @@ void add_new_pokemon_to_dex(Pokedex&);
 void rewrite_dex(Pokedex&, string, ofstream&);
 
 void initialize_last_index(Pokedex&);
-bool no_duplicate_dex(Pokedex& pokedex);
-bool no_duplicate_name(Pokedex& pokedex);
+bool no_duplicate_dex(Pokedex&);
+bool no_duplicate_name(Pokedex&);
 
-string to_lowercase(string str);
-void error_handle_new_pokemon(Pokedex& pokedex);
-void string_to_int(string num, int& value);
+string to_lowercase(string);
+void error_handle_new_pokemon(Pokedex&);
+void string_to_int(string, int&);
 
-int pow(int base, int exponent);
+int pow(int, int);
+
+void error_handle_moves(Pokedex&);
+void error_handle_new_nummoves(Pokedex&);
+void error_handle_new_type(Pokedex&);
+
+bool is_str_with_under(string);
 
 #endif
