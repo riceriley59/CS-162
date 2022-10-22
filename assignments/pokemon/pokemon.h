@@ -56,7 +56,7 @@ void get_output_file(ofstream&, string);
 
 //printing functions
 void print_to_screen(Pokedex&, int i);
-void print_to_output_file(ofstream&, Pokedex&, int i);
+void print_to_output_file(ofstream&, Pokedex&, int, bool);
 
 //handles recursive option function call
 void handle_going_again(Pokedex&, ofstream&, int, string);
@@ -83,7 +83,7 @@ void string_to_int(string, int&);
 int pow(int, int);
 bool is_str_with_under(string);
 bool is_int(string);
-bool txt(char str[]);
-void convert_str_to_char(string str, char chr[]);
+bool txt(char[], int);
+void convert_str_to_char(string, char[]);
 
 #endif

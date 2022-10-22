@@ -320,7 +320,7 @@ void search_by_dex(Pokedex& pokedex, ofstream& outputfile, string input_file_nam
                     get_output_file(outputfile, input_file_name);
                     cout << "\nThese pokemon have been written to that file: \n";
                 }
-                print_to_output_file(outputfile, pokedex, i);
+                print_to_output_file(outputfile, pokedex, i, true);
             }
         }
     }
@@ -357,7 +357,7 @@ void search_by_name(Pokedex& pokedex, ofstream& outputfile, string input_file_na
                     get_output_file(outputfile, input_file_name);
                     cout << "\nThese pokemon have been written to that file: \n";
                 }
-                print_to_output_file(outputfile, pokedex, i);
+                print_to_output_file(outputfile, pokedex, i, true);
             }
         }
     }
@@ -394,7 +394,7 @@ void search_by_type(Pokedex& pokedex, ofstream& outputfile, string input_file_na
                     get_output_file(outputfile, input_file_name);
                     cout << "\nThese pokemon have been written to that file: \n";
                 }
-                print_to_output_file(outputfile, pokedex, i);
+                print_to_output_file(outputfile, pokedex, i, true);
             }
         }
     }
@@ -631,7 +631,7 @@ void rewrite_dex(Pokedex& pokedex, string file_name, ofstream& outputfile){
     outputfile << pokedex.num_pokemon << '\n';
 
     for(int i = 0; i < pokedex.num_pokemon; i++){
-        print_to_output_file(outputfile, pokedex, i);
+        print_to_output_file(outputfile, pokedex, i, false);
     }
 
     outputfile.close();
@@ -731,19 +731,21 @@ void print_to_screen(Pokedex& pokemon, int i){
 ** Function: print_to_output_file()
 ** Description: This function handles outputting a given pokemon struct to a 
 an outputfile and then also print it to the screen so the user know what was outputted
-** Parameters: ofstream& outputfile, int i 
+** Parameters: ofstream& outputfile, int i, bool print
 ** Pre-Conditions: the current iteration along with the pokedex struct is passed in
 ** Post-Conditions: The pokemon at the index of i is printed to the screen and also outputted
 to a user given output file
 *********************************************************************/
-void print_to_output_file(ofstream& outputfile, Pokedex& pokemon, int i){
+void print_to_output_file(ofstream& outputfile, Pokedex& pokemon, int i, bool print){
     outputfile << pokemon.dex[i].dex_num << " " << pokemon.dex[i].name << " " << pokemon.dex[i].type << " " << pokemon.dex[i].num_moves << endl;
     for(int j = 0; j < pokemon.dex[i].num_moves; j++){
         outputfile << pokemon.dex[i].moves[j] << " ";
     }
     outputfile << "\n";
 
-    print_to_screen(pokemon, i);
+    if(print){
+        print_to_screen(pokemon, i);
+    }
 }
 
 /*******************************************************************
@@ -753,10 +755,10 @@ void print_to_output_file(ofstream& outputfile, Pokedex& pokemon, int i){
 ** Pre-conditions: it needs an initialized cstring
 ** Post-conditions: return a boolean value based on whether there is a .txt extension at the end
 *******************************************************************/
-bool txt(char str[]){
+bool txt(char str[], int size){
     bool txt = false;
 
-    for(int i = 0; i < strlen(str); i++){
+    for(int i = 0; i < size; i++){
         if(str[i] == '.'){
             if(str[i + 1] == 't' && str[i + 2] == 'x' && str[i + 3] == 't') {
                 txt = true;
@@ -786,7 +788,7 @@ void get_output_file(ofstream& outputfile, string inputfilename){
         char outputfile_char[outputfile_name.length()];
         convert_str_to_char(outputfile_name, outputfile_char);
 
-        if(!txt(outputfile_char) || outputfile_name == inputfilename){
+        if(!txt(outputfile_char, outputfile_name.length()) || outputfile_name == inputfilename){
             cout << "\nThat input is invalid you must .txt at the end Try Again!! \n";
             good = false;
         }else{
