@@ -1,4 +1,4 @@
-8
+7
 1 Bulbasaur Grass 2
 Vine_Whip Razor_Leaf 
 4 Charmander Fire 3
@@ -13,5 +13,3 @@ Flame_Burst
 Soak Confusion Zen_Headbutt Water_Sport 
 133 Eevee Normal 2
 Helping_Hand Sand_Attack 
-99 Pire Water 2
-water_splash tail_whip 
