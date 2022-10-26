@@ -1,25 +1,26 @@
 CC=g++
+CCFLAGS = -g
+
 EXE_FILE=gofish
+BIN = bin
+SRC = src
+INCLUDE = include
 
-all: $(EXE_FILE)
+all: $(BIN)/$(EXE_FILE)
 
-$(EXE_FILE): game.o player.o hand.o deck.o card.o main.cpp
-	$(CC) game.o player.o hand.o deck.o card.o main.cpp -o $(EXE_FILE)
+run: clean all
+	clear
+	@echo "🚀 Executing..."
+	./$(BIN)/$(EXE_FILE)
 
-game.o: game.h game.cpp
-	$(CC) -c game.cpp
+debug: $(SRC)/*.cpp
+	$(CC) $(CCFLAGS) -I $(INCLUDE) $^ -o $(BIN)/$(EXE_FILE)
+	gdb ./$(BIN)/$(EXE_FILE)
 
-player.o: player.h player.cpp
-	$(CC) -c player.cpp
 
-hand.o: hand.h hand.cpp
-	$(CC) -c hand.cpp
-
-deck.o: deck.h deck.cpp
-	$(CC) -c deck.cpp
-
-card.o: card.h card.cpp
-	$(CC) -c card.cpp
+$(BIN)/$(EXE_FILE): $(SRC)/*.cpp
+	$(CC) -I $(INCLUDE) $^ -o $@
 
 clean:
-	rm -f *.o $(EXE_FILE)
+	@echo "🧹 Clearing..."
+	-rm $(BIN)/*
