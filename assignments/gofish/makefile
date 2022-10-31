@@ -1,5 +1,5 @@
 CC=g++
-CCFLAGS = -g
+CCFLAGS = -std=c++11 -g
 
 EXE_FILE=gofish
 BIN = bin
@@ -9,6 +9,9 @@ OBJ = $(BIN)/obj
 OBJS := $(OBJ)/player.o $(OBJ)/game.o $(OBJ)/deck.o $(OBJ)/hand.o $(OBJ)/card.o $(OBJ)/main.o
 
 all: $(OBJS) $(BIN)/$(EXE_FILE)
+
+valgrind:
+	valgrind ./$(BIN)/$(EXE_FILE)
 
 run: 
 	./$(BIN)/$(EXE_FILE)
