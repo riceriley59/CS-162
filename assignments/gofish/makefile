@@ -5,22 +5,31 @@ EXE_FILE=gofish
 BIN = bin
 SRC = src
 INCLUDE = include
+OBJ = $(BIN)/obj
+OBJS := $(OBJ)/player.o $(OBJ)/game.o $(OBJ)/deck.o $(OBJ)/hand.o $(OBJ)/card.o $(OBJ)/main.o
 
-all: $(BIN)/$(EXE_FILE)
+all: $(OBJS) $(BIN)/$(EXE_FILE)
 
-run: clean all
+run: 
+	./$(BIN)/$(EXE_FILE)
+
+crun: clean all
 	clear
 	@echo "🚀 Executing..."
 	./$(BIN)/$(EXE_FILE)
 
-debug: $(SRC)/*.cpp
-	$(CC) $(CCFLAGS) -I $(INCLUDE) $^ -o $(BIN)/$(EXE_FILE)
+debug: clean all
+	clear 
+	@echo "Debug Mode..."
 	gdb ./$(BIN)/$(EXE_FILE)
-
-
-$(BIN)/$(EXE_FILE): $(SRC)/*.cpp
-	$(CC) -I $(INCLUDE) $^ -o $@
 
 clean:
 	@echo "🧹 Clearing..."
-	-rm $(BIN)/*
+	rm -rf $(BIN)/*
+	mkdir $(OBJ)
+
+$(OBJ)/%.o: $(SRC)/%.cpp
+	$(CC) $(CCFLAGS) -I $(INCLUDE) -c $< -o $@
+
+$(BIN)/$(EXE_FILE): $(OBJS)
+	$(CC) $(CCFLAGS) -I $(INCLUDE) $^ -o $@

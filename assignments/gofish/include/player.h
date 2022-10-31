@@ -6,10 +6,28 @@
 class Player {
     private:
         Hand hand;
-        int* books; // Array with ranks for which the player has books.
         int n_books;
+        int* books;
     public:
-        // must have constructors, destructor, accessors, and mutators
+        Player();
+        Player(int);
+
+        //big 3
+        Player(const Player&);
+        Player& operator=(const Player&);
+        ~Player();
+
+        //setters
+        void set_n_books(int);
+        void set_books(int*);
+        void set_hand(Hand);
+
+        //getters
+        Hand get_hand();
+        int* get_books();
+        int get_n_books();
+
+        //member functions
 };
 
 #endif

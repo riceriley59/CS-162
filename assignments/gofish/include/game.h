@@ -10,6 +10,9 @@ class Game {
         Player players[2];
     public:
         // must have constructors, destructor, accessors, and mutators
+
+        //getters
+        Deck get_deck();
 };
 
 #endif

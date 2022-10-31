@@ -8,7 +8,23 @@ class Hand {
         Card* cards; // An array of cards in hand
         int n_cards; // Number of cards in the hand.
     public:
-        // must have constructors, destructor, accessors, and mutators
+        Hand();
+        Hand(int n_cards);
+
+        //big 3
+        ~Hand(); //destructor
+        Hand(const Hand&); //copy constructor
+        Hand& operator=(const Hand&); //AOO
+
+        //getters
+        Card* get_cards();
+        int get_n_cards();
+
+        //setters
+        void set_cards();
+        void set_n_cards();
+
+        //member functions
 };
 
 #endif
