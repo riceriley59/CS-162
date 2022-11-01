@@ -44,26 +44,28 @@ Player::~Player(){
 
 //setters
 void Player::set_n_books(int n_books){
-
+    this->n_books = n_books;
 }
 
 void Player::set_books(int* books){
-
+    this->books = books;
 }
 
 void Player::set_hand(Hand h){
-
+    this->hand = h;
 }
 
 //getters
 Hand Player::get_hand(){
-
+    return this->hand;
 }
 
 int* Player::get_books(){
-
+    return this->books;
 }
 
 int Player::get_n_books(){
-
+    return this->n_books;
 }
+
+//member functions

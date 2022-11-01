@@ -10,7 +10,9 @@ OBJS := $(OBJ)/player.o $(OBJ)/game.o $(OBJ)/deck.o $(OBJ)/hand.o $(OBJ)/card.o 
 
 all: $(OBJS) $(BIN)/$(EXE_FILE)
 
-valgrind:
+valgrind: clean all 
+	clear 
+	@echo "Checking for Memory Leaks"
 	valgrind ./$(BIN)/$(EXE_FILE)
 
 run: 

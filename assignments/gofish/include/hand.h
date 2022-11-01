@@ -21,8 +21,8 @@ class Hand {
         int get_n_cards();
 
         //setters
-        void set_cards();
-        void set_n_cards();
+        void set_cards(Card*);
+        void set_n_cards(int);
 
         //member functions
 };

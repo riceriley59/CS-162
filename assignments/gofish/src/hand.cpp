@@ -37,20 +37,20 @@ Hand& Hand::operator=(const Hand& h){
 
 //getters
 Card* Hand::get_cards(){
-
+    return this->cards;
 }
 
 int Hand::get_n_cards(){
-
+    return this->n_cards;
 }
 
 //setters
-void Hand::set_cards(){
-
+void Hand::set_cards(Card* cards){
+    this->cards = cards;
 }
 
-void Hand::set_n_cards(){
-
+void Hand::set_n_cards(int n_cards){
+    this->n_cards = n_cards;
 }
 
 Hand::~Hand(){
