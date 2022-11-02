@@ -76,3 +76,12 @@ void Deck::print_card_array(){
     }
     cout << "\n";
 }
+
+Card Deck::get_card(int i){
+    return this->cards[i];
+}
+
+Card& Deck::pull_from_top(){
+    this->n_cards--;
+    return this->cards[this->n_cards];
+}

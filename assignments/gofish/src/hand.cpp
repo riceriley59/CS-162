@@ -59,3 +59,36 @@ Hand::~Hand(){
         this->cards = NULL;
     }
 }
+
+void Hand::print_hand(bool faceup){
+    if(faceup){
+        for(int i = 0; i < this->n_cards; i++){
+            cout << (i + 1) << ". ";
+            this->cards[i].print_card();
+            cout << "\n";
+        }
+    } else{
+        for(int i = 0; i < this->n_cards; i++){
+            cout << " X ";
+        }
+    }
+
+    cout << "\n\n";
+}
+
+void Hand::add_card(Card& card){
+    Card* temp_arr = new Card[this->n_cards + 1];
+
+    for(int i = 0; i < this->n_cards; i++){
+        temp_arr[i] = this->cards[i];
+    }
+
+    if(this->cards != NULL){
+        delete [] this->cards;
+        this->cards = NULL;
+    }
+
+    temp_arr[this->n_cards] = card;
+    this->cards = temp_arr;
+    this->n_cards++;
+}

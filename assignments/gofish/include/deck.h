@@ -25,12 +25,14 @@ class Deck {
 
         //getters
         int get_n_cards();
+        Card get_card(int);
         
         //member functions
         void shuffle();
         void populate_card_array();
         void print_card_array();
         void swapcards(Card&, Card&);
+        Card& pull_from_top();
 
 };
 

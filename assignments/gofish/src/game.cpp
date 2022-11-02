@@ -51,3 +51,10 @@ void Game::set_deck(Deck d){
 void Game::set_player(Player p, int i){
     this->players[i] = p;
 }
+
+//member functions
+void Game::deal(){
+    for(int i = 1; i < 15; i++){
+        this->players[i % 2].add_card_to_hand(this->d.pull_from_top());
+    }
+}

@@ -69,3 +69,6 @@ int Player::get_n_books(){
 }
 
 //member functions
+void Player::add_card_to_hand(Card& card){
+    this->hand.add_card(card);
+}

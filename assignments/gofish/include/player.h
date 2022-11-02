@@ -28,6 +28,7 @@ class Player {
         int get_n_books();
 
         //member functions
+        void add_card_to_hand(Card&);
 };
 
 #endif

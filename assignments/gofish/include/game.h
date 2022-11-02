@@ -27,6 +27,7 @@ class Game {
         void set_player(Player, int);
 
         //member functions
+        void deal();
 };
 
 #endif

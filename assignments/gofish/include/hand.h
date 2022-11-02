@@ -25,6 +25,8 @@ class Hand {
         void set_n_cards(int);
 
         //member functions
+        void print_hand(bool);
+        void add_card(Card&);
 };
 
 #endif

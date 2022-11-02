@@ -26,7 +26,7 @@ crun: clean all
 debug: clean all
 	clear 
 	@echo "Debug Mode..."
-	gdb ./$(BIN)/$(EXE_FILE)
+	sudo gdb ./$(BIN)/$(EXE_FILE)
 
 clean:
 	@echo "🧹 Clearing..."
