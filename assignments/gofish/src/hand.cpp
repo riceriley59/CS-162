@@ -65,11 +65,10 @@ void Hand::print_hand(bool faceup){
         for(int i = 0; i < this->n_cards; i++){
             cout << (i + 1) << ". ";
             this->cards[i].print_card();
-            cout << "\n";
         }
     } else{
         for(int i = 0; i < this->n_cards; i++){
-            cout << " X ";
+            cout << (i + 1) << ". X \n";
         }
     }
 
@@ -91,4 +90,30 @@ void Hand::add_card(Card& card){
     temp_arr[this->n_cards] = card;
     this->cards = temp_arr;
     this->n_cards++;
+}
+
+void Hand::remove_card_from_hand(Card& c){
+    Card* temp_arr = new Card[this->n_cards - 1];
+    bool found_card = false;
+
+    for(int i = 0; i < this->n_cards; i++){
+        if((this->cards[i].get_rank() == c.get_rank()) && (this->cards[i].get_suit() == c.get_suit())){
+            found_card = true;
+            continue;
+        } else{
+            if(found_card){
+                temp_arr[i - 1] = this->cards[i];
+            }else{
+                temp_arr[i] = this->cards[i];
+            }
+        }
+    }
+
+    if(this->cards != NULL){
+        delete [] this->cards;
+        this->cards = NULL;
+    }
+
+    this->cards = temp_arr;
+    this->n_cards--;
 }

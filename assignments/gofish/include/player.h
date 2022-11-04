@@ -23,7 +23,7 @@ class Player {
         void set_hand(Hand);
 
         //getters
-        Hand get_hand();
+        Hand& get_hand();
         int* get_books();
         int get_n_books();
 

@@ -8,6 +8,7 @@ class Game {
     private:
         Deck d;
         Player players[2];
+        bool debug_mode;
     public:
         Game();
         Game(Deck, Player[]);
@@ -18,16 +19,34 @@ class Game {
         Game(const Game&);
 
         //getters
-        Deck get_deck();
-        Player get_player();
-        Player get_computer();
+        Deck& get_deck();
+        Player& get_player();
+        Player& get_computer();
+        bool get_debugmode();
         
         //setters
         void set_deck(Deck);
         void set_player(Player, int);
+        void set_debugmode(bool);
 
         //member functions
         void deal();
+        void play();
+        void print_players_hands();
+        void get_debug_mode();
+        void players_turn(int&);
+        void computers_turn();
+        
+        int to_int(string);
+        string map_output_rank(int);
+
+        void validate_rank_input(int&);
+        int validate_rank();
+        bool validate_rank_in_hand(int);
+        void check_for_chars(string, bool&);
+        void handle_guess_cards(int);
+        void go_fish(bool);
+        void check_for_books_player();
 };
 
 #endif

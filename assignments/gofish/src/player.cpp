@@ -2,6 +2,7 @@
 
 Player::Player(){
     this->books = NULL;
+    this->n_books = 0;
 }
 
 Player::Player(int n_books){
@@ -56,7 +57,7 @@ void Player::set_hand(Hand h){
 }
 
 //getters
-Hand Player::get_hand(){
+Hand& Player::get_hand(){
     return this->hand;
 }
 
