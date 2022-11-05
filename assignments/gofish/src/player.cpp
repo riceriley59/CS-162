@@ -87,15 +87,17 @@ void Player::add_book_to_player(int rank){
         this->books = NULL;
     }
 
-    for(int i = 0; i < this->hand.get_n_cards(); i++){
+    temp_arr[this->n_books] = rank;
+    this->books = temp_arr;
+    this->n_books++;
+}
+
+void Player::remove_card_from_hand(int rank){
+     for(int i = 0; i < this->hand.get_n_cards(); i++){
         if(this->hand.get_cards()[i].get_rank() == rank){
             this->hand.remove_card_from_hand(this->hand.get_cards()[i]);
         }
     }
-
-    temp_arr[this->n_books] = rank;
-    this->books = temp_arr;
-    this->n_books++;
 }
 
 void Player::print_player_books(bool faceup){

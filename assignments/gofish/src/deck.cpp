@@ -75,7 +75,7 @@ void Deck::print_card_array(){
     cout << "\n";
 }
 
-Card Deck::get_card(int i){
+Card& Deck::get_card(int i){
     return this->cards[i];
 }
 

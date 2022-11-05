@@ -25,7 +25,7 @@ class Deck {
 
         //getters
         int get_n_cards();
-        Card get_card(int);
+        Card& get_card(int);
         
         //member functions
         void shuffle();

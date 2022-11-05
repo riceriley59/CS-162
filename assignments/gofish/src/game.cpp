@@ -249,8 +249,9 @@ void Game::check_for_books_player(){
 
         if(c == 4){
             //then there is a book
-            cout << "\n\nYou got a book of " << this->map_output_rank(i) << "s!!! \n";
             this->get_player().add_book_to_player(i);
+            this->get_player().remove_card_from_hand(i);
+            cout << "\n\nYou got a book of " << this->map_output_rank(i) << "s!!! \n";
         }
     }
 }
@@ -326,8 +327,9 @@ void Game::check_for_books_computer(){
 
         if(c == 4){
             //then there is a book
-            cout << "\n\nComputer got a book of " << this->map_output_rank(i) << "s!!! \n";
             this->get_computer().add_book_to_player(i);
+            this->get_computer().remove_card_from_hand(i);
+            cout << "\n\nComputer got a book of " << this->map_output_rank(i) << "s!!! \n";
         }
     }
 }

@@ -32,6 +32,7 @@ class Player {
         void add_book_to_player(int);
         void print_player_books(bool);
         string map_output_rank(int);
+        void remove_card_from_hand(int);
 };
 
 #endif

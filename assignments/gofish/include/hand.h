@@ -27,7 +27,7 @@ class Hand {
         //member functions
         void print_hand(bool);
         void add_card(Card&);
-        void remove_card_from_hand(Card&);
+        void remove_card_from_hand(Card);
 };
 
 #endif
