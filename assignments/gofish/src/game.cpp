@@ -204,10 +204,10 @@ void Game::handle_guess_cards(int rank, bool& goagain){
     int amount = 0;
     goagain = false;
 
-    for(int i = 0; i < this->get_computer().get_hand().get_n_cards() + 1; i++){
+    for(int i = 0; i < this->get_computer().get_hand().get_n_cards(); i++){
         if(this->get_computer().get_hand().get_cards()[i].get_rank() == rank){
             this->get_player().add_card_to_hand(this->get_computer().get_hand().get_cards()[i]);
-            this->get_computer().get_hand().remove_card_from_hand(this->get_computer().get_hand().get_cards()[i]);
+            this->get_computer().remove_card_from_hand(rank);
             amount++;
         }
     }
@@ -262,7 +262,7 @@ string Game::map_output_rank(int rank){
 void Game::check_for_books_player(){
     int c = 0;
 
-    for(int i = 1; i < 14; i++){
+    for(int i = 0; i < 14; i++){
         c = 0;
         for(int j = 0; j < this->get_player().get_hand().get_n_cards(); j++){
             if(this->get_player().get_hand().get_cards()[j].get_rank() == i){

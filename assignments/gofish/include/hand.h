@@ -28,6 +28,7 @@ class Hand {
         void print_hand(bool);
         void add_card(Card&);
         void remove_card_from_hand(Card&);
+        bool hasrank(int);
 };
 
 #endif

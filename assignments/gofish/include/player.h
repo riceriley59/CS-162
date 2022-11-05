@@ -33,7 +33,6 @@ class Player {
         void print_player_books(bool);
         string map_output_rank(int);
         void remove_card_from_hand(int);
-        void remove_book_from_hand(int, int[]);
 };
 
 #endif

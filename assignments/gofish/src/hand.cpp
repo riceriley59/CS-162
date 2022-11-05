@@ -118,3 +118,13 @@ void Hand::remove_card_from_hand(Card& c){
     this->cards = temp_arr;
     this->n_cards--;
 }
+
+bool Hand::hasrank(int rank){
+    for(int i = 0; i < this->n_cards; i++){
+        if(cards[i].get_rank() == rank){
+            return true;
+        }
+    }
+
+    return false;
+}
