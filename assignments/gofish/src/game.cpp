@@ -75,9 +75,13 @@ void Game::deal(){
 }
 
 void Game::print_players_hands(){
+    cout << "\nHeres the Player's books\n";
+    this->get_player().print_player_books(true);
     cout << "\nHere's your hand:\n";
     this->get_player().get_hand().print_hand(true);
 
+    cout << "\nHeres the opponent's books\n";
+    this->get_computer().print_player_books(this->debug_mode);
     cout << "Heres the opponents hand: \n";
     this->get_computer().get_hand().print_hand(this->debug_mode);
 }
@@ -86,8 +90,10 @@ void Game::play(){
     while((this->get_player().get_n_books() + this->get_computer().get_n_books()) != 13){
         int rank = 0;
 
+        cout << "\nIts your turn.. \n";
         this->players_turn(rank);
-        this->computers_turn();
+        cout << "\nIts the opponents turn...\n";
+        this->computers_turn(rank);
 
         cout << "\n\nThere are " << this->get_deck().get_n_cards() << " cards left.\n";
         this->print_players_hands();
@@ -200,12 +206,14 @@ void Game::go_fish(bool player){
 
         if(player){
             this->get_player().add_card_to_hand(card);
+            cout << "\nGo Fish!! you pulled a ";
+            card.print_card();
         }else{
             this->get_computer().add_card_to_hand(card);
+            cout << "\nGo Fish!! the computer pulled a ";
+            card.print_card();
         }
 
-        cout << "\nGo Fish!! You pulled a ";
-        card.print_card();
     }else{
         cout << "\nGo Fish!!, There are no more cards in the deck!!";
     }
@@ -234,12 +242,15 @@ void Game::check_for_books_player(){
     for(int i = 1; i < 14; i++){
         c = 0;
         for(int j = 0; j < this->get_player().get_hand().get_n_cards(); j++){
-            if(this->get_player().get_hand().get_cards()[i].get_rank() == i){
+            if(this->get_player().get_hand().get_cards()[j].get_rank() == i){
                 c++;
             }
         }
+
         if(c == 4){
             //then there is a book
+            cout << "\n\nYou got a book of " << this->map_output_rank(i) << "s!!! \n";
+            this->get_player().add_book_to_player(i);
         }
     }
 }
@@ -249,12 +260,13 @@ void Game::players_turn(int& rank){
 
     //corresponding action
     this->handle_guess_cards(rank);
-
     this->check_for_books_player();
 }
 
-void Game::computers_turn(){
-
+void Game::computers_turn(int rank){
+    int guess = this->guess_rank(rank);
+    this->handle_guess_cards_computer(guess);
+    this->check_for_books_computer();
 }
 
 int Game::to_int(string c){
@@ -271,4 +283,55 @@ int Game::to_int(string c){
     } else{
         return string_to_int(c) - 1;
     }
+}
+
+int Game::guess_rank(int rank){
+    for(int i = 0; i < this->get_computer().get_hand().get_n_cards(); i++){
+        if(rank == this->get_computer().get_hand().get_cards()[i].get_rank()){
+            return rank;
+        }
+    }
+
+    return this->get_computer().get_hand().get_cards()[rand() % (this->get_computer().get_hand().get_n_cards() - 1)].get_rank();
+}
+
+void Game::handle_guess_cards_computer(int rank){
+    int amount = 0;
+
+    for(int i = 0; i < this->get_player().get_hand().get_n_cards(); i++){
+        if(this->get_player().get_hand().get_cards()[i].get_rank() == rank){
+            this->get_computer().add_card_to_hand(this->get_player().get_hand().get_cards()[i]);
+            this->get_player().get_hand().remove_card_from_hand(this->get_player().get_hand().get_cards()[i]);
+            amount++;
+        }
+    }
+
+    if(amount > 0){
+        cout << "\nThe computer got " << amount << " " << this->map_output_rank(rank) << " in your hand";
+    } else if(amount == 0){
+        this->go_fish(false);
+    }
+}
+
+void Game::check_for_books_computer(){
+    int c = 0;
+
+    for(int i = 1; i < 14; i++){
+        c = 0;
+        for(int j = 0; j < this->get_computer().get_hand().get_n_cards(); j++){
+            if(this->get_computer().get_hand().get_cards()[j].get_rank() == i){
+                c++;
+            }
+        }
+
+        if(c == 4){
+            //then there is a book
+            cout << "\n\nComputer got a book of " << this->map_output_rank(i) << "s!!! \n";
+            this->get_computer().add_book_to_player(i);
+        }
+    }
+}
+
+void Game::end(){
+    
 }

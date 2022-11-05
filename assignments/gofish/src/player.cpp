@@ -73,3 +73,56 @@ int Player::get_n_books(){
 void Player::add_card_to_hand(Card& card){
     this->hand.add_card(card);
 }
+
+//causing bug only removing three cards
+void Player::add_book_to_player(int rank){
+    int* temp_arr = new int[this->n_books + 1];
+
+    for(int i = 0; i < this->n_books; i++){
+        temp_arr[i] = this->books[i];
+    }
+
+    if(this->books != NULL){
+        delete [] this->books;
+        this->books = NULL;
+    }
+
+    for(int i = 0; i < this->hand.get_n_cards(); i++){
+        if(this->hand.get_cards()[i].get_rank() == rank){
+            this->hand.remove_card_from_hand(this->hand.get_cards()[i]);
+        }
+    }
+
+    temp_arr[this->n_books] = rank;
+    this->books = temp_arr;
+    this->n_books++;
+}
+
+void Player::print_player_books(bool faceup){
+    for(int i = 0; i < this->n_books; i++){
+        if(faceup){
+            cout << (i + 1) << ". "<< this->map_output_rank(this->books[i]) << "s ";
+        }else{
+            cout << (i + 1) << ". X ";
+        }
+    }
+
+    cout << "\n";
+}
+
+string Player::map_output_rank(int rank){
+    if(rank <= 9){
+        string str_rank = to_string(rank + 1);
+        return str_rank; 
+    } else if(rank == 10){
+        return "Jack";
+    } else if(rank == 11){
+        return "Queen";
+    } else if(rank == 12){
+        return "King";
+    } else if(rank == 13){
+        return "Ace";
+    }
+
+    return "Error";
+}

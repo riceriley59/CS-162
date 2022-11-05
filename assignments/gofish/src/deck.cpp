@@ -53,8 +53,6 @@ void Deck::swapcards(Card& card1, Card& card2){
 }
 
 void Deck::shuffle(){
-    srand(time(NULL));
-
     for(int i = 0; i < this->n_cards; i++){
         swapcards(this->cards[rand() % (this->n_cards - 1)], this->cards[rand() % (this->n_cards - 1)]);
     }

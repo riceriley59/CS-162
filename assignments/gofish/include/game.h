@@ -32,10 +32,11 @@ class Game {
         //member functions
         void deal();
         void play();
+        void end();
         void print_players_hands();
         void get_debug_mode();
         void players_turn(int&);
-        void computers_turn();
+        void computers_turn(int);
         
         int to_int(string);
         string map_output_rank(int);
@@ -47,6 +48,9 @@ class Game {
         void handle_guess_cards(int);
         void go_fish(bool);
         void check_for_books_player();
+        int guess_rank(int);
+        void handle_guess_cards_computer(int);
+        void check_for_books_computer();
 };
 
 #endif
