@@ -35,8 +35,8 @@ class Game {
         void end();
         void print_players_hands();
         void get_debug_mode();
-        void players_turn(int&);
-        void computers_turn(int);
+        void players_turn(int&, bool&);
+        void computers_turn(int, bool&);
         
         int to_int(string);
         string map_output_rank(int);
@@ -45,11 +45,11 @@ class Game {
         int validate_rank();
         bool validate_rank_in_hand(int);
         void check_for_chars(string, bool&);
-        void handle_guess_cards(int);
-        void go_fish(bool);
+        void handle_guess_cards(int, bool&);
+        void go_fish(bool, int, bool&);
         void check_for_books_player();
         int guess_rank(int);
-        void handle_guess_cards_computer(int);
+        void handle_guess_cards_computer(int, bool&);
         void check_for_books_computer();
 };
 

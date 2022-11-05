@@ -93,10 +93,17 @@ void Player::add_book_to_player(int rank){
 }
 
 void Player::remove_card_from_hand(int rank){
-     for(int i = 0; i < this->hand.get_n_cards(); i++){
+     for(int i = 0; i < this->get_hand().get_n_cards(); i++){
         if(this->hand.get_cards()[i].get_rank() == rank){
-            this->hand.remove_card_from_hand(this->hand.get_cards()[i]);
+            Card card = this->hand.get_cards()[i];
+            this->hand.remove_card_from_hand(card);
         }
+    }
+}
+
+void Player::remove_book_from_hand(int rank, int rankposition[]){
+    for(int i = 0; i < 4; i++){
+        this->hand.remove_card_from_hand(this->get_hand().get_cards()[rankposition[i]]);
     }
 }
 

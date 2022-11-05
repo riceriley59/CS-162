@@ -97,12 +97,13 @@ void Hand::remove_card_from_hand(Card& c){
     bool found_card = false;
 
     for(int i = 0; i < this->n_cards; i++){
-        if((this->cards[i].get_rank() == c.get_rank()) && (this->cards[i].get_suit() == c.get_suit())){
+        if(this->cards[i].get_rank() == c.get_rank() && this->cards[i].get_suit() == c.get_suit()){
             found_card = true;
             continue;
         } else{
             if(found_card){
                 temp_arr[i - 1] = this->cards[i];
+
             }else{
                 temp_arr[i] = this->cards[i];
             }

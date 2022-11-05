@@ -89,11 +89,29 @@ void Game::print_players_hands(){
 void Game::play(){
     while((this->get_player().get_n_books() + this->get_computer().get_n_books()) != 13){
         int rank = 0;
+        bool gotagain = false;
 
-        cout << "\nIts your turn.. \n";
-        this->players_turn(rank);
-        cout << "\nIts the opponents turn...\n";
-        this->computers_turn(rank);
+        do{
+            cout << "\nIts your turn.. \n";
+            this->players_turn(rank, gotagain);
+
+            if(gotagain == true){
+                cout << "\n\nThere are " << this->get_deck().get_n_cards() << " cards left.\n";
+                this->print_players_hands();
+            }
+        } while(gotagain);
+
+        gotagain = false;
+
+        do{
+            cout << "\nIts the opponents turn...\n";
+            this->computers_turn(rank, gotagain);
+
+            if(gotagain == true){
+                cout << "\n\nThere are " << this->get_deck().get_n_cards() << " cards left.\n";
+                this->print_players_hands();
+            }
+        }while(gotagain);
 
         cout << "\n\nThere are " << this->get_deck().get_n_cards() << " cards left.\n";
         this->print_players_hands();
@@ -182,10 +200,11 @@ void Game::validate_rank_input(int& rank){
     }while(!this->validate_rank_in_hand(rank));
 }
 
-void Game::handle_guess_cards(int rank){
+void Game::handle_guess_cards(int rank, bool& goagain){
     int amount = 0;
+    goagain = false;
 
-    for(int i = 0; i < this->get_computer().get_hand().get_n_cards(); i++){
+    for(int i = 0; i < this->get_computer().get_hand().get_n_cards() + 1; i++){
         if(this->get_computer().get_hand().get_cards()[i].get_rank() == rank){
             this->get_player().add_card_to_hand(this->get_computer().get_hand().get_cards()[i]);
             this->get_computer().get_hand().remove_card_from_hand(this->get_computer().get_hand().get_cards()[i]);
@@ -195,12 +214,13 @@ void Game::handle_guess_cards(int rank){
 
     if(amount > 0){
         cout << "\nThey had " << amount << " " << this->map_output_rank(rank) << " in their hand";
+        goagain = true;
     } else if(amount == 0){
-        this->go_fish(true);
+        this->go_fish(true, rank, goagain);
     }
 }
 
-void Game::go_fish(bool player){
+void Game::go_fish(bool player, int rank, bool& goagain){
     if(this->get_deck().get_n_cards() != 0){
         Card card = this->get_deck().pull_from_top();
 
@@ -208,6 +228,9 @@ void Game::go_fish(bool player){
             this->get_player().add_card_to_hand(card);
             cout << "\nGo Fish!! you pulled a ";
             card.print_card();
+            if(rank == card.get_rank()){
+                cout << "\nYou get another turn!!!\n";
+            }
         }else{
             this->get_computer().add_card_to_hand(card);
             cout << "\nGo Fish!! the computer pulled a ";
@@ -256,17 +279,15 @@ void Game::check_for_books_player(){
     }
 }
 
-void Game::players_turn(int& rank){
+void Game::players_turn(int& rank, bool& goagain){
     this->validate_rank_input(rank);
-
-    //corresponding action
-    this->handle_guess_cards(rank);
+    this->handle_guess_cards(rank, goagain);
     this->check_for_books_player();
 }
 
-void Game::computers_turn(int rank){
+void Game::computers_turn(int rank, bool& goagain){
     int guess = this->guess_rank(rank);
-    this->handle_guess_cards_computer(guess);
+    this->handle_guess_cards_computer(guess, goagain);
     this->check_for_books_computer();
 }
 
@@ -296,8 +317,9 @@ int Game::guess_rank(int rank){
     return this->get_computer().get_hand().get_cards()[rand() % (this->get_computer().get_hand().get_n_cards() - 1)].get_rank();
 }
 
-void Game::handle_guess_cards_computer(int rank){
+void Game::handle_guess_cards_computer(int rank, bool& goagain){
     int amount = 0;
+    goagain = false;
 
     for(int i = 0; i < this->get_player().get_hand().get_n_cards(); i++){
         if(this->get_player().get_hand().get_cards()[i].get_rank() == rank){
@@ -309,18 +331,20 @@ void Game::handle_guess_cards_computer(int rank){
 
     if(amount > 0){
         cout << "\nThe computer got " << amount << " " << this->map_output_rank(rank) << " in your hand";
+        goagain = true;
+        cout << "\nThey get to go again\n";
     } else if(amount == 0){
-        this->go_fish(false);
+        this->go_fish(false, rank, goagain);
     }
 }
 
 void Game::check_for_books_computer(){
-    int c = 0;
-
     for(int i = 1; i < 14; i++){
-        c = 0;
+        int rank_position[] = { 0, 0, 0, 0};
+        int c = 0;
         for(int j = 0; j < this->get_computer().get_hand().get_n_cards(); j++){
             if(this->get_computer().get_hand().get_cards()[j].get_rank() == i){
+                rank_position[c] = j;
                 c++;
             }
         }
