@@ -351,7 +351,7 @@ void Game::computers_turn(int rank, bool& go_again){
     }
 
     int guess = this->guess_rank(rank);
-    cout << "\nThe computer asked for " << this->map_output_rank(rank) << "s\n";
+    cout << "\nThe computer asked for " << this->map_output_rank(guess) << "s\n";
     this->handle_guess_cards_computer(guess, go_again);
     this->check_for_books_computer();
 }
