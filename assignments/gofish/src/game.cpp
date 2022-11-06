@@ -251,7 +251,13 @@ void Game::go_fish(bool player, int rank, bool& go_again){
             }
         }else{
             this->get_computer().add_card_to_hand(card);
-            cout << "\nGo Fish!! the computer pulled a card";
+            cout << "\nGo Fish!! the computer pulled a "; 
+            if(this->debug_mode){
+                card.print_card();
+            }else{
+                 cout << "card";
+            }
+
             if(card.get_rank() == rank){
                 cout << "\nThey get another turn!!!\n";
                 go_again = true;
