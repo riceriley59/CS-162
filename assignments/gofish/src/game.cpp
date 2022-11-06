@@ -251,8 +251,7 @@ void Game::go_fish(bool player, int rank, bool& go_again){
             }
         }else{
             this->get_computer().add_card_to_hand(card);
-            cout << "\nGo Fish!! the computer pulled a ";
-            card.print_card();
+            cout << "\nGo Fish!! the computer pulled a card";
             if(card.get_rank() == rank){
                 cout << "\nThey get another turn!!!\n";
                 go_again = true;
@@ -340,7 +339,7 @@ void Game::computers_turn(int rank, bool& go_again){
         Card pulled = this->d.pull_from_top();
         this->get_player().add_card_to_hand(pulled);
 
-        cout << "\nYou pulled a card\n";
+        cout << "\nThey pulled a card\n";
         cout << "\n\nThere are " << this->get_deck().get_n_cards() << " cards left.\n";
         this->print_players_hands();
     }
