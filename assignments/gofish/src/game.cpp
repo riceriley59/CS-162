@@ -107,6 +107,7 @@ void Game::play(){
                 this->print_players_hands();
             }
 
+            cout << "Press enter to continue";
             getline(cin, input);
         }while(go_again);
 
@@ -127,6 +128,7 @@ void Game::play(){
                 this->print_players_hands();
             }
 
+            cout << "Press enter to continue";
             getline(cin, input);
         }while(go_again);
 
