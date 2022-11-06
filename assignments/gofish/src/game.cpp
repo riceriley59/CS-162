@@ -16,7 +16,7 @@ Game::Game(Deck d, Player players[]){
 
  //Big3
 Game::~Game(){
-    cout << "\nGame has ended, Thanks for playing! \n";
+
 }
 
 Game& Game::operator=(const Game& g){
@@ -310,6 +310,15 @@ void Game::players_turn(int& rank, bool& go_again){
         this->print_players_hands();
     }
 
+    if(this->get_computer().get_hand().get_n_cards() < 1 && this->d.get_n_cards() != 0){
+        Card pulled = this->d.pull_from_top();
+        this->get_computer().add_card_to_hand(pulled);
+
+        cout << "\nThe computer pulled a card\n";
+        cout << "\n\nThere are " << this->get_deck().get_n_cards() << " cards left.\n";
+        this->print_players_hands();
+    }
+
     this->validate_rank_input(rank);
 
     //corresponding action
@@ -323,6 +332,15 @@ void Game::computers_turn(int rank, bool& go_again){
         this->get_computer().add_card_to_hand(pulled);
 
         cout << "\npulled a card\n";
+        cout << "\n\nThere are " << this->get_deck().get_n_cards() << " cards left.\n";
+        this->print_players_hands();
+    }
+
+    if(this->get_player().get_hand().get_n_cards() < 1 && this->d.get_n_cards() != 0){
+        Card pulled = this->d.pull_from_top();
+        this->get_player().add_card_to_hand(pulled);
+
+        cout << "\nYou pulled a card\n";
         cout << "\n\nThere are " << this->get_deck().get_n_cards() << " cards left.\n";
         this->print_players_hands();
     }
@@ -399,5 +417,33 @@ void Game::check_for_books_computer(){
 }
 
 void Game::end(){
-    
+    if(this->get_player().get_n_books() > this->get_computer().get_n_books()){
+        cout << "\nYou won!! you got " << this->get_player().get_n_books() << " books\n";
+        cout << "The computer got " << this->get_computer().get_n_books() << " books\n";
+    }else if(this->get_computer().get_n_books() > this->get_player().get_n_books()){
+        cout << "\nYou lost. You got " << this->get_player().get_n_books() << " books\n";
+        cout << "The computer got " << this->get_computer().get_n_books() << " books\n";
+    }
+}
+
+bool Game::playagain(){
+    string input;
+    bool inputg;
+
+    cout << "\nDo you want to play again? (yes or no): ";
+    do{
+        getline(cin, input);
+        if(input == "yes"){
+            inputg = true;
+            return true;
+        }else if(input == "no"){
+            cout << "\nThe game has ended, Thanks for playing! \n";
+            inputg = true;
+            return false;
+        }else{
+            cout << "\nThis input is invalid, Try Again: ";
+            cin.clear();
+            inputg = false;
+        }
+    }while(!inputg);
 }

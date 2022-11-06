@@ -51,6 +51,7 @@ class Game {
         int guess_rank(int);
         void handle_guess_cards_computer(int, bool&);
         void check_for_books_computer();
+        bool playagain();
 };
 
 #endif

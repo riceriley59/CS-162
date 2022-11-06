@@ -1,12 +1,19 @@
 #include "game.h"
 
 int main(){
-    srand(time(NULL));
-    Game g;
+    bool playagain = false;
 
-    g.deal();
-    g.play();
-    g.end();
+    do{
+        srand(time(NULL));
+        Game g;
+
+        g.deal();
+        g.play();
+        g.end();
+
+        playagain = g.playagain();
+
+    }while(playagain);
 
     return 0;
 }
