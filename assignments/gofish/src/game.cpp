@@ -86,51 +86,62 @@ void Game::print_players_hands(){
     this->get_computer().get_hand().print_hand(this->debug_mode);
 }
 
+void Game::play_player(int& rank, bool& go_again){
+    string input;
+
+    do{
+        if((this->get_player().get_n_books() + this->get_computer().get_n_books()) == 13){
+            go_again = false;
+            continue;
+        }
+        go_again = false;
+
+        cout << "\nIts your turn.. \n";
+        this->players_turn(rank, go_again);
+
+        if(go_again){
+            cout << "\n\nThere are " << this->get_deck().get_n_cards() << " cards left.\n";
+            this->print_players_hands();
+        }
+
+        cout << "Press enter to continue";
+        getline(cin, input);
+    }while(go_again);
+}
+
+void Game::play_computer(int& rank, bool& go_again){
+    string input;
+
+    do{
+        if((this->get_player().get_n_books() + this->get_computer().get_n_books()) == 13){
+            go_again = false;
+            continue;
+        }
+
+        go_again = false;
+        cout << "\nIts the opponents turn...\n";
+        this->computers_turn(rank, go_again);
+
+        if(go_again){
+            cout << "\n\nThere are " << this->get_deck().get_n_cards() << " cards left.\n";
+            this->print_players_hands();
+        }
+
+        cout << "Press enter to continue";
+        getline(cin, input);
+    }while(go_again);
+}
+
 void Game::play(){
     while((this->get_player().get_n_books() + this->get_computer().get_n_books()) != 13){
         int rank = 0;
         bool go_again = false;
-        string input;
 
-        do{
-            if((this->get_player().get_n_books() + this->get_computer().get_n_books()) == 13){
-                go_again = false;
-                continue;
-            }
-            go_again = false;
-
-            cout << "\nIts your turn.. \n";
-            this->players_turn(rank, go_again);
-
-            if(go_again){
-                cout << "\n\nThere are " << this->get_deck().get_n_cards() << " cards left.\n";
-                this->print_players_hands();
-            }
-
-            cout << "Press enter to continue";
-            getline(cin, input);
-        }while(go_again);
+        this->play_player(rank, go_again);
 
         go_again = false;
 
-        do{
-            if((this->get_player().get_n_books() + this->get_computer().get_n_books()) == 13){
-                go_again = false;
-                continue;
-            }
-
-            go_again = false;
-            cout << "\nIts the opponents turn...\n";
-            this->computers_turn(rank, go_again);
-
-            if(go_again){
-                cout << "\n\nThere are " << this->get_deck().get_n_cards() << " cards left.\n";
-                this->print_players_hands();
-            }
-
-            cout << "Press enter to continue";
-            getline(cin, input);
-        }while(go_again);
+        this->play_computer(rank, go_again);
 
         if((this->get_player().get_n_books() + this->get_computer().get_n_books()) != 13){
             cout << "\n\nThere are " << this->get_deck().get_n_cards() << " cards left.\n";
@@ -239,36 +250,42 @@ void Game::handle_guess_cards(int rank, bool& go_again){
         go_again = true;
         cout << "\nYou get another turn!!!\n";
     } else if(amount == 0){
-        this->go_fish(true, rank, go_again);
+        this->go_fish_player(rank, go_again);
     }
 }
 
-void Game::go_fish(bool player, int rank, bool& go_again){
+void Game::go_fish_computer(int rank, bool& go_again){
     if(this->get_deck().get_n_cards() != 0){
         Card card = this->get_deck().pull_from_top();
 
-        if(player){
-            this->get_player().add_card_to_hand(card);
-            cout << "\nGo Fish!! you pulled a ";
+        this->get_computer().add_card_to_hand(card);
+        cout << "\nGo Fish!! the computer pulled a "; 
+        if(this->debug_mode){
             card.print_card();
-
-            if(card.get_rank() == rank){
-                cout << "\nYou get another turn!!!\n";
-                go_again = true;
-            }
         }else{
-            this->get_computer().add_card_to_hand(card);
-            cout << "\nGo Fish!! the computer pulled a "; 
-            if(this->debug_mode){
-                card.print_card();
-            }else{
-                 cout << "card";
-            }
+                cout << "card";
+        }
 
-            if(card.get_rank() == rank){
-                cout << "\nThey get another turn!!!\n";
-                go_again = true;
-            }
+        if(card.get_rank() == rank){
+            cout << "\nThey get another turn!!!\n";
+            go_again = true;
+        }
+    }else{
+        cout << "\nGo Fish!!, There are no more cards in the deck!!";
+    }
+}
+
+void Game::go_fish_player(int rank, bool& go_again){
+    if(this->get_deck().get_n_cards() != 0){
+        Card card = this->get_deck().pull_from_top();
+
+        this->get_player().add_card_to_hand(card);
+        cout << "\nGo Fish!! you pulled a ";
+        card.print_card();
+
+        if(card.get_rank() == rank){
+            cout << "\nYou get another turn!!!\n";
+            go_again = true;
         }
 
     }else{
@@ -406,7 +423,7 @@ void Game::handle_guess_cards_computer(int rank, bool& go_again){
         go_again = true;
         cout << "\nThey get another turn!!!\n";
     } else if(amount == 0){
-        this->go_fish(false, rank, go_again);
+        this->go_fish_computer(rank, go_again);
     }
 }
 

@@ -46,12 +46,15 @@ class Game {
         bool validate_rank_in_hand(int);
         void check_for_chars(string, bool&);
         void handle_guess_cards(int, bool&);
-        void go_fish(bool, int, bool&);
+        void go_fish_computer(int, bool&);
+        void go_fish_player(int, bool&);
         void check_for_books_player();
         int guess_rank(int);
         void handle_guess_cards_computer(int, bool&);
         void check_for_books_computer();
         bool playagain();
+        void play_computer(int&, bool&);
+        void play_player(int&, bool&);
 };
 
 #endif
