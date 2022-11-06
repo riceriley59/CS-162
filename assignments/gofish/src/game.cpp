@@ -90,6 +90,7 @@ void Game::play(){
     while((this->get_player().get_n_books() + this->get_computer().get_n_books()) != 13){
         int rank = 0;
         bool go_again = false;
+        string input;
 
         do{
             if((this->get_player().get_n_books() + this->get_computer().get_n_books()) == 13){
@@ -105,6 +106,8 @@ void Game::play(){
                 cout << "\n\nThere are " << this->get_deck().get_n_cards() << " cards left.\n";
                 this->print_players_hands();
             }
+
+            getline(cin, input);
         }while(go_again);
 
         go_again = false;
@@ -123,6 +126,8 @@ void Game::play(){
                 cout << "\n\nThere are " << this->get_deck().get_n_cards() << " cards left.\n";
                 this->print_players_hands();
             }
+
+            getline(cin, input);
         }while(go_again);
 
         if((this->get_player().get_n_books() + this->get_computer().get_n_books()) != 13){
