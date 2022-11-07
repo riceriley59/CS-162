@@ -406,6 +406,8 @@ bool Game::validate_rank_in_hand(int rank){
         cout << "\nYou can only choose ranks from cards from your hand, Try Again!!!\n";
         return false;
     }
+
+    return false;
 }
 
 /*********************************************************************
@@ -437,12 +439,14 @@ have to go fish
 void Game::handle_guess_cards(int rank, bool& go_again){
     int amount = 0;
 
-    for(int i = 0; i < this->get_computer().get_hand().get_n_cards(); i++){
-        if(this->get_computer().get_hand().get_cards()[i].get_rank() == rank){
-            this->get_player().add_card_to_hand(this->get_computer().get_hand().get_cards()[i]);
-            this->get_computer().remove_card_from_hand(this->get_computer().get_hand().get_cards()[i]);
-            
-            amount++;
+    while(this->get_computer().get_hand().has_rank(rank)){
+        for(int i = 0; i < this->get_computer().get_hand().get_n_cards(); i++){
+            if(this->get_computer().get_hand().get_cards()[i].get_rank() == rank){
+                this->get_player().add_card_to_hand(this->get_computer().get_hand().get_cards()[i]);
+                this->get_computer().remove_card_from_hand(this->get_computer().get_hand().get_cards()[i]);
+                
+                amount++;
+            }
         }
     }
 
@@ -693,11 +697,13 @@ computer's hand, and if not then the computer will go fish
 void Game::handle_guess_cards_computer(int rank, bool& go_again){
     int amount = 0;
 
-    for(int i = 0; i < this->get_player().get_hand().get_n_cards(); i++){
-        if(this->get_player().get_hand().get_cards()[i].get_rank() == rank){
-            this->get_computer().add_card_to_hand(this->get_player().get_hand().get_cards()[i]);
-            this->get_player().remove_card_from_hand(this->get_player().get_hand().get_cards()[i]);
-            amount++;
+    while(this->get_player().get_hand().has_rank(rank)){
+        for(int i = 0; i < this->get_player().get_hand().get_n_cards(); i++){
+            if(this->get_player().get_hand().get_cards()[i].get_rank() == rank){
+                this->get_computer().add_card_to_hand(this->get_player().get_hand().get_cards()[i]);
+                this->get_player().remove_card_from_hand(this->get_player().get_hand().get_cards()[i]);
+                amount++;
+            }
         }
     }
 
@@ -788,4 +794,6 @@ bool Game::playagain(){
             inputg = false;
         }
     }while(!inputg);
+
+    return false;
 }
