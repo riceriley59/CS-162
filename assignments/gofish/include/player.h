@@ -1,8 +1,18 @@
+/*********************************************************************
+** Filename: player.h
+** Author: Riley Rice
+** Date: 11-6-2022
+** Description: This is the header file for my player class
+*********************************************************************/
+
+//header guard
 #ifndef PLAYER_H
 #define PLAYER_H
 
+//include my hand class
 #include "hand.h"
 
+//player class for each player in gofish
 class Player {
     private:
         Hand hand;

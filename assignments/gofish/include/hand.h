@@ -1,13 +1,24 @@
+/*********************************************************************
+** Filename: hand.h
+** Author: Riley Rice
+** Date: 11-6-2022
+** Description: This is the header file for my hand class
+*********************************************************************/
+
+//header guard
 #ifndef HAND_H
 #define HAND_H
 
+//include my card class
 #include "card.h"
 
+//each player has a hand which has a card
 class Hand {
     private:
         Card* cards; // An array of cards in hand
         int n_cards; // Number of cards in the hand.
     public:
+        //default and paramaterized constructors
         Hand();
         Hand(int n_cards);
 

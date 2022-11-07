@@ -1,3 +1,12 @@
+/*********************************************************************
+** Filename: help.cpp
+** Author: Riley Rice
+** Date: 11-6-2022
+** Description: This is the implementation file for my helper functions
+which make error handling in my program easier.
+*********************************************************************/
+
+//include header file
 #include "help.h"
 
 using namespace std;

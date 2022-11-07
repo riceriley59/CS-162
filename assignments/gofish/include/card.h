@@ -1,11 +1,22 @@
+/*********************************************************************
+** Filename: card.h
+** Author: Riley Rice
+** Date: 11-6-2022
+** Description: This is the header file for my card class
+*********************************************************************/
+
+//header guard
 #ifndef CARD_H
 #define CARD_H
 
+//include basic libraries
 #include <string>
 #include <iostream>
 
+//use namespace std
 using namespace std;
 
+//deck and hand have cards
 class Card {
     private:
         int rank; // Should be in the range 0-12.

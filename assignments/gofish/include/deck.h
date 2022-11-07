@@ -1,11 +1,21 @@
+/*********************************************************************
+** Filename: deck.h
+** Author: Riley Rice
+** Date: 11-6-2022
+** Description: header file for my deck class
+*********************************************************************/
+
+//header guard
 #ifndef DECK_H
 #define DECK_H
 
+//include basic libraries and card class
 #include "card.h"
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
 
+//deck has 52 cards
 class Deck {
     private:
         Card cards[52]; //A full deck of cards
