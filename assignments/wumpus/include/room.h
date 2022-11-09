@@ -5,6 +5,7 @@
 
 class Room{
     private:
+        int value;
 
     public:
 
