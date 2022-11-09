@@ -6,7 +6,7 @@ BIN = bin
 SRC = src
 INCLUDE = include
 OBJ = $(BIN)/obj
-OBJS := $(OBJ)/main.o $(OBJ)/player.o $(OBJ)/game.o $(OBJ)/room.o $(OBJ)/event.o $(OBJ)/wumpus.o $(OBJ)/bats.o $(OBJ)/pits.o $(OBJ)/gold.o
+OBJS := $(OBJ)/main.o $(OBJ)/player.o $(OBJ)/game.o $(OBJ)/room.o $(OBJ)/event.o $(OBJ)/wumpus.o $(OBJ)/bats.o $(OBJ)/pits.o $(OBJ)/gold.o $(OBJ)/help.o
 
 all: $(OBJS) $(BIN)/$(EXE_FILE)
 
