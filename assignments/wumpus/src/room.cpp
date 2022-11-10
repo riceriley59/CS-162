@@ -2,11 +2,11 @@
 
 Room::Room(int x, int y) : x(x), y(y), event(NULL), player_in_room(false){}
 
-int Room::get_x(){
+int Room::get_x() const{
     return this->x;
 }
 
-int Room::get_y(){
+int Room::get_y() const{
     return this->y;
 }
 
@@ -14,11 +14,11 @@ void Room::set_has_player(bool is){
     this->player_in_room = is;
 }
 
-bool Room::has_player(){
+bool Room::get_has_player(){
     return this->player_in_room;
 }
 
-bool Room::has_event(){
+bool Room::get_has_event(){
     if(this->event != NULL){
         return true;
     }

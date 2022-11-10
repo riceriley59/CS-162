@@ -2,7 +2,6 @@
 #define ROOM_H
 
 #include "event.h"
-#include <cstddef>
 #include <iostream>
 
 class Room{
@@ -15,11 +14,15 @@ class Room{
     public:
         Room(int, int);
 
-        int get_x();
-        int get_y();
-        bool has_player();
-        bool has_event();
+        //getters
+        bool get_has_player();
+        bool get_has_event();
+        int get_x() const;
+        int get_y() const;
+
+        //setters
         void set_has_player(bool);
+        
         ~Room();
         
 };

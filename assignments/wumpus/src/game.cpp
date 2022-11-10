@@ -5,6 +5,34 @@ Game::Game(){
     this->input_debug_mode();
 }
 
+
+//getters
+int Game::get_grid_cols() const{
+    return this->grid_cols;
+}
+
+bool Game::get_debug_mode() const{
+    return this->debugmode;
+}
+
+Player Game::get_player() const{
+    return this->player;
+}
+
+std::vector<std::vector<Room>> Game::get_grid() const{
+    return this->grid;
+}
+
+//setters
+void Game::set_grid_cols(int grid_cols){
+    this->grid_cols = grid_cols;
+}
+
+void Game::set_debug_mode(bool debugmode){
+    this->debugmode = debugmode;
+}
+
+
 void Game::start(){
     this->create_matrix(this->grid_cols);
 
@@ -16,6 +44,37 @@ void Game::start(){
     this->grid[this->player.get_y()][this->player.get_x()].set_has_player(true);
 
     this->print_matrix();
+}
+
+void Game::play(){
+    while(this->player.get_alive() == true){
+        std::string move = this->player.get_move();
+
+        this->move_player(move);
+
+        this->player.print_position();
+        this->print_matrix();
+    }
+}
+
+void Game::move_player(std::string move){
+    if(move == "w"){
+        this->grid[this->player.get_y()][this->player.get_x()].set_has_player(false);
+        this->player.set_x(this->player.get_x() - 1);
+        this->grid[this->player.get_y()][this->player.get_x()].set_has_player(true);
+    }else if(move == "s"){
+        this->grid[this->player.get_y()][this->player.get_x()].set_has_player(false);
+        this->player.set_x(this->player.get_x() + 1);
+        this->grid[this->player.get_y()][this->player.get_x()].set_has_player(true);
+    }else if (move == "d"){
+        this->grid[this->player.get_y()][this->player.get_x()].set_has_player(false);
+        this->player.set_y(this->player.get_y() + 1);
+        this->grid[this->player.get_y()][this->player.get_x()].set_has_player(true);
+    }else if(move == "a"){
+        this->grid[this->player.get_y()][this->player.get_x()].set_has_player(false);
+        this->player.set_y(this->player.get_y() - 1);
+        this->grid[this->player.get_y()][this->player.get_x()].set_has_player(true);
+    }
 }
 
 void Game::create_matrix(int size){
@@ -36,13 +95,13 @@ void Game::print_top_of_grid(){
 
 void Game::print_cell(int j, int k, int i){
     if(j == 0){        
-        if(this->grid[j][k].has_player() && i == 2){
+        if(this->grid[j][k].get_has_player() && i == 2){
             std::cout << "| Player |";
         }
         else{
             std::cout << "|        |";
         }
-    }else if(this->grid[j][k].has_player() && i == 2){
+    }else if(this->grid[j][k].get_has_player() && i == 2){
         std::cout << "  Player |";
     }else {
         std::cout << "         |"; 
@@ -51,12 +110,12 @@ void Game::print_cell(int j, int k, int i){
 
 void Game::print_cell_debug(int j, int k, int i){
     if(j == 0){
-        if(!this->grid[j][k].has_player() && i == 2){
+        if(!this->grid[j][k].get_has_player() && i == 2){
             std::cout << "|        |";        
-        }else if(this->grid[j][k].has_player() && i == 2){
+        }else if(this->grid[j][k].get_has_player() && i == 2){
             std::cout << "| Player |";
         }
-    }else if(this->grid[j][k].has_player() && i == 2){
+    }else if(this->grid[j][k].get_has_player() && i == 2){
         std::cout << "  Player |";
     }else {
         std::cout << "         |"; 
