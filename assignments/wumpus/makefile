@@ -1,5 +1,5 @@
 CC=g++
-CCFLAGS = -std=c++11 -g
+CCFLAGS = -std=c++11 -g -lncurses
 
 EXE_FILE=wumpus
 BIN = bin

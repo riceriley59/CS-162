@@ -24,5 +24,4 @@ bool is_str(string);
 bool is_str_with_under(string);
 string to_lowercase(string);
 
-
 #endif

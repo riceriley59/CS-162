@@ -14,6 +14,14 @@ bool Player::get_alive(){
     return this->alive;
 }
 
+WINDOW* Player::get_win(){
+    return this->curwin;
+}  
+
+void Player::set_win(WINDOW* curwin){
+    this->curwin = curwin;
+}
+
 void Player::set_x(int x){
     this->x = x;
 }
@@ -26,23 +34,19 @@ void Player::print_position(){
     std::cout << "\n\nThis is your position: " << "(" << (this->y + 1) << ", " << (this->x + 1) << ")\n\n";
 }
 
-std::string Player::get_move(){
-    std::string input;
+int Player::get_move(){
+    int input;
     bool inputg = false;
 
     std::cout << "\nWhat move do you want to do? (You can go up w, down s, left a, and right d\n";
     std::cout << "You can also shoot an arrow by entering a space then a direction wasd: ";
 
-    do{
-        std::getline(std::cin, input);
-
-        this->handle_move_input(inputg, input);
-    }while(!inputg);
+    input = wgetch(curwin);
 
     return input;
 }
 
-void Player::handle_move_input(bool& inputg, std::string input){
+/* void Player::handle_move_input(bool& inputg, std::string input){
     if(input == "w"){
         inputg = true;
     }else if(input == "s"){
@@ -70,4 +74,4 @@ void Player::handle_arrow_input(bool& inputg, std::string input){
         std::cin.clear();
         inputg = false;
     }
-}
+} */

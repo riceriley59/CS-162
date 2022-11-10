@@ -8,6 +8,7 @@
 #include <vector>
 #include <iostream>
 #include <string>
+#include <ncurses.h>
 
 class Game{
     private:
@@ -16,6 +17,11 @@ class Game{
 
         int grid_cols;
         bool debugmode;
+
+        int y_max;
+        int x_max;
+
+        WINDOW* win;
     public:
         Game();
 
@@ -35,14 +41,15 @@ class Game{
 
         void create_matrix(int);
         void print_matrix();
-        void print_top_of_grid();
-        void print_cell(int, int, int);
-        void print_cell_debug(int, int, int);
+        void print_horizontal_line(int);
+        void print_vertical_line(int);
         
         void input_debug_mode();
         void input_grid_size();
 
-        void move_player(std::string);
+        void move_player(int);
+
+        ~Game();
 };
 
 #endif
