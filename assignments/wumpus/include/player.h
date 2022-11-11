@@ -29,9 +29,6 @@ class Player{
         void set_win(WINDOW*);
 
         int get_move();
-        void handle_move_input(bool&, std::string);
-        void handle_arrow_input(bool&, std::string);
-        void print_position();
 };
 
 #endif

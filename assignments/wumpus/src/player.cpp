@@ -22,6 +22,10 @@ void Player::set_win(WINDOW* curwin){
     this->curwin = curwin;
 }
 
+void Player::set_alive(bool alive){
+    this->alive = alive;
+}
+
 void Player::set_x(int x){
     this->x = x;
 }
@@ -30,48 +34,33 @@ void Player::set_y(int y){
     this->y = y;
 }
 
-void Player::print_position(){
-    std::cout << "\n\nThis is your position: " << "(" << (this->y + 1) << ", " << (this->x + 1) << ")\n\n";
-}
-
 int Player::get_move(){
-    int input;
+    mvwprintw(this->curwin, 0, 0, "Where do you want to move? (w-up, s-down, d-right, a-left): ");
     bool inputg = false;
+    
+    do{
+        char inputc = wgetch(this->curwin);
+        int input = int(inputc);
 
-    std::cout << "\nWhat move do you want to do? (You can go up w, down s, left a, and right d\n";
-    std::cout << "You can also shoot an arrow by entering a space then a direction wasd: ";
-
-    input = wgetch(curwin);
-
-    return input;
+        if(input == 119){
+            return input;
+            inputg = true;
+        } else if(input == 115){
+            return input;
+            inputg = true;
+        } else if(input == 100){
+            return input;
+            inputg = true;
+        } else if(input == 97){
+            return input;
+            inputg = true;
+        } else if(input == 113){
+            return input;
+            inputg = true;
+        }else{
+            mvwprintw(this->curwin, 0, 0, "That input is invalid, try again (w-up, s-down, d-right, a-left): ");
+            inputg = false;
+            wrefresh(this->curwin);
+        }
+    }while(!inputg);
 }
-
-/* void Player::handle_move_input(bool& inputg, std::string input){
-    if(input == "w"){
-        inputg = true;
-    }else if(input == "s"){
-        inputg = true;
-    }else if (input == "d"){
-        inputg = true;
-    }else if(input == "a"){
-        inputg = true;
-    }else{
-        handle_arrow_input(inputg, input);
-    }
-}
-
-void Player::handle_arrow_input(bool& inputg, std::string input){
-    if(input == " w"){
-        inputg = true;
-    }else if(input == " s"){
-        inputg = true;
-    }else if (input == " d"){
-        inputg = true;
-    }else if(input == " a"){
-        inputg = true;
-    }else{
-        std::cout << "\nInput is invalid Try Again: ";
-        std::cin.clear();
-        inputg = false;
-    }
-} */

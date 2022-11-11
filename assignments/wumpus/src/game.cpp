@@ -8,7 +8,7 @@ Game::Game(){
 
     getmaxyx(stdscr, this->y_max, this->x_max);
 
-    this->win = newwin(this->y_max/2, this->x_max/2, this->y_max/4, this->x_max/4);
+    this->win = newwin(this->y_max/1.5f, this->x_max/1.5f, this->y_max/6, this->x_max/6);
     this->player.set_win(this->win); 
     this->input_grid_size();
     this->input_debug_mode();
@@ -52,31 +52,29 @@ void Game::start(){
 }
 
 void Game::play(){
-    wgetch(this->win);
-    //while(this->player.get_alive() == true){
-        //int input = this->player.get_move();
+    while(this->player.get_alive() == true){
+        int input = this->player.get_move();
 
-      //  this->print_matrix();
-    //}
+        if(input == 113){
+            break;
+        }
+        
+        this->move_player(input);
+
+        this->print_matrix();
+        wrefresh(this->win);
+    }
 }
 
 void Game::move_player(int move){
     if(move == 119){
-        this->grid[this->player.get_y()][this->player.get_x()].set_has_player(false);
-        this->player.set_x(this->player.get_x() - 1);
-        this->grid[this->player.get_y()][this->player.get_x()].set_has_player(true);
-    }else if(move == 115){
-        this->grid[this->player.get_y()][this->player.get_x()].set_has_player(false);
-        this->player.set_x(this->player.get_x() + 1);
-        this->grid[this->player.get_y()][this->player.get_x()].set_has_player(true);
-    }else if (move == 100){
-        this->grid[this->player.get_y()][this->player.get_x()].set_has_player(false);
-        this->player.set_y(this->player.get_y() + 1);
-        this->grid[this->player.get_y()][this->player.get_x()].set_has_player(true);
-    }else if(move == 97){
-        this->grid[this->player.get_y()][this->player.get_x()].set_has_player(false);
         this->player.set_y(this->player.get_y() - 1);
-        this->grid[this->player.get_y()][this->player.get_x()].set_has_player(true);
+    }else if(move == 115){
+        this->player.set_y(this->player.get_y() + 1);
+    }else if (move == 100){
+        this->player.set_x(this->player.get_x() + 1);
+    }else if(move == 97){
+        this->player.set_x(this->player.get_x() - 1);
     }
 }
 
@@ -97,42 +95,57 @@ void Game::print_horizontal_line(int y){
 }
 
 void Game::print_vertical_line(int x){
-    for(int i = 0; i < this->grid_cols * (getmaxy(this->win)/this->grid_cols); i++){
+    for(int i = 0; i < (this->grid_cols * (getmaxy(this->win) /this->grid_cols)); i++){
         mvwaddch(this->win, i, x, '|');
     }
 }
 
 void Game::print_matrix(){
+    int xsection = getmaxx(this->win)/this->grid_cols;
+    int ysection = getmaxy(this->win)/this->grid_cols;
     wclear(this->win);
-    for(int i = 0; i < this->grid_cols; i++){
-        this->print_horizontal_line(i * getmaxy(this->win)/this->grid_cols);
-        this->print_vertical_line(i * getmaxx(this->win)/this->grid_cols);
+    for(int i = 0; i < this->grid_cols + 1; i++){
+        if(i == 0){
+            this->print_horizontal_line(i * ysection);
+            this->print_vertical_line(i * xsection);
+        }else{
+            this->print_horizontal_line(i * ysection - 1);
+            this->print_vertical_line(i * xsection - 1);
+        }
     }
 
-    this->print_horizontal_line(getmaxy(this->win) - 1);
-    this->print_vertical_line(getmaxx(this->win) - 1);
+    this->print_player();
 
-    mvwaddch(this->win, this->player.get_y() * this->grid_cols, this->player.get_x() * this->grid_cols, 'P');
+    if(this->debugmode){
+        this->print_events();
+    }
 
-    mvwprintw(this->win, 0, 0, "Where do you want to move?: ");
-
+    mvwprintw(this->win, getmaxy(this->win) - 1, 0, "Output: ");
     wrefresh(this->win);
 }
 
+void Game::print_events(){
+
+}
+
+void Game::print_player(){
+    mvwaddch(this->win, (this->player.get_y() * (getmaxy(this->win)/this->grid_cols)) + (((getmaxy(this->win)/this->grid_cols)/2) - 1), (this->player.get_x() * (getmaxx(this->win)/this->grid_cols)) + (getmaxx(this->win)/this->grid_cols)/2, 'P');
+}
+
 void Game::input_grid_size(){
-    mvwprintw(this->win, 10, 25,"How big do you want the matrix to be? : ");
+    mvwprintw(this->win, 10, 25,"How big do you want the matrix to be? (5-7): ");
     bool inputg = false;
 
     do{
         char inputc = wgetch(this->win);
         int input = int(inputc);
 
-        if(input > 49 && input < 57){
+        if(input > 52 && input < 56){
             this->grid_cols = input - 48;
             inputg = true;
         }else{
             werase(this->win);
-            mvwprintw(this->win, 10, 25, "That input is invalid, try again: ");
+            mvwprintw(this->win, 10, 25, "That input is invalid, try again (5-7): ");
             inputg = false;
             wrefresh(this->win);
         }
@@ -143,7 +156,7 @@ void Game::input_grid_size(){
 }
 
 void Game::input_debug_mode(){
-    mvwprintw(this->win, 10, 25, "Do you want to run in Debug Mode: ");
+    mvwprintw(this->win, 10, 25, "Do you want to run in Debug Mode (t(true) or f(false)): ");
     bool inputg = false;
     
     do{
@@ -158,7 +171,7 @@ void Game::input_debug_mode(){
             inputg = true;
         } else{
             werase(this->win);
-            mvwprintw(this->win, 10, 25, "That input is invalid, try again: ");
+            mvwprintw(this->win, 10, 25, "That input is invalid, try again (t(true) or f(false)): ");
             inputg = false;
             wrefresh(this->win);
         }

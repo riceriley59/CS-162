@@ -43,6 +43,8 @@ class Game{
         void print_matrix();
         void print_horizontal_line(int);
         void print_vertical_line(int);
+        void print_player();
+        void print_events();
         
         void input_debug_mode();
         void input_grid_size();

@@ -1,6 +1,6 @@
 #include "room.h"
 
-Room::Room(int x, int y) : x(x), y(y), event(NULL), player_in_room(false){}
+Room::Room(int x, int y) : x(x), y(y), event(NULL){}
 
 int Room::get_x() const{
     return this->x;
@@ -8,14 +8,6 @@ int Room::get_x() const{
 
 int Room::get_y() const{
     return this->y;
-}
-
-void Room::set_has_player(bool is){
-    this->player_in_room = is;
-}
-
-bool Room::get_has_player(){
-    return this->player_in_room;
 }
 
 bool Room::get_has_event(){
