@@ -8,7 +8,7 @@ class Bats : public Event{
     public:
         Bats();
 
-        void percept() override;
+        std::string percept() override;
         void encounter() override;
 
         virtual ~Bats();

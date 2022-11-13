@@ -1,9 +1,9 @@
 #include "pits.h"
 
-Pits::Pits() : Event("pit") {}
+Pits::Pits() : Event('P') {}
 
-void Pits::percept(){
-    std::cout << "You feel a breeze.";
+std::string Pits::percept(){
+    return "You feel a breeze. ";
 }
 
 void Pits::encounter(){

@@ -8,7 +8,7 @@ class Wumpus : public Event{
     public:
         Wumpus();
 
-        void percept() override;
+        std::string percept() override;
         void encounter() override;
 
         virtual ~Wumpus();

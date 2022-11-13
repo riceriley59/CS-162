@@ -1,9 +1,9 @@
 #include "wumpus.h"
 
-Wumpus::Wumpus() : Event("wumpus"){}
+Wumpus::Wumpus() : Event('W'){}
 
-void Wumpus::percept(){
-    std::cout << "You smell a terrible stench.";
+std::string Wumpus::percept(){
+    return "You smell a terrible stench. ";
 }
 
 void Wumpus::encounter(){

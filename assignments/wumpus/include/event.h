@@ -6,18 +6,18 @@
 class Event{
     protected:
         //event type identifier
-        std::string const name;
+        char const name;
     public:
         //allow child classes to call constructor with specfic name to identify type
         //of event
         Event();
-        Event(std::string);
+        Event(char);
 
         //pure virtual funcitons
-        virtual void percept()=0;
+        virtual std::string percept()=0;
         virtual void encounter()=0;
 
-        std::string get_name() const;
+        char get_name() const;
 
         virtual ~Event() = default;
 };

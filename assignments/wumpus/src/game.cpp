@@ -12,6 +12,7 @@ Game::Game(){
     this->player.set_win(this->win); 
     this->input_grid_size();
     this->input_debug_mode();
+    this->output = "Welcome to Hunt the Wumpus!!! You can quit the game by pressing q press any key to start!!!";
 }
 
 
@@ -43,38 +44,184 @@ void Game::set_debug_mode(bool debugmode){
 
 
 void Game::start(){
-    this->create_matrix(this->grid_cols);
+    this->create_matrix(this->grid_cols + 2);
 
-    this->player.set_x((rand() % this->grid_cols));
-    this->player.set_y((rand() % this->grid_cols));
+    this->escape_x = (rand() % this->grid_cols) + 1;
+    this->escape_y = (rand() % this->grid_cols) + 1;
 
+    this->player.set_x(escape_x);
+    this->player.set_y(escape_y);
+
+    this->populate_events();
+
+    this->print_matrix();
+    wgetch(this->win);
+    this->output = " ";
     this->print_matrix();
 }
 
 void Game::play(){
     while(this->player.get_alive() == true){
         int input = this->player.get_move();
+        this->output = " ";
 
         if(input == 113){
             break;
         }
         
         this->move_player(input);
+        //this->check_for_encounter();
+        this->check_for_percept();
 
+        std::string player = "Your positon is: (";
+        player.append(to_string(this->player.get_x()));
+        player.append(", ");
+        player.append(to_string(this->player.get_y()));
+        player.append(")");
+        this->output.append(player);
         this->print_matrix();
         wrefresh(this->win);
     }
 }
 
+void Game::check_for_encounter(){
+
+}
+        
+void Game::check_for_percept(){
+    if(this->grid[this->player.get_y() + 1][this->player.get_x()].get_has_event()){
+        this->output.append(this->grid[this->player.get_y() + 1][this->player.get_x()].get_event()->percept());
+    } 
+    if(this->grid[this->player.get_y() - 1][this->player.get_x()].get_has_event()){
+        this->output.append(this->grid[this->player.get_y() - 1][this->player.get_x()].get_event()->percept());
+    }
+    if(this->grid[this->player.get_y()][this->player.get_x() + 1].get_has_event()){
+        this->output.append(this->grid[this->player.get_y()][this->player.get_x() + 1].get_event()->percept());
+    }
+    if(this->grid[this->player.get_y()][this->player.get_x() - 1].get_has_event()){
+        this->output.append(this->grid[this->player.get_y()][this->player.get_x() - 1].get_event()->percept());
+    }
+}
+
+void Game::generate_bats(){
+    for(int i = 0; i < 2; i++){
+        int batx = 0;
+        int baty = 0;
+        bool location = false;
+
+        do{
+            batx = (rand() % this->grid_cols) + 1;
+            baty = (rand() % this->grid_cols) + 1;
+
+            if(batx == this->escape_x && baty == this->escape_y){
+                location = false;
+            }else if(this->grid[baty][batx].get_has_event()){
+                location = false;
+            }else{
+                location = true;
+            }
+        }while(!location);
+
+        this->grid[baty][batx].set_event(new Bats);
+    }
+}
+
+void Game::generate_pits(){
+    for(int i = 0; i < 2; i++){
+        int pitx = 0;
+        int pity = 0;
+        bool location = false;
+
+        do{
+            pitx = (rand() % this->grid_cols) + 1;
+            pity = (rand() % this->grid_cols) + 1;
+
+            if(pitx == this->escape_x && pity == this->escape_y){
+                location = false;
+            }else if(this->grid[pity][pitx].get_has_event()){
+                location = false;
+            }else{
+                location = true;
+            }
+        }while(!location);
+
+        this->grid[pity][pitx].set_event(new Pits);
+    }
+}
+
+void Game::generate_gold(){
+    int goldx = 0;
+    int goldy = 0;
+    bool glocation = false;
+    
+    do{
+        goldx = (rand() % this->grid_cols) + 1;
+        goldy = (rand() % this->grid_cols) + 1;
+
+        if(goldx == this->escape_x && goldy == this->escape_y){
+            glocation = false;
+        } else if(this->grid[goldy][goldx].get_has_event()){
+            glocation = false;
+        } else {
+            glocation = true;
+        }
+    }while(!glocation);
+
+    this->grid[goldy][goldx].set_event(new Gold);
+}
+
+void Game::generate_wumpus(){
+    int wumpusx = 0;
+    int wumpusy = 0;
+    bool wlocation = false;
+
+    do{
+        wumpusx = (rand() % this->grid_cols) + 1;
+        wumpusy = (rand() % this->grid_cols) + 1;
+
+        if(wumpusx == this->escape_x && wumpusy == this->escape_y){
+            wlocation = false;
+        } else if(this->grid[wumpusy][wumpusx].get_has_event()){
+            wlocation = false;
+        } else {
+            wlocation = true;
+        }
+    }while(!wlocation);
+
+    this->grid[wumpusy][wumpusx].set_event(new Wumpus);
+}
+
+void Game::populate_events(){
+    //generate bats
+    this->generate_bats();
+
+    //generate pits
+    this->generate_pits();
+
+    //generate gold
+    this->generate_gold();
+
+    //generate wumpus
+    this->generate_wumpus();
+}
+
 void Game::move_player(int move){
     if(move == 119){
-        this->player.set_y(this->player.get_y() - 1);
+        if(!(this->player.get_y() == 1)){
+            this->player.set_y(this->player.get_y() - 1);
+        }
     }else if(move == 115){
-        this->player.set_y(this->player.get_y() + 1);
+        if(!(this->player.get_y() == this->grid_cols)){
+            this->player.set_y(this->player.get_y() + 1);
+        }
     }else if (move == 100){
-        this->player.set_x(this->player.get_x() + 1);
+        if(!(this->player.get_x() == this->grid_cols)){
+            this->player.set_x(this->player.get_x() + 1);
+        }
     }else if(move == 97){
-        this->player.set_x(this->player.get_x() - 1);
+        if(!(this->player.get_x() == 1)){
+            this->player.set_x(this->player.get_x() - 1);
+        }
     }
 }
 
@@ -104,6 +251,7 @@ void Game::print_matrix(){
     int xsection = getmaxx(this->win)/this->grid_cols;
     int ysection = getmaxy(this->win)/this->grid_cols;
     wclear(this->win);
+    
     for(int i = 0; i < this->grid_cols + 1; i++){
         if(i == 0){
             this->print_horizontal_line(i * ysection);
@@ -121,15 +269,22 @@ void Game::print_matrix(){
     }
 
     mvwprintw(this->win, getmaxy(this->win) - 1, 0, "Output: ");
+    mvwprintw(this->win, getmaxy(this->win) - 1, 8, this->output.c_str());
     wrefresh(this->win);
 }
 
 void Game::print_events(){
-
+    for(int i = 0; i < this->grid_cols + 2; i++){
+        for(int j = 0; j < this->grid_cols + 2; j++){
+            if(this->grid[i][j].get_has_event()){
+                mvwaddch(this->win, ((i - 1) * (getmaxy(this->win)/this->grid_cols)) + (((getmaxy(this->win)/this->grid_cols)/2) - 1), ((j - 1) * (getmaxx(this->win)/this->grid_cols)) + (getmaxx(this->win)/this->grid_cols)/2, this->grid[i][j].get_event()->get_name());
+            }
+        }
+    }
 }
 
 void Game::print_player(){
-    mvwaddch(this->win, (this->player.get_y() * (getmaxy(this->win)/this->grid_cols)) + (((getmaxy(this->win)/this->grid_cols)/2) - 1), (this->player.get_x() * (getmaxx(this->win)/this->grid_cols)) + (getmaxx(this->win)/this->grid_cols)/2, 'P');
+    mvwaddch(this->win, ((this->player.get_y() - 1) * (getmaxy(this->win)/this->grid_cols)) + (((getmaxy(this->win)/this->grid_cols)/2) - 1), ((this->player.get_x() - 1) * (getmaxx(this->win)/this->grid_cols)) + (getmaxx(this->win)/this->grid_cols)/2, '*');
 }
 
 void Game::input_grid_size(){

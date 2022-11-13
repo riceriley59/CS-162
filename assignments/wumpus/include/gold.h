@@ -8,7 +8,7 @@ class Gold : public Event{
     public:
         Gold();
 
-        void percept() override;
+        std::string percept() override;
         void encounter() override;
 
         virtual ~Gold();

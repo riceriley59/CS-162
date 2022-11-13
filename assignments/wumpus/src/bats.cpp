@@ -1,9 +1,9 @@
 #include "bats.h"
 
-Bats::Bats() : Event("bat"){}
+Bats::Bats() : Event('B'){}
 
-void Bats::percept(){
-    std::cout << "You hear wings flapping.";
+std::string Bats::percept(){
+    return "You hear wings flapping. ";
 }
 
 void Bats::encounter(){

@@ -1,9 +1,9 @@
 #include "gold.h"
 
-Gold::Gold() : Event("gold"){}
+Gold::Gold() : Event('G'){}
 
-void Gold::percept(){
-    std::cout << "You see a glimmer nearby.";
+std::string Gold::percept(){
+    return "You see a glimmer nearby. ";
 }
 
 void Gold::encounter(){

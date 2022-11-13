@@ -8,7 +8,7 @@ class Pits : public Event{
     public:
         Pits();
 
-        void percept() override;
+        std::string percept() override;
         void encounter() override;
 
         virtual ~Pits();
