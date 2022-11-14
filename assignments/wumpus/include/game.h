@@ -22,13 +22,19 @@ class Game{
 
         int grid_cols;
         bool debugmode;
+        bool quit;
 
         int y_max;
         int x_max;
+
         int escape_x;
         int escape_y;
 
+        int wumpusx;
+        int wumpusy;
+
         std::string output;
+        std::string header;
 
         WINDOW* win;
     public:
@@ -39,6 +45,7 @@ class Game{
         bool get_debug_mode() const;
         Player get_player() const;
         std::vector<std::vector<Room>> get_grid() const;
+        std::string get_output();
 
         //setters
         void set_grid_cols(int);
@@ -58,7 +65,12 @@ class Game{
         void input_debug_mode();
         void input_grid_size();
 
-        void move_player(int);
+        void move_player();
+
+        void move_up();
+        void move_down();
+        void move_right();
+        void move_left();
 
         void populate_events();
         void generate_bats();
@@ -67,6 +79,18 @@ class Game{
         void generate_wumpus();
         void check_for_encounter();
         void check_for_percept();
+        void print_player_position();
+        
+        void shoot_arrow();
+        bool handle_shoot(int);
+        
+        void shoot_up();
+        void shoot_down();
+        void shoot_left();
+        void shoot_right();
+
+        void hit_wall();
+        void miss_shot();
 
         ~Game();
 };

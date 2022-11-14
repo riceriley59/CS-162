@@ -13,6 +13,8 @@ Game::Game(){
     this->input_grid_size();
     this->input_debug_mode();
     this->output = "Welcome to Hunt the Wumpus!!! You can quit the game by pressing q press any key to start!!!";
+
+    this->quit = false;
 }
 
 
@@ -33,6 +35,10 @@ std::vector<std::vector<Room>> Game::get_grid() const{
     return this->grid;
 }
 
+std::string Game::get_output(){
+    return this->output;
+}
+
 //setters
 void Game::set_grid_cols(int grid_cols){
     this->grid_cols = grid_cols;
@@ -44,6 +50,7 @@ void Game::set_debug_mode(bool debugmode){
 
 
 void Game::start(){
+    this->player.set_grid_cols(this->grid_cols);
     this->create_matrix(this->grid_cols + 2);
 
     this->escape_x = (rand() % this->grid_cols) + 1;
@@ -57,35 +64,65 @@ void Game::start(){
     this->print_matrix();
     wgetch(this->win);
     this->output = " ";
+    this->header.append("Where do you want to move? (w-up, s-down, d-right, a-left): ");
+    this->print_player_position();
+    this->check_for_percept();
     this->print_matrix();
 }
 
 void Game::play(){
     while(this->player.get_alive() == true){
-        int input = this->player.get_move();
+        this->header = " ";
+        this->header.append("Where do you want to move? (w-up, s-down, d-right, a-left): ");
         this->output = " ";
 
-        if(input == 113){
+        if(this->quit){
             break;
         }
         
-        this->move_player(input);
-        //this->check_for_encounter();
+        this->move_player();
+
+        this->check_for_encounter();
+
+        if(this->player.get_alive() == false){
+            this->print_matrix();
+            wgetch(this->win);
+            break;
+        }
+
         this->check_for_percept();
 
-        std::string player = "Your positon is: (";
-        player.append(to_string(this->player.get_x()));
-        player.append(", ");
-        player.append(to_string(this->player.get_y()));
-        player.append(")");
-        this->output.append(player);
+        this->print_player_position();
         this->print_matrix();
         wrefresh(this->win);
     }
 }
 
-void Game::check_for_encounter(){
+void Game::print_player_position(){
+    std::string player = " Your positon is: (";
+    player.append(to_string(this->player.get_x()));
+    player.append(", ");
+    player.append(to_string(this->player.get_y()));
+    player.append(")");
+    this->header.append(player);
+}
 
+void Game::check_for_encounter(){
+    if(this->grid[this->player.get_y()][this->player.get_x()].get_has_event()){
+        if(this->grid[this->player.get_y()][this->player.get_x()].get_event()->get_name() == 'B'){
+            this->output.append(this->grid[this->player.get_y()][this->player.get_x()].get_event()->encounter(this->player));
+            this->print_matrix();
+            wgetch(this->win);
+            this->output = " ";
+            this->check_for_encounter();
+        } else{
+            this->output.append(this->grid[this->player.get_y()][this->player.get_x()].get_event()->encounter(this->player));
+            if(this->grid[this->player.get_y()][this->player.get_x()].get_event()->get_name() == 'G'){
+                delete this->grid[this->player.get_y()][this->player.get_x()].get_event();
+                this->grid[this->player.get_y()][this->player.get_x()].set_event(NULL);
+            }
+        }
+    }
 }
         
 void Game::check_for_percept(){
@@ -174,7 +211,7 @@ void Game::generate_wumpus(){
     int wumpusx = 0;
     int wumpusy = 0;
     bool wlocation = false;
-
+    
     do{
         wumpusx = (rand() % this->grid_cols) + 1;
         wumpusy = (rand() % this->grid_cols) + 1;
@@ -188,6 +225,8 @@ void Game::generate_wumpus(){
         }
     }while(!wlocation);
 
+    this->wumpusx = wumpusx;
+    this->wumpusy = wumpusy;
     this->grid[wumpusy][wumpusx].set_event(new Wumpus);
 }
 
@@ -205,24 +244,128 @@ void Game::populate_events(){
     this->generate_wumpus();
 }
 
-void Game::move_player(int move){
+void Game::move_player(){
+    int move = 0;
+
+    do{
+        move = this->player.get_move();
+
+        if(move == 119){
+            this->move_up();
+        }else if(move == 115){
+            this->move_down();
+        }else if (move == 100){
+            this->move_right();
+        }else if(move == 97){
+            this->move_left();
+        }else if(move == 113){
+            this->quit = true;
+        }else if(move == 32){
+            this->header = "";
+            this->shoot_arrow();
+            this->print_matrix();
+        }else{
+            this->header.append("That input is invalid, try again (w-up, s-down, d-right, a-left): ");
+        }
+    }while(move != 115 && move != 119 && move != 100 && move != 97 && move != 32 && move != 113);
+}
+
+void Game::move_up(){
+    if(!(this->player.get_y() == 1)){
+        this->player.set_y(this->player.get_y() - 1);
+    }
+}
+
+void Game::move_down(){
+    if(!(this->player.get_y() == this->grid_cols)){
+        this->player.set_y(this->player.get_y() + 1);
+    }
+}
+
+void Game::move_right(){
+    if(!(this->player.get_x() == this->grid_cols)){
+        this->player.set_x(this->player.get_x() + 1);
+    }
+}
+
+void Game::move_left(){
+    if(!(this->player.get_x() == 1)){
+        this->player.set_x(this->player.get_x() - 1);
+    }
+}
+
+void Game::shoot_arrow(){
+    this->header = "";
+    this->header.append("What direction do you want to shoot your arrow, or press e to cancel (w-up, s-down, d-right, a-left): ");
+    this->print_matrix();
+
+    int move = 0;
+
+    do{
+        char inputc = wgetch(this->win);
+        move = int(inputc);
+    }while(!this->handle_shoot(move));
+
+    this->header = "";
+    this->header.append("Where do you want to move? (w-up, s-down, d-right, a-left): ");
+}
+
+bool Game::handle_shoot(int move){
     if(move == 119){
-        if(!(this->player.get_y() == 1)){
-            this->player.set_y(this->player.get_y() - 1);
-        }
+        this->shoot_up();
+        return true;
     }else if(move == 115){
-        if(!(this->player.get_y() == this->grid_cols)){
-            this->player.set_y(this->player.get_y() + 1);
-        }
+        this->shoot_down();
+        return true;
     }else if (move == 100){
-        if(!(this->player.get_x() == this->grid_cols)){
-            this->player.set_x(this->player.get_x() + 1);
-        }
+        this->shoot_right();
+        return true;
     }else if(move == 97){
-        if(!(this->player.get_x() == 1)){
-            this->player.set_x(this->player.get_x() - 1);
+        this->shoot_left();
+        return true;
+    }else if(move == 101){
+        return true;
+    }else{
+        this->header = "";
+        this->header.append("That input is invalid, try again. What direction do you want to shoot in (w-up, s-down, d-right, a-left, e-don't shoot): ");
+        this->print_matrix();
+        return false;
+    }
+}
+
+void Game::shoot_up(){
+    for(int i = 1; i < 4; i++){
+        if(this->player.get_y() - i == 0){
+            this->hit_wall();
+            break;
+        } else{
+            if(this->grid[this->player.get_y() - i][this->player.get_x()].get_has_event()){
+                
+            } else if(i == 3){
+                this->miss_shot();
+            }
         }
     }
+}
+
+void Game::shoot_down(){
+
+}
+
+void Game::shoot_left(){
+
+}
+
+void Game::shoot_right(){
+
+}
+
+void Game::hit_wall(){
+
+}
+
+void Game::miss_shot(){
+
 }
 
 void Game::create_matrix(int size){
@@ -270,6 +413,7 @@ void Game::print_matrix(){
 
     mvwprintw(this->win, getmaxy(this->win) - 1, 0, "Output: ");
     mvwprintw(this->win, getmaxy(this->win) - 1, 8, this->output.c_str());
+    mvwprintw(this->win, 0, 0, this->header.c_str());
     wrefresh(this->win);
 }
 
@@ -277,7 +421,9 @@ void Game::print_events(){
     for(int i = 0; i < this->grid_cols + 2; i++){
         for(int j = 0; j < this->grid_cols + 2; j++){
             if(this->grid[i][j].get_has_event()){
-                mvwaddch(this->win, ((i - 1) * (getmaxy(this->win)/this->grid_cols)) + (((getmaxy(this->win)/this->grid_cols)/2) - 1), ((j - 1) * (getmaxx(this->win)/this->grid_cols)) + (getmaxx(this->win)/this->grid_cols)/2, this->grid[i][j].get_event()->get_name());
+                if(!(this->grid[i][j].get_event()->get_name() == 'G' && this->player.get_has_gold() == true)){
+                    mvwaddch(this->win, ((i - 1) * (getmaxy(this->win)/this->grid_cols)) + (((getmaxy(this->win)/this->grid_cols)/2) - 1), ((j - 1) * (getmaxx(this->win)/this->grid_cols)) + (getmaxx(this->win)/this->grid_cols)/2, this->grid[i][j].get_event()->get_name());
+                }
             }
         }
     }

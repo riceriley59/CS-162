@@ -2,6 +2,7 @@
 #define GOLD_H
 
 #include "event.h"
+#include "player.h"
 #include <iostream>
 
 class Gold : public Event{
@@ -9,7 +10,7 @@ class Gold : public Event{
         Gold();
 
         std::string percept() override;
-        void encounter() override;
+        std::string encounter(Player&) override;
 
         virtual ~Gold();
 };

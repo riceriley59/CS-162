@@ -2,6 +2,7 @@
 #define EVENT_H
 
 #include <string>
+#include "player.h"
 
 class Event{
     protected:
@@ -15,7 +16,7 @@ class Event{
 
         //pure virtual funcitons
         virtual std::string percept()=0;
-        virtual void encounter()=0;
+        virtual std::string encounter(Player&)=0;
 
         char get_name() const;
 

@@ -1,6 +1,6 @@
 #include "player.h"
 
-Player::Player() : x(0), y(0), n_arrows(3), alive(true){}
+Player::Player() : x(0), y(0), n_arrows(3), alive(true), has_gold(false){}
 
 int Player::get_x(){
     return this->x;
@@ -18,8 +18,28 @@ WINDOW* Player::get_win(){
     return this->curwin;
 }  
 
+int Player::get_grid_cols(){
+    return this->grid_cols;
+}
+
+bool Player::get_has_gold(){
+    return this->has_gold;
+}
+
+std::string Player::get_header(){
+    return this->move_string;
+}
+
 void Player::set_win(WINDOW* curwin){
     this->curwin = curwin;
+}
+
+void Player::set_grid_cols(int cols){
+    this->grid_cols = cols;
+}
+
+void Player::set_has_gold(bool b){
+    this->has_gold = b;
 }
 
 void Player::set_alive(bool alive){
@@ -34,33 +54,13 @@ void Player::set_y(int y){
     this->y = y;
 }
 
+void Player::set_header(std::string message){
+    this->move_string = message;
+}
+
 int Player::get_move(){
-    mvwprintw(this->curwin, 0, 0, "Where do you want to move? (w-up, s-down, d-right, a-left): ");
-    bool inputg = false;
-    
-    do{
         char inputc = wgetch(this->curwin);
         int input = int(inputc);
 
-        if(input == 119){
-            return input;
-            inputg = true;
-        } else if(input == 115){
-            return input;
-            inputg = true;
-        } else if(input == 100){
-            return input;
-            inputg = true;
-        } else if(input == 97){
-            return input;
-            inputg = true;
-        } else if(input == 113){
-            return input;
-            inputg = true;
-        }else{
-            mvwprintw(this->curwin, 0, 0, "That input is invalid, try again (w-up, s-down, d-right, a-left): ");
-            inputg = false;
-            wrefresh(this->curwin);
-        }
-    }while(!inputg);
+        return input;
 }

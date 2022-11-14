@@ -2,6 +2,7 @@
 #define PITS_H
 
 #include "event.h"
+#include "player.h"
 #include <iostream>
 
 class Pits : public Event{
@@ -9,7 +10,7 @@ class Pits : public Event{
         Pits();
 
         std::string percept() override;
-        void encounter() override;
+        std::string encounter(Player&) override;
 
         virtual ~Pits();
 };

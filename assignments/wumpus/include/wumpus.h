@@ -2,6 +2,7 @@
 #define WUMPUS_H
 
 #include "event.h"
+#include "player.h"
 #include <iostream>
 
 class Wumpus : public Event{
@@ -9,7 +10,7 @@ class Wumpus : public Event{
         Wumpus();
 
         std::string percept() override;
-        void encounter() override;
+        std::string encounter(Player&) override;
 
         virtual ~Wumpus();
 };
