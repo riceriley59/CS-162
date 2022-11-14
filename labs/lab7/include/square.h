@@ -11,6 +11,8 @@ class Square : public Rectangle{
         void set_width(float width) override;
         void set_height(float height) override;
         void print_object() override;
+
+        virtual ~Square();
 };
 
 #endif

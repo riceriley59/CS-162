@@ -18,3 +18,7 @@ void Square::print_object() {
     cout << "\nThis is a square, name " << this->name << " with side length of: " << this->width << " and an area of " << this->area(); 
     cout << " The color is " << this->color << "\n";
 }
+
+Square::~Square(){
+    std::cout << "\n~Square\n";
+}
