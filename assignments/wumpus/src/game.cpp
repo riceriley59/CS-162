@@ -434,7 +434,7 @@ void Game::print_player(){
 }
 
 void Game::input_grid_size(){
-    mvwprintw(this->win, 10, 25,"How big do you want the matrix to be? (5-7): ");
+    mvwprintw(this->win,  getmaxy(this->win)/4, getmaxx(this->win)/4,"How big do you want the matrix to be? (5-7): ");
     bool inputg = false;
 
     do{
@@ -457,7 +457,7 @@ void Game::input_grid_size(){
 }
 
 void Game::input_debug_mode(){
-    mvwprintw(this->win, getmaxy(this->win)/2, getmaxx(this->win)/2, "Do you want to run in Debug Mode (t(true) or f(false)): ");
+    mvwprintw(this->win, getmaxy(this->win)/4, getmaxx(this->win)/4, "Do you want to run in Debug Mode (t(true) or f(false)): ");
     bool inputg = false;
     
     do{
