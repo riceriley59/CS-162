@@ -457,7 +457,7 @@ void Game::input_grid_size(){
 }
 
 void Game::input_debug_mode(){
-    mvwprintw(this->win, 10, 25, "Do you want to run in Debug Mode (t(true) or f(false)): ");
+    mvwprintw(this->win, getmaxy(this->win)/2, getmaxx(this->win)/2, "Do you want to run in Debug Mode (t(true) or f(false)): ");
     bool inputg = false;
     
     do{
