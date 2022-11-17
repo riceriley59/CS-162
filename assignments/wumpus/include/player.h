@@ -30,6 +30,7 @@ class Player{
         WINDOW* get_win();
         int get_grid_cols();
         std::string get_header();
+        int get_n_arrows();
 
         void set_x(int);
         void set_y(int);
@@ -38,6 +39,7 @@ class Player{
         void set_has_gold(bool);
         void set_grid_cols(int);
         void set_header(std::string);
+        void set_n_arrows(int);
 
         int get_move();
 };

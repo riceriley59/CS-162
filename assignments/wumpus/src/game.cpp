@@ -1,6 +1,6 @@
 #include "game.h"
 
-Game::Game(){
+Game::Game() : quit(false), wumpusdead(false), playagain(false){
     initscr();
     noecho();
     cbreak();
@@ -8,15 +8,28 @@ Game::Game(){
 
     getmaxyx(stdscr, this->y_max, this->x_max);
 
-    this->win = newwin(this->y_max/1.5f, this->x_max/1.5f, this->y_max/6, this->x_max/6);
+    this->win = newwin(this->y_max / 1.5f, this->x_max / 1.5f, this->y_max / 6, this->x_max / 6);
     this->player.set_win(this->win); 
     this->input_grid_size();
     this->input_debug_mode();
     this->output = "Welcome to Hunt the Wumpus!!! You can quit the game by pressing q press any key to start!!!";
-
-    this->quit = false;
 }
 
+Game::Game(std::vector<std::vector<Room>> grid, int x, int y) : grid(grid), quit(false), wumpusdead(false), playagain(false){
+    initscr();
+    noecho();
+    cbreak();
+    keypad(stdscr, TRUE);
+
+    getmaxyx(stdscr, this->y_max, this->x_max);
+
+    this->win = newwin(this->y_max / 1.5f, this->x_max / 1.5f, this->y_max / 6, this->x_max / 6);
+    this->player.set_win(this->win);
+    this->player.set_x(x);
+    this->player.set_y(y);
+    this->input_debug_mode();
+    this->output = "Welcome to Hunt the Wumpus!!! You can quit the game by pressing q press any key to start!!!";
+}
 
 //getters
 int Game::get_grid_cols() const{
@@ -25,6 +38,18 @@ int Game::get_grid_cols() const{
 
 bool Game::get_debug_mode() const{
     return this->debugmode;
+}
+
+bool Game::get_quit() const{
+    return this->quit;
+}
+
+bool Game::get_playagain() const{
+    return this->playagain;
+}
+
+bool Game::get_same_cave() const{
+    return this->samecave;
 }
 
 Player Game::get_player() const{
@@ -70,15 +95,30 @@ void Game::start(){
     this->print_matrix();
 }
 
+void Game::same_start(){
+    this->player.set_grid_cols(this->grid.size() - 2);
+
+    this->escape_x = this->player.get_x();
+    this->escape_y = this->player.get_y();
+
+    this->print_matrix();
+    wgetch(this->win);
+    this->output = " ";
+    this->header.append("Where do you want to move? (w-up, s-down, d-right, a-left): ");
+    this->print_player_position();
+    this->check_for_percept();
+    this->print_matrix();
+}
+
 void Game::play(){
     while(this->player.get_alive() == true){
+        if(this->quit || this->check_for_win()){
+            break;
+        }
+
         this->header = " ";
         this->header.append("Where do you want to move? (w-up, s-down, d-right, a-left): ");
         this->output = " ";
-
-        if(this->quit){
-            break;
-        }
         
         this->move_player();
 
@@ -94,8 +134,74 @@ void Game::play(){
 
         this->print_player_position();
         this->print_matrix();
-        wrefresh(this->win);
     }
+}
+
+void Game::end(){
+    wclear(this->win);
+    this->play_again();
+}
+
+void Game::play_again(){
+    mvwprintw(this->win, getmaxy(this->win)/4, getmaxx(this->win)/4, "Do you want to play again? (t(true) or f(false)): ");
+    bool inputg = false;
+    
+    do{
+        char inputc = wgetch(this->win);
+        int input = int(inputc);
+
+        if(input == 116){
+            this->samecave = this->get_cave_config();
+            this->playagain = true;
+            inputg = true;
+        } else if(input == 102){
+            inputg = true;
+        } else{
+            werase(this->win);
+            mvwprintw(this->win, getmaxy(this->win)/4, getmaxx(this->win)/4, "That input is invalid, try again (t(true) or f(false)): ");
+            inputg = false;
+            wrefresh(this->win);
+        }
+    }while(!inputg);
+
+    werase(this->win);
+    wrefresh(this->win);
+}
+
+bool Game::get_cave_config(){
+    mvwprintw(this->win, getmaxy(this->win)/4, getmaxx(this->win)/4, "Do you want to play with the same cave configuration? (t(true) or f(false)): ");
+    bool inputg = false;
+    
+    do{
+        char inputc = wgetch(this->win);
+        int input = int(inputc);
+
+        if(input == 116){
+            return true;
+        } else if(input == 102){
+            return false;
+        } else{
+            werase(this->win);
+            mvwprintw(this->win, getmaxy(this->win)/4, getmaxx(this->win)/4, "That input is invalid, try again (t(true) or f(false)): ");
+            inputg = false;
+            wrefresh(this->win);
+        }
+    }while(!inputg);
+
+    werase(this->win);
+    wrefresh(this->win);
+}
+
+bool Game::check_for_win(){
+    if(this->player.get_has_gold() == true && this->wumpusdead == true && this->player.get_y() == this->escape_y && this->player.get_x() == this->escape_x){
+        this->output = " ";
+        this->output.append("You killed the wumpus and escaped the cave with the gold, you won!!! Press any key to continue...");
+        this->print_matrix();
+        wgetch(this->win);
+        return true;
+    }
+
+    return false;
 }
 
 void Game::print_player_position(){
@@ -248,6 +354,7 @@ void Game::move_player(){
     int move = 0;
 
     do{
+        this->header = "Where do you want to move? (w-up, s-down, d-right, a-left): ";
         move = this->player.get_move();
 
         if(move == 119){
@@ -263,9 +370,10 @@ void Game::move_player(){
         }else if(move == 32){
             this->header = "";
             this->shoot_arrow();
-            this->print_matrix();
         }else{
+            this->header = "";
             this->header.append("That input is invalid, try again (w-up, s-down, d-right, a-left): ");
+            this->print_matrix();
         }
     }while(move != 115 && move != 119 && move != 100 && move != 97 && move != 32 && move != 113);
 }
@@ -295,19 +403,29 @@ void Game::move_left(){
 }
 
 void Game::shoot_arrow(){
-    this->header = "";
-    this->header.append("What direction do you want to shoot your arrow, or press e to cancel (w-up, s-down, d-right, a-left): ");
-    this->print_matrix();
+    if(this->player.get_n_arrows() > 0){
+        this->header = "";
+        this->header.append("What direction do you want to shoot your arrow, or press e to cancel (w-up, s-down, d-right, a-left): ");
+        this->print_matrix();
 
-    int move = 0;
+        int move = 0;
 
-    do{
-        char inputc = wgetch(this->win);
-        move = int(inputc);
-    }while(!this->handle_shoot(move));
+        do{
+            char inputc = wgetch(this->win);
+            move = int(inputc);
+        }while(!this->handle_shoot(move));
 
-    this->header = "";
-    this->header.append("Where do you want to move? (w-up, s-down, d-right, a-left): ");
+        this->header = "";
+        this->header.append("Where do you want to move? (w-up, s-down, d-right, a-left): ");
+    }else {
+        this->header = "";
+        this->header.append("Where do you want to move? (w-up, s-down, d-right, a-left): ");
+        this->output = " ";
+        this->output.append("You have no more arrows to shoot. Press any key to continue... ");
+        this->print_matrix();
+        wgetch(this->win);
+        this->output = " ";
+    }
 }
 
 bool Game::handle_shoot(int move){
@@ -337,35 +455,167 @@ void Game::shoot_up(){
     for(int i = 1; i < 4; i++){
         if(this->player.get_y() - i == 0){
             this->hit_wall();
+            this->relocate_wumpus();
             break;
         } else{
             if(this->grid[this->player.get_y() - i][this->player.get_x()].get_has_event()){
-                
+                if(this->grid[this->player.get_y() - i][this->player.get_x()].get_event()->get_name() == 'W'){
+                    delete this->grid[this->player.get_y() - i][this->player.get_x()].get_event();
+                    this->grid[this->player.get_y() - i][this->player.get_x()].set_event(NULL);
+
+                    this->output = " ";
+                    this->output.append("You Killed the Wumpus!!! find the gold and escape");
+                    this->print_matrix();
+                    this->wumpusdead = true;
+                    break;
+                } else if(this->grid[this->player.get_y() - i][this->player.get_x()].get_event()->get_name() != 'W' && i == 3){
+                    this->miss_shot();
+                }
             } else if(i == 3){
                 this->miss_shot();
             }
         }
     }
+
+    this->player.set_n_arrows(this->player.get_n_arrows() - 1);
+
+    if(this->player.get_n_arrows() == 0 && this->wumpusdead == false){
+        this->output = " ";
+        this->output.append("You ran out of arrows, and the wumpus is still alive so you lost. press any key to continue...");
+        this->player.set_alive(false);
+    }
 }
 
 void Game::shoot_down(){
+    for(int i = 1; i < 4; i++){
+        if(this->player.get_y() + i == 0){
+            this->hit_wall();
+            this->relocate_wumpus();
+            break;
+        } else{
+            if(this->grid[this->player.get_y() + i][this->player.get_x()].get_has_event()){
+                if(this->grid[this->player.get_y() + i][this->player.get_x()].get_event()->get_name() == 'W'){
+                    delete this->grid[this->player.get_y() + i][this->player.get_x()].get_event();
+                    this->grid[this->player.get_y() + i][this->player.get_x()].set_event(NULL);
 
+                    this->output = " ";
+                    this->output.append("You Killed the Wumpus!!! find the gold and escape");
+                    this->print_matrix();
+                    this->wumpusdead = true;
+                    break;
+                } else if(this->grid[this->player.get_y() + i][this->player.get_x()].get_event()->get_name() != 'W' && i == 3){
+                    this->miss_shot();
+                }
+            } else if(i == 3){
+                this->miss_shot();
+            }
+        }
+    }
+
+    this->player.set_n_arrows(this->player.get_n_arrows() - 1);
+
+    if(this->player.get_n_arrows() == 0 && this->wumpusdead == false){
+        this->output = " ";
+        this->output.append("You ran out of arrows, and the wumpus is still alive so you lost. press any key to continue...");
+        this->player.set_alive(false);
+    }
 }
 
 void Game::shoot_left(){
+    for(int i = 1; i < 4; i++){
+        if(this->player.get_x() - i == 0){
+            this->hit_wall();
+            this->relocate_wumpus();
+            break;
+        } else{
+            if(this->grid[this->player.get_y()][this->player.get_x() - i].get_has_event()){
+                if(this->grid[this->player.get_y()][this->player.get_x() - i].get_event()->get_name() == 'W'){
+                    delete this->grid[this->player.get_y()][this->player.get_x() - i].get_event();
+                    this->grid[this->player.get_y()][this->player.get_x() - i].set_event(NULL);
 
+                    this->output = " ";
+                    this->output.append("You Killed the Wumpus!!! find the gold and escape");
+                    this->print_matrix();
+                    this->wumpusdead = true;
+                    break;
+                } else if(this->grid[this->player.get_y()][this->player.get_x() - i].get_event()->get_name() != 'W' && i == 3){
+                    this->miss_shot();
+                }
+            } else if(i == 3){
+                this->miss_shot();
+            }
+        }
+    }
+
+    this->player.set_n_arrows(this->player.get_n_arrows() - 1);
+
+    if(this->player.get_n_arrows() == 0 && this->wumpusdead == false){
+        this->output = " ";
+        this->output.append("You ran out of arrows, and the wumpus is still alive so you lost. press any key to continue...");
+        this->player.set_alive(false);
+    }
 }
 
 void Game::shoot_right(){
+    for(int i = 1; i < 4; i++){
+        if(this->player.get_x() + i == 0){
+            this->hit_wall();
+            this->relocate_wumpus();
+            break;
+        } else{
+            if(this->grid[this->player.get_y()][this->player.get_x() + i].get_has_event()){
+                if(this->grid[this->player.get_y()][this->player.get_x() + i].get_event()->get_name() == 'W'){
+                    delete this->grid[this->player.get_y()][this->player.get_x() + i].get_event();
+                    this->grid[this->player.get_y()][this->player.get_x() + i].set_event(NULL);
 
+                    this->output = " ";
+                    this->output.append("You Killed the Wumpus!!! find the gold and escape. ");
+                    this->print_matrix();
+                    this->wumpusdead = true;
+                    break;
+                } else if(this->grid[this->player.get_y()][this->player.get_x() + i].get_event()->get_name() != 'W' && i == 3){
+                    this->miss_shot();
+                    this->relocate_wumpus();
+                }
+            } else if(i == 3){
+                this->miss_shot();
+                this->relocate_wumpus();
+            }
+        }
+    }
+
+    this->player.set_n_arrows(this->player.get_n_arrows() - 1);
+
+    if(this->player.get_n_arrows() == 0 && this->wumpusdead == false){
+        this->output = " ";
+        this->output.append("You ran out of arrows, and the wumpus is still alive so you lost. press any key to continue...");
+        this->player.set_alive(false);
+    }
 }
 
 void Game::hit_wall(){
-
+    this->output = " ";
+    this->output.append("Your arrow Hit the Wall. ");
+    this->print_matrix();
 }
 
 void Game::miss_shot(){
+    this->output = " ";
+    this->output.append("You missed your shot. ");
+    this->print_matrix();
+}
 
+void Game::relocate_wumpus(){
+    int randnum = rand() % 100;
+
+    if(randnum < 75 && this->wumpusdead == false){
+        delete this->grid[this->wumpusy][this->wumpusx].get_event();
+        this->grid[this->wumpusy][this->wumpusx].set_event(NULL);
+
+        this->generate_wumpus();
+        this->output.append("You woke up the wumpus and he moved!!! ");
+        this->print_matrix();
+    }
 }
 
 void Game::create_matrix(int size){
@@ -418,6 +668,10 @@ void Game::print_matrix(){
 }
 
 void Game::print_events(){
+    if(!((this->player.get_x() == this->escape_x) && (this->player.get_y() == this->escape_y))){
+        mvwaddch(this->win, ((this->escape_y - 1) * (getmaxy(this->win)/this->grid_cols)) + ((getmaxy(this->win)/this->grid_cols/2) - 1), ((this->escape_x - 1) * (getmaxx(this->win)/this->grid_cols)) + (getmaxx(this->win)/this->grid_cols)/2, 'E');
+    }
+
     for(int i = 0; i < this->grid_cols + 2; i++){
         for(int j = 0; j < this->grid_cols + 2; j++){
             if(this->grid[i][j].get_has_event()){
@@ -434,7 +688,7 @@ void Game::print_player(){
 }
 
 void Game::input_grid_size(){
-    mvwprintw(this->win,  getmaxy(this->win)/4, getmaxx(this->win)/4,"How big do you want the matrix to be? (5-7): ");
+    mvwprintw(this->win, getmaxy(this->win)/4, getmaxx(this->win)/4,"How big do you want the matrix to be? (5-7): ");
     bool inputg = false;
 
     do{
@@ -446,7 +700,7 @@ void Game::input_grid_size(){
             inputg = true;
         }else{
             werase(this->win);
-            mvwprintw(this->win, 10, 25, "That input is invalid, try again (5-7): ");
+            mvwprintw(this->win, getmaxy(this->win)/4, getmaxx(this->win)/4, "That input is invalid, try again (5-7): ");
             inputg = false;
             wrefresh(this->win);
         }
@@ -472,7 +726,7 @@ void Game::input_debug_mode(){
             inputg = true;
         } else{
             werase(this->win);
-            mvwprintw(this->win, 10, 25, "That input is invalid, try again (t(true) or f(false)): ");
+            mvwprintw(this->win, getmaxy(this->win)/4, getmaxx(this->win)/4, "That input is invalid, try again (t(true) or f(false)): ");
             inputg = false;
             wrefresh(this->win);
         }

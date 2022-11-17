@@ -50,6 +50,10 @@ void Player::set_x(int x){
     this->x = x;
 }
 
+void Player::set_n_arrows(int arrows){
+    this->n_arrows = arrows;
+}
+
 void Player::set_y(int y){
     this->y = y;
 }
@@ -63,4 +67,8 @@ int Player::get_move(){
         int input = int(inputc);
 
         return input;
+}
+
+int Player::get_n_arrows(){
+    return this->n_arrows;
 }
