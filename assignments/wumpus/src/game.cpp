@@ -15,7 +15,7 @@ Game::Game() : quit(false), wumpusdead(false), playagain(false){
     this->output = "Welcome to Hunt the Wumpus!!! You can quit the game by pressing q press any key to start!!!";
 }
 
-Game::Game(std::vector<std::vector<Room>> grid, int x, int y) : grid_cols(grid.size() - 2), grid(grid), quit(false), wumpusdead(false), playagain(false){
+Game::Game(std::vector<std::vector<Room>> grid, int x, int y) : grid(grid), quit(false), wumpusdead(false), playagain(false){
     initscr();
     noecho();
     cbreak();
@@ -27,6 +27,7 @@ Game::Game(std::vector<std::vector<Room>> grid, int x, int y) : grid_cols(grid.s
     this->player.set_win(this->win);
     this->player.set_x(x);
     this->player.set_y(y);
+    this->set_grid_cols(this->grid.size() - 2);
     this->input_debug_mode();
     this->output = "Welcome to Hunt the Wumpus!!! You can quit the game by pressing q press any key to start!!!";
 }

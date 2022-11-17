@@ -20,6 +20,7 @@ int main(){
         }else{
             g = new Game(grid, playerx, playery);
             g->same_start();
+            
             grid.clear();
             playerx = 0;
             playery = 0;
