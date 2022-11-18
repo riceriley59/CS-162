@@ -32,9 +32,18 @@ Game::Game(std::vector<std::vector<Room>> grid, int x, int y) : grid(grid), quit
     this->output = "Welcome to Hunt the Wumpus!!! You can quit the game by pressing q press any key to start!!!";
 }
 
+
 //getters
 int Game::get_grid_cols() const{
     return this->grid_cols;
+}
+
+int Game::get_escape_x() const{
+    return this->escape_x;
+}
+
+int Game::get_escape_y() const{
+    return this->escape_y;
 }
 
 bool Game::get_debug_mode() const{
@@ -61,7 +70,7 @@ std::vector<std::vector<Room>> Game::get_grid() const{
     return this->grid;
 }
 
-std::string Game::get_output(){
+std::string Game::get_output() const {
     return this->output;
 }
 
@@ -75,32 +84,24 @@ void Game::set_debug_mode(bool debugmode){
 }
 
 
-void Game::start(){
+void Game::start(bool playagain){
     this->player.set_grid_cols(this->grid_cols);
-    this->create_matrix(this->grid_cols + 2);
+    if(!playagain){
+        this->create_matrix(this->grid_cols + 2);
 
-    this->escape_x = (rand() % this->grid_cols) + 1;
-    this->escape_y = (rand() % this->grid_cols) + 1;
+        this->escape_x = (rand() % this->grid_cols) + 1;
+        this->escape_y = (rand() % this->grid_cols) + 1;
+    }else{
+        this->escape_x = this->player.get_x();
+        this->escape_y = this->player.get_y();
+    }
 
     this->player.set_x(escape_x);
     this->player.set_y(escape_y);
 
-    this->populate_events();
-
-    this->print_matrix();
-    wgetch(this->win);
-    this->output = " ";
-    this->header.append("Where do you want to move? (w-up, s-down, d-right, a-left): ");
-    this->print_player_position();
-    this->check_for_percept();
-    this->print_matrix();
-}
-
-void Game::same_start(){
-    this->player.set_grid_cols(this->grid_cols);
-
-    this->escape_x = this->player.get_x();
-    this->escape_y = this->player.get_y();
+    if(!this->playagain){
+        this->populate_events();
+    }
 
     this->print_matrix();
     wgetch(this->win);
@@ -489,7 +490,7 @@ void Game::shoot_up(){
 
 void Game::shoot_down(){
     for(int i = 1; i < 4; i++){
-        if(this->player.get_y() + i == 0){
+        if(this->player.get_y() + i == this->grid_cols + 2){
             this->hit_wall();
             this->relocate_wumpus();
             break;
@@ -559,7 +560,7 @@ void Game::shoot_left(){
 
 void Game::shoot_right(){
     for(int i = 1; i < 4; i++){
-        if(this->player.get_x() + i == 0){
+        if(this->player.get_x() + i == this->grid_cols + 2){
             this->hit_wall();
             this->relocate_wumpus();
             break;

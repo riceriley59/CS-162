@@ -2,11 +2,11 @@
 
 Gold::Gold() : Event('G'){}
 
-std::string Gold::percept(){
+std::string Gold::percept() const {
     return "You see a glimmer nearby. ";
 }
 
-std::string Gold::encounter(Player& p){
+std::string Gold::encounter(Player& p) const {
     if(p.get_has_gold()){
         return "";
     }else{

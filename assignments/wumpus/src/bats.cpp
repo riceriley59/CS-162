@@ -2,11 +2,11 @@
 
 Bats::Bats() : Event('B'){}
 
-std::string Bats::percept(){
+std::string Bats::percept() const{
     return "You hear wings flapping. ";
 }
 
-std::string Bats::encounter(Player& p){
+std::string Bats::encounter(Player& p) const{
     int randplayerx = (rand() % p.get_grid_cols()) + 1;
     int randplayery = (rand() % p.get_grid_cols()) + 1;
 

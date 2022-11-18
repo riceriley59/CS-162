@@ -1,6 +1,16 @@
+/*********************************************************************
+** Filename: game.h
+** Author: Riley Rice
+** Date: 11-18-2022
+** Description: This is the defintion file for my main class or game class which
+brings all the game logic together.
+*********************************************************************/
+
+//header guard
 #ifndef GAME_H
 #define GAME_H
 
+//include all the classes which the game will have
 #include "player.h"
 #include "room.h"
 #include "help.h"
@@ -10,62 +20,84 @@
 #include "pits.h"
 #include "gold.h"
 
+//include other standard libraries
 #include <vector>
 #include <iostream>
 #include <string>
 #include <ncurses.h>
 
+//this is the main game class which handles all the logic for the actual game. This combines all
+//the classes and their functionalities together
 class Game{
     private:
+        //include player object and a 2D vector of room objects
         Player player;
         std::vector<std::vector<Room>> grid;
 
+        //number cols within our grid
         int grid_cols;
 
+        //booleans for handling some logiv
         bool debugmode;
         bool quit;
         bool playagain;
         bool samecave;
 
+        //y and x max for our ncurses screen
         int y_max;
         int x_max;
 
+        //starting x and y or where the escape rope will be
         int escape_x;
         int escape_y;
 
+        //the x and y of the wumpus event
         int wumpusx;
         int wumpusy;
 
+        //bool which checks if the wumpus is dead
         bool wumpusdead;
 
+        //the two strings for the output and for the header
         std::string output;
         std::string header;
 
+        //window pointer which will hold our window in ncurses
         WINDOW* win;
     public:
+        //constructor and deconstructor
         Game();
         Game(std::vector<std::vector<Room>>, int x, int y);
+        ~Game();
+
 
         //getters
         int get_grid_cols() const;
+        int get_escape_x() const;
+        int get_escape_y() const;
         bool get_debug_mode() const;
         bool get_playagain() const;
         bool get_quit() const;
         bool get_same_cave() const;
         Player get_player() const;
         std::vector<std::vector<Room>> get_grid() const;
-        std::string get_output();
+        std::string get_output() const;
 
         //setters
         void set_grid_cols(int);
         void set_debug_mode(bool);
 
         //member functions
-        void start();
+        //main loop for implemetation file
+        void start(bool);
         void same_start();
         void play();
         void end();
 
+        //this checks to see if player run and returns true if they did
+        bool check_for_win();
+
+        //this handles all the printing
         void create_matrix(int);
         void print_matrix();
         void print_horizontal_line(int);
@@ -74,43 +106,48 @@ class Game{
         void print_player_position();
         void print_events();
         
+        //handles all the user input for game scenarios
         void input_debug_mode();
         void input_grid_size();
         void play_again();
 
+        //do they want the same cave configuration
         bool get_cave_config();
 
+        //function which moves player
         void move_player();
 
+        //funcitons which handle moving the player without letting them go out of bounds
         void move_up();
         void move_down();
         void move_right();
         void move_left();
-
+        
+        //these functions create events at random in the grid
         void populate_events();
         void generate_bats();
         void generate_pits();
         void generate_gold();
         void generate_wumpus();
 
+        //this checks for an encounter or percept
         void check_for_encounter();
         void check_for_percept();
         
+        //handles shooting arrow input and actually shooting arrow
         void shoot_arrow();
         bool handle_shoot(int);
         
+        //shooting funcitons
         void shoot_up();
         void shoot_down();
         void shoot_left();
         void shoot_right();
 
+        //functions for handling missing or shooting an arrow
         void hit_wall();
         void miss_shot();
         void relocate_wumpus();
-
-        bool check_for_win();
-
-        ~Game();
 };
 
 #endif

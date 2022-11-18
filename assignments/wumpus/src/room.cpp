@@ -10,7 +10,7 @@ int Room::get_y() const{
     return this->y;
 }
 
-bool Room::get_has_event(){
+bool Room::get_has_event() const {
     if(this->event != NULL){
         return true;
     }
@@ -18,11 +18,11 @@ bool Room::get_has_event(){
     return false;
 }
 
-bool Room::get_has_player(){
+bool Room::get_has_player() const {
     return this->has_player;
 }
 
-Event* Room::get_event(){
+Event* Room::get_event() const {
     return this->event;
 }
 
