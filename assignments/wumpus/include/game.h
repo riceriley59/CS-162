@@ -67,9 +67,7 @@ class Game{
     public:
         //constructor and deconstructor
         Game();
-        Game(std::vector<std::vector<Room>>, int x, int y);
         ~Game();
-
 
         //getters
         int get_grid_cols() const;
@@ -89,8 +87,7 @@ class Game{
 
         //member functions
         //main loop for implemetation file
-        void start(bool);
-        void same_start();
+        void start();
         void play();
         void end();
 
@@ -105,11 +102,13 @@ class Game{
         void print_player();
         void print_player_position();
         void print_events();
+        void start_print();
         
         //handles all the user input for game scenarios
         void input_debug_mode();
         void input_grid_size();
         void play_again();
+        void handle_play_again(bool);
 
         //do they want the same cave configuration
         bool get_cave_config();
@@ -128,7 +127,7 @@ class Game{
         void generate_bats();
         void generate_pits();
         void generate_gold();
-        void generate_wumpus();
+        void generate_wumpus(bool);
 
         //this checks for an encounter or percept
         void check_for_encounter();
@@ -137,6 +136,12 @@ class Game{
         //handles shooting arrow input and actually shooting arrow
         void shoot_arrow();
         bool handle_shoot(int);
+        void see_if_out_of_arrows();
+
+        bool shoot_at_event_up(int);
+        bool shoot_at_event_down(int);
+        bool shoot_at_event_right(int);
+        bool shoot_at_event_left(int);
         
         //shooting funcitons
         void shoot_up();
