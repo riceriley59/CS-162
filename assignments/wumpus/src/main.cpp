@@ -21,31 +21,6 @@ a game, and also handling whether the user wants to play again
 ** Pre-Conditions: game is started and keeps on going till the player doesn't want to play anymore
 ** Post-Conditions: exit and return 0 to tell the computer the program ran correctly.
 *********************************************************************/
-/* int main(){
-    srand(time(NULL));
-    Game* g = NULL;
-
-    do{
-        if(g != NULL){
-            delete g;
-            g = NULL;
-        }
-
-        g = new Game();
-        g->start();
-        g->play();
-        
-        if(g->get_quit() == false){
-            g->end();
-        }
-    }while(g->get_playagain());
-
-    delete g;
-    g = NULL;
-
-    return 0;
-} */
-
 int main(){
     srand(time(NULL));
     Game* g = NULL;
@@ -78,6 +53,8 @@ int main(){
         
         if(g->get_quit() == false){
             g->end();
+        }else{
+            playagain = false;
         }
 
         playagain = g->get_playagain();
