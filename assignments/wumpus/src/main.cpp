@@ -21,7 +21,7 @@ a game, and also handling whether the user wants to play again
 ** Pre-Conditions: game is started and keeps on going till the player doesn't want to play anymore
 ** Post-Conditions: exit and return 0 to tell the computer the program ran correctly.
 *********************************************************************/
-int main(){
+/* int main(){
     srand(time(NULL));
     Game* g = NULL;
 
@@ -44,9 +44,9 @@ int main(){
     g = NULL;
 
     return 0;
-}
+} */
 
-/* int main(){
+int main(){
     srand(time(NULL));
     Game* g = NULL;
     std::vector<std::vector<Room>> grid;
@@ -65,13 +65,13 @@ int main(){
 
         if(!samecave){
             g = new Game();
+            g->start();
             grid = g->get_grid();
-            g->start(false);
             g->play();
         }else{
             g = new Game(grid, playerx, playery);
+            g->same_start(grid);
             grid = g->get_grid();
-            g->start(false);
             g->play();
         }
         
@@ -89,4 +89,4 @@ int main(){
     g = NULL;
 
     return 0;
-} */
+}

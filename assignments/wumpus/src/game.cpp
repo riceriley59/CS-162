@@ -31,6 +31,22 @@ Game::Game() : quit(false), wumpusdead(false), playagain(false){
     this->output = "Welcome to Hunt the Wumpus!!! You can quit the game by pressing q press any key to start!!!";
 }
 
+Game::Game(std::vector<std::vector<Room>> grid, int playerx, int playery){
+    initscr();
+    noecho();
+    cbreak();
+    keypad(stdscr, TRUE);
+
+    getmaxyx(stdscr, this->y_max, this->x_max);
+
+    this->win = newwin(this->y_max / 1.5f, this->x_max / 1.5f, this->y_max / 6, this->x_max / 6);
+    this->player.set_win(this->win);
+    this->input_debug_mode();
+    this->escape_x = playerx;
+    this->escape_y = playery;
+    this->output = "Welcome to Hunt the Wumpus!!! You can quit the game by pressing q press any key to start!!!";
+}
+
 
 //getters
 /*********************************************************************
@@ -185,6 +201,16 @@ void Game::start(){
     this->player.set_y(escape_y);
 
     this->populate_events();
+
+    this->start_print();
+}
+
+void Game::same_start(std::vector<std::vector<Room>> grid){
+    this->player.set_grid_cols(this->grid.size() - 2);
+    this->grid = grid;
+
+    this->player.set_x(this->escape_x);
+    this->player.set_y(this->escape_y);
 
     this->start_print();
 }

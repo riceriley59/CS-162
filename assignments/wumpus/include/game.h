@@ -67,6 +67,7 @@ class Game{
     public:
         //constructor and deconstructor
         Game();
+        Game(std::vector<std::vector<Room>>, int, int);
         ~Game();
 
         //getters
@@ -88,6 +89,8 @@ class Game{
         //member functions
         //main loop for implemetation file
         void start();
+        void same_start(std::vector<std::vector<Room>>);
+
         void play();
         void end();
 
