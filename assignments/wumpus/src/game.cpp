@@ -31,7 +31,7 @@ Game::Game() : quit(false), wumpusdead(false), playagain(false){
     this->output = "Welcome to Hunt the Wumpus!!! You can quit the game by pressing q press any key to start!!!";
 }
 
-Game::Game(std::vector<std::vector<Room>> grid, int playerx, int playery){
+Game::Game(int playerx, int playery){
     initscr();
     noecho();
     cbreak();
@@ -205,9 +205,8 @@ void Game::start(){
     this->start_print();
 }
 
-void Game::same_start(std::vector<std::vector<Room>> grid){
+void Game::same_start(){
     this->player.set_grid_cols(this->grid.size() - 2);
-    this->grid = grid;
 
     this->player.set_x(this->escape_x);
     this->player.set_y(this->escape_y);
@@ -231,6 +230,50 @@ void Game::start_print(){
     this->check_for_percept();
     this->print_matrix();
 }
+
+void Game::get_grid_events(std::vector<std::vector<char>>& grid){
+    for(int i = this->grid.size(); i > 0; i--){
+        std::vector<char> row;
+        for(int j = 0; j < this->grid.size(); j++){
+            row.push_back(' ');
+        }
+        grid.push_back(row);
+    }
+
+    for(int i = 0; i < this->grid.size(); i++){
+        for(int j = 0; j < this->grid.size(); j++){
+            if(this->grid[i][j].get_event() != NULL){
+                grid[i][j] = this->grid[i][j].get_event()->get_name();
+            }
+        }
+    }
+}
+
+void Game::populate_grid_events(std::vector<std::vector<char>> grid){
+    for(int i = 0; i < grid.size(); i++){
+        std::vector<Room> row;
+        for(int j = 0; j < grid.size(); j++){
+            row.push_back(Room(i, j));
+        }
+        this->grid.push_back(row);
+    }
+
+    for(int i = 0; i < this->grid.size(); i++){
+        for(int j = 0; j < this->grid.size(); j++){
+            if(grid[i][j] != ' '){
+                if(grid[i][j] == 'W'){
+                    this->grid[i][j].set_event(new Wumpus);
+                }else if(grid[i][j] == 'P'){
+                    this->grid[i][j].set_event(new Pits);
+                }else if(grid[i][j] == 'G'){
+                    this->grid[i][j].set_event(new Gold);
+                }else if(grid[i][j] == 'B'){
+                    this->grid[i][j].set_event(new Bats);
+                }
+            }
+        }
+    }
+};
 
 /*********************************************************************
 ** Function: Game::play()

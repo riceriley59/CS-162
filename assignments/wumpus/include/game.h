@@ -67,7 +67,7 @@ class Game{
     public:
         //constructor and deconstructor
         Game();
-        Game(std::vector<std::vector<Room>>, int, int);
+        Game(int, int);
         ~Game();
 
         //getters
@@ -89,13 +89,15 @@ class Game{
         //member functions
         //main loop for implemetation file
         void start();
-        void same_start(std::vector<std::vector<Room>>);
+        void same_start();
 
         void play();
         void end();
 
         //this checks to see if player run and returns true if they did
         bool check_for_win();
+        void get_grid_events(std::vector<std::vector<char>>&);
+        void populate_grid_events(std::vector<std::vector<char>>);
 
         //this handles all the printing
         void create_matrix(int);

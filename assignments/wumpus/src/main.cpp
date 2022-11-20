@@ -49,7 +49,7 @@ a game, and also handling whether the user wants to play again
 int main(){
     srand(time(NULL));
     Game* g = NULL;
-    std::vector<std::vector<Room>> grid;
+    std::vector<std::vector<char>> grid;
 
     bool playagain = false;
     bool samecave = false;
@@ -66,12 +66,13 @@ int main(){
         if(!samecave){
             g = new Game();
             g->start();
-            grid = g->get_grid();
+            grid.clear();
+            g->get_grid_events(grid);
             g->play();
         }else{
-            g = new Game(grid, playerx, playery);
-            g->same_start(grid);
-            grid = g->get_grid();
+            g = new Game(playerx, playery);
+            g->populate_grid_events(grid);
+            g->same_start();
             g->play();
         }
         
