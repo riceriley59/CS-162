@@ -90,7 +90,6 @@ class Game{
         //main loop for implemetation file
         void start();
         void same_start();
-
         void play();
         void end();
 

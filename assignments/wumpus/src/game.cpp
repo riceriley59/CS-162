@@ -31,6 +31,14 @@ Game::Game() : quit(false), wumpusdead(false), playagain(false){
     this->output = "Welcome to Hunt the Wumpus!!! You can quit the game by pressing q press any key to start!!!";
 }
 
+/*********************************************************************
+** Function: Game::Game()
+** Description: This is the paramaterized constructor and I use this to handle
+playing a new game with the same game configuration as a previous one
+** Parameters: int playerx, int playery
+** Pre-Conditions: previous Game object must be called
+** Post-Conditions: new Game with same configuration as last game is constructed
+*********************************************************************/
 Game::Game(int playerx, int playery){
     initscr();
     noecho();
@@ -205,8 +213,17 @@ void Game::start(){
     this->start_print();
 }
 
+/*********************************************************************
+** Function: Game::same_start()
+** Description: This starts the game and sets up the variables for a new game
+although the grid is the same as the previous game with the same configuration
+** Parameters: NONE
+** Pre-Conditions: player has played once and wants to play again with same configuration
+** Post-Conditions: new game is setup with same grid as last time
+*********************************************************************/
 void Game::same_start(){
     this->player.set_grid_cols(this->grid.size() - 2);
+    this->grid_cols = this->grid.size() - 2;
 
     this->player.set_x(this->escape_x);
     this->player.set_y(this->escape_y);
@@ -231,6 +248,14 @@ void Game::start_print(){
     this->print_matrix();
 }
 
+/*********************************************************************
+** Function: Game::get_grid_events()
+** Description: This creates a char vector of the same size of the grid
+and puts the events name where it is in the grid
+** Parameters: std::vector<std::vector<char>>&
+** Pre-Conditions: needs a constructed game object
+** Post-Conditions: grid has position of all the events
+*********************************************************************/
 void Game::get_grid_events(std::vector<std::vector<char>>& grid){
     for(int i = this->grid.size(); i > 0; i--){
         std::vector<char> row;
@@ -249,6 +274,15 @@ void Game::get_grid_events(std::vector<std::vector<char>>& grid){
     }
 }
 
+/*********************************************************************
+** Function: Game::populate_grid_events()
+** Description: This takes in a 2d vector of chars and the makes the objects
+grid the same size and constructs events depending on where the chars are in
+the grid
+** Parameters: std::vector<std::vector<char>>
+** Pre-Conditions: needs a populated char grid with location of events
+** Post-Conditions: makes a grid with the identical events
+*********************************************************************/
 void Game::populate_grid_events(std::vector<std::vector<char>> grid){
     for(int i = 0; i < grid.size(); i++){
         std::vector<Room> row;
@@ -273,7 +307,7 @@ void Game::populate_grid_events(std::vector<std::vector<char>> grid){
             }
         }
     }
-};
+}
 
 /*********************************************************************
 ** Function: Game::play()
