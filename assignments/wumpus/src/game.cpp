@@ -359,6 +359,7 @@ void Game::handle_play_again(bool inputg){
             this->playagain = true;
             inputg = true;
         } else if(input == 102){
+            this->playagain = false;
             inputg = true;
         } else{
             werase(this->win);
