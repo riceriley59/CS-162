@@ -17,8 +17,8 @@ class vector {
 
       //copy constructor
       vector(vector &other){
-         this->v = new T[other.size()];
          this->s = other.size();
+         this->v = new T[this->s];
 
          for(int i = 0; i < this->s; i++){
             this->v[i] = other.v[i];
@@ -27,8 +27,13 @@ class vector {
 
       //AOO
       vector& operator=(vector<T> &other){
-         this->v = new T[other.size()];
+         if(this->v != NULL){
+            delete this->v;
+            this->v = NULL;
+         }
+
          this->s = other.size();
+         this->v = new T[this->s];
 
          for(int i = 0; i < this->s; i++){
             this->v[i] = other.v[i];

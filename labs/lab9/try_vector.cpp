@@ -32,7 +32,7 @@ int main (){
    v3.push_back(10);
    v3.push_back(100);
    v3.push_back(1000);
-   cout << "v3 size: " << v3.size() << endl; //should display 2
+   cout << "v3 size: " << v3.size() << endl; //should display 3
    v3 = v; //envoke aoo
    cout << "v3 size: " << v3.size() << endl; //should display 1
 
