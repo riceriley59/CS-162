@@ -60,8 +60,7 @@ class vector {
 
             return this->v[x];
          } catch(std::out_of_range e){
-            std::cout << e.what() << " ";
-            exit(1);
+            std::cout << e.what() << std::endl;
          }
       }
 	
