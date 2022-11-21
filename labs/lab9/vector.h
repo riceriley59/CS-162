@@ -1,0 +1,65 @@
+#include <stdlib.h>
+#include <iostream>
+#include <exception> //base class of all built-in exceptions
+#include <stdexcept> //where out_of_range lives
+
+template <class T>
+class vector {
+   private:
+      T *v;  //a dynamic array of elements of type T
+      int s; //size
+   public:
+      //default constructor
+      vector(){
+	      this->s = 0;
+	      this->v = NULL;
+      }
+
+      //copy constructor
+      vector(vector &other){
+         this->v = new T[other.size()];
+         this->s = other.size();
+
+         for(int i = 0; i < this->size(); i++){
+            this->v[i] = other.v[i];
+         }
+      }
+
+      //AOO
+      vector& operator=(vector<T> &other){
+         this->v = new T[other.size()];
+         this->s = other.size();
+
+         for(int i = 0; i < this->size(); i++){
+            this->v[i] = other.v[i];
+         }
+
+         return *this;
+      }
+
+      //destructor	  
+      ~vector(){
+	      delete [] this->v;
+	      this->v = NULL;
+      }
+	
+      //size function	  
+      int size() {
+	      return this->s;
+      }
+
+      //push_back: add an element to the end	  
+      void push_back(T ele) {
+         T *temp;
+         temp = new T[++this->s];
+         for(int i = 0; i < this->s-1; i++)
+            temp[i] = this->v[i];
+
+         if (this->v != NULL)
+            delete [] this->v;
+
+         this->v = temp;
+         this->v[s-1] = ele;
+      }
+
+};
