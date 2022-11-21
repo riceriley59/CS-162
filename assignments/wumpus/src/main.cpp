@@ -20,6 +20,8 @@ a game, and also handling whether the user wants to play again
 ** Parameters: NONE
 ** Pre-Conditions: game is started and keeps on going till the player doesn't want to play anymore
 ** Post-Conditions: exit and return 0 to tell the computer the program ran correctly.
+** Justification: This is over 15 lines because when I tried to moduralize this into different
+functions it would seg fault. This isn't too much longer and is still understandable to read.
 *********************************************************************/
 int main(){
     srand(time(NULL));

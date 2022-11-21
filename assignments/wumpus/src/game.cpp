@@ -39,7 +39,7 @@ playing a new game with the same game configuration as a previous one
 ** Pre-Conditions: previous Game object must be called
 ** Post-Conditions: new Game with same configuration as last game is constructed
 *********************************************************************/
-Game::Game(int playerx, int playery){
+Game::Game(int playerx, int playery) : quit(false), wumpusdead(false), playagain(false){
     initscr();
     noecho();
     cbreak();
@@ -297,6 +297,8 @@ void Game::populate_grid_events(std::vector<std::vector<char>> grid){
             if(grid[i][j] != ' '){
                 if(grid[i][j] == 'W'){
                     this->grid[i][j].set_event(new Wumpus);
+                    this->wumpusx = j;
+                    this->wumpusy = i;
                 }else if(grid[i][j] == 'P'){
                     this->grid[i][j].set_event(new Pits);
                 }else if(grid[i][j] == 'G'){
@@ -877,6 +879,7 @@ void Game::shoot_up(){
                 }
             } else if(i == 3){
                 this->miss_shot();
+                this->relocate_wumpus();
             }
         }
     }
@@ -932,6 +935,7 @@ void Game::shoot_down(){
                 }
             } else if(i == 3){
                 this->miss_shot();
+                this->relocate_wumpus();
             }
         }
     }
@@ -987,6 +991,7 @@ void Game::shoot_left(){
                 }
             } else if(i == 3){
                 this->miss_shot();
+                this->relocate_wumpus();
             }
         }
     }
