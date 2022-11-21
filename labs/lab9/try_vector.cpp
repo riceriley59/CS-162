@@ -38,16 +38,16 @@ int main (){
 
 
    //Step 2...
-   // cout << "v[0]: " << v[0] << endl; //should display 23
-   // cout << "stdv[0]: " << stdv[0] << endl; //should display 23
+   cout << "v[0]: " << v[0] << endl; //should display 23
+   cout << "stdv[0]: " << stdv[0] << endl; //should display 23
 
-   // v3.push_back(500);
-   // cout << "v3[1]: " << v3[1] << endl; //should display 500
-   // cout << "v[1]: " << v[1] << endl; //should display a garbage or crash the program
+   v3.push_back(500);
+   cout << "v3[1]: " << v3[1] << endl; //should display 500
+   cout << "v[1]: " << v[1] << endl; //should display a garbage or crash the program
    
    //should throw an "out_of_range" exception
    //and exit the program gracefully
-   // cout << "v.at(1): " << v.at(1) << endl;
+   cout << "v.at(1): " << v.at(1) << endl;
    
 
    //Step 3...

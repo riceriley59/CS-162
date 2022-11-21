@@ -47,6 +47,23 @@ class vector {
 	      delete [] this->v;
 	      this->v = NULL;
       }
+
+      T operator[](int x){
+         return this->v[x];
+      }
+
+      T at(int x){
+         try{
+            if(x > this->s - 1){
+               throw std::out_of_range("out of my vector bounds");
+            }
+
+            return this->v[x];
+         } catch(std::out_of_range e){
+            std::cout << e.what() << " ";
+            exit(1);
+         }
+      }
 	
       //size function	  
       int size() {
