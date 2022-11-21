@@ -20,7 +20,7 @@ class vector {
          this->v = new T[other.size()];
          this->s = other.size();
 
-         for(int i = 0; i < this->size(); i++){
+         for(int i = 0; i < this->s; i++){
             this->v[i] = other.v[i];
          }
       }
@@ -30,7 +30,7 @@ class vector {
          this->v = new T[other.size()];
          this->s = other.size();
 
-         for(int i = 0; i < this->size(); i++){
+         for(int i = 0; i < this->s; i++){
             this->v[i] = other.v[i];
          }
 
