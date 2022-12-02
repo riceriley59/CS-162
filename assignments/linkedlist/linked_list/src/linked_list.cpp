@@ -7,15 +7,12 @@ int Linked_List::get_length(){
 }
 
 void Linked_List::print(){
-    std::cout << "[";
     Node* temp = this->head;
 
     while(temp != nullptr){
-        std::cout << temp->val << ", ";
+        std::cout << temp->val << " ";
         temp = temp->next;
     }
-
-    std::cout << "]";
 }
 
 void Linked_List::clear(){
