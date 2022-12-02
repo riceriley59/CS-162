@@ -46,11 +46,9 @@ void Linked_List::push_front(int value){
 }
 
 void Linked_List::push_back(int value){
-    Node* prev = nullptr;
     Node* curr = this->head;
 
     while(curr->next != nullptr){
-        prev = curr;
         curr = curr->next;
     }
 
@@ -60,9 +58,11 @@ void Linked_List::push_back(int value){
 
 void Linked_List::insert(int val, unsigned int index){
     if(index <= this->length){
-        Node* curr = this->head;
+        Node* prev = this->head;
+        Node* curr = this->head->next;
 
         while(index > 0){
+            prev = curr;
             curr = curr->next;
 
             index--;
