@@ -1,6 +1,6 @@
 #include "linked_list.h"
 
-Linked_List::Linked_List() : length(0), head(nullptr){}
+Linked_List::Linked_List() : length(0), head(nullptr) {}
 
 int Linked_List::get_length(){
     return this->length; 
@@ -59,21 +59,25 @@ void Linked_List::push_back(int value){
 }
 
 void Linked_List::insert(int val, unsigned int index){
-    Node* prev = nullptr;
-    Node* curr = this->head;
+    if(index < this->length - 1){
+        Node* prev = nullptr;
+        Node* curr = this->head;
 
-    while(index > 0){
-        prev = curr;
-        curr = curr->next;
+        while(index > 0){
+            prev = curr;
+            curr = curr->next;
 
-        index--;
+            index--;
+        }
+
+        Node* newnode = new Node(val);
+        Node* next = curr->next;
+
+        curr->next = newnode;
+        newnode->next = next;
+
+        this->length++;
     }
-
-    Node* newnode = new Node(val);
-    Node* next = curr->next;
-
-    curr->next = newnode;
-    newnode->next = next;
 }
 
 void Linked_List::sort_ascending(){
