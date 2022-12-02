@@ -59,7 +59,7 @@ void Linked_List::push_back(int value){
 }
 
 void Linked_List::insert(int val, unsigned int index){
-    if(index <= this->length){
+    if(index <= this->length - 1){
         Node* prev = nullptr;
         Node* curr = this->head;
 
