@@ -55,17 +55,18 @@ void Linked_List::push_back(int value){
 void Linked_List::insert(int val, unsigned int index){
     if(index <= this->length){
         Node* curr = this->head;
+        Node** location = &this->head;
 
         while(index > 0){
             curr = curr->next;
-
+            location = &curr;
             index--;
         }
 
         Node* newnode = new Node(val);
 
         newnode->next = curr;
-        curr = newnode;
+        *location = newnode;
 
         this->length++;
     }
