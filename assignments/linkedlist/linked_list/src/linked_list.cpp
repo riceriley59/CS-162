@@ -65,7 +65,7 @@ void Linked_List::insert(int val, unsigned int index){
 
         Node* newnode = new Node(val);
 
-        newnode->next = curr;
+        newnode->next = curr->next;
         *location = newnode;
 
         this->length++;
