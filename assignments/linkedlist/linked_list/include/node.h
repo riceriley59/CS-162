@@ -8,8 +8,6 @@ class Node{
 		
 		Node();
 		Node(int);
-		Node(Node*);
-		Node(Node*, int);
 };
 
 #endif
