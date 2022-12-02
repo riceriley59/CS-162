@@ -16,16 +16,20 @@ void Linked_List::print(){
 }
 
 void Linked_List::clear(){
-    Node* prev = nullptr;
-    Node* curr = this->head;
+    if(this->length > 0){
+        Node* temp = this->head;
+        Node* prev = nullptr;
 
-    while(curr != nullptr){
-        prev = curr;
-        curr = curr->next;
+        while(temp != nullptr){
+            prev = temp;
+            temp = temp->next;
 
-        prev->next = nullptr;
-        delete prev;
-        prev = nullptr;
+            prev->next = nullptr;
+            delete prev;
+            prev = nullptr;
+        }
+
+        this->length = 0;
     }
 }
 
@@ -187,29 +191,37 @@ Linked_List::~Linked_List(){
     this->clear();
 }
 
+bool isprime(int num){
+    if(num <= 1){
+        return false;
+    }
+    if(num <= 3){
+        return true;
+    }
+
+    if(num % 2 == 0 || num % 3 == 0){
+        return false;
+    }
+
+    for(int i = 5; i * i <= num; i = i + 6){
+        if(num % i == 0 || num % (i + 2) == 0){
+            return false;
+        }
+    }
+
+    return true;
+}
+
 unsigned int count_prime(Linked_List& list){
     unsigned int count = 0;
 
-    if(list.get_length() == 0){
-        return count;
-    }
+    Node* ptr = list.get_head();
 
-    Node* temp = list.get_head();
-
-    for(int i = 0; i < list.get_length(); i++){
-        if(temp->val < 1){
-            continue;
+    while(ptr != nullptr){
+        if(isprime(ptr->val)){
+            count++;
         }
-
-        for(int j = 2; j <= temp->val/2; j++){
-            if(temp->val % j == 0){
-                continue;
-            }else{
-                count++;
-            }
-        }
-
-        temp = temp->next;
+        ptr = ptr->next;
     }
 
     return count;
