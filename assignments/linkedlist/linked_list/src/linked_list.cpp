@@ -54,6 +54,7 @@ void Linked_List::push_back(int value){
 
 void Linked_List::insert(int val, unsigned int index){
     if(index <= this->length){
+        index--;
         Node* curr = this->head;
 
         while(index > 0){
