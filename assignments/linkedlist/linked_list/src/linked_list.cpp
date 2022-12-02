@@ -62,7 +62,7 @@ void Linked_List::insert(int val, unsigned int index){
     if(index <= this->length){
         Node* curr = this->head;
 
-        while(index > 0){
+        while(index > 1){
             curr = curr->next;
 
             index--;
