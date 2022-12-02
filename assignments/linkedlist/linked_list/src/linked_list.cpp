@@ -1,6 +1,6 @@
 #include "linked_list.h"
 
-Linked_List::Linked_List() : length(0) {}
+Linked_List::Linked_List() : length(0), head(nullptr){}
 
 int Linked_List::get_length(){
     return this->length; 
