@@ -54,20 +54,23 @@ void Linked_List::push_back(int value){
 
 void Linked_List::insert(int val, unsigned int index){
     if(index <= this->length){
-        index--;
         Node* curr = this->head;
 
-        while(index > 0){
-            curr = curr->next;
+        if(index == 0){
+            this->push_front(val);
+        }else{
             index--;
+            while(index > 0){
+                curr = curr->next;
+                index--;
+            }
+
+            Node* newnode = new Node(val);
+
+            newnode->next = curr->next;
+            curr->next = newnode;
+            this->length++;
         }
-
-        Node* newnode = new Node(val);
-
-        newnode->next = curr->next;
-        curr->next = newnode;
-
-        this->length++;
     }
 }
 
