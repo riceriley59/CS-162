@@ -59,7 +59,7 @@ int main(int argc, char const *argv[])
 	cout << "Test 2.3: Testing insert()\n";
 	l.insert(11, 0);   // insert 11 at the front of the list
 	l.insert(20, 100); // 100 is not a valid index, therefore 20 is not inserted
-	//l.insert(50, l.get_length()); // insert 50 at the end of the list
+	l.insert(50, l.get_length()); // insert 50 at the end of the list
 	l.insert(9, 5); // insert 9 at index 5 
 	cout << "Expected: 11 16 -8 0 100 9 5 5 1 2 7 7919 50\n";
 	cout << "Actual  : "; 
