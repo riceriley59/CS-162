@@ -1,24 +1,22 @@
 #include "linked_list.h"
 
-Linked_List::Linked_List(){
-    this->head = new Node();
-    this->length = 0;
-}
+Linked_List::Linked_List() : length(0) {}
 
 int Linked_List::get_length(){
-    return this->length;
+    return this->length; 
 }
 
 void Linked_List::print(){
-    std::cout << "(";
+    std::cout << "[";
     Node* temp = this->head;
 
-    while(temp != nullptr){
+    while(temp->next != nullptr){
         std::cout << temp->val << ", ";
         temp = temp->next;
     }
 
-    std::cout << ")";
+    std::cout << temp->val;
+    std::cout << "]";
 }
 
 void Linked_List::clear(){
@@ -38,16 +36,44 @@ void Linked_List::clear(){
     curr = nullptr;
 }
 
-void Linked_List::push_front(int){
+void Linked_List::push_front(int value){
+    Node* newnode = new Node(value);
 
+    newnode->next = this->head;
+    this->head = newnode;
+
+    this->length++;
 }
 
-void Linked_List::push_back(int){
+void Linked_List::push_back(int value){
+    Node* prev = nullptr;
+    Node* curr = this->head;
 
+    while(curr->next != nullptr){
+        prev = curr;
+        curr = curr->next;
+    }
+
+    curr->next = new Node(value);
+    this->length++;
 }
 
 void Linked_List::insert(int val, unsigned int index){
+    Node* prev = nullptr;
+    Node* curr = this->head;
 
+    while(index > 0){
+        prev = curr;
+        curr = curr->next;
+
+        index--;
+    }
+
+    Node* newnode = new Node(val);
+    Node* next = curr->next;
+
+    curr->next = newnode;
+    newnode->next = next;
 }
 
 void Linked_List::sort_ascending(){

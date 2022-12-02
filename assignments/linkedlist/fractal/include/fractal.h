@@ -3,7 +3,6 @@
 
 #include <iostream>
 
-void print_star(int);
 void pattern(int n, int col);
 
 #endif
