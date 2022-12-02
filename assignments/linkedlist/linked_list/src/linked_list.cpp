@@ -84,18 +84,19 @@ void Linked_List::merge_sort(Node** headref){
     Node* a = nullptr;
     Node* b = nullptr;
 
-    if(head == NULL || head->next == NULL)
+    if(head == nullptr || head->next == nullptr){
         return;
+    }
 
     this->split(head, &a, &b);
 
     this->merge_sort(&a);
     this->merge_sort(&b);
 
-    *headref = this->sort(a, b);
+    *headref = this->m_sort(a, b);
 }
 
-Node* Linked_List::sort(Node* a, Node* b){
+Node* Linked_List::m_sort(Node* a, Node* b){
     Node* result = nullptr;
 
     if(a == nullptr){
@@ -106,42 +107,110 @@ Node* Linked_List::sort(Node* a, Node* b){
 
     if(a->val <= b->val){
         result = a;
-        result->next = sort(a->next, b);
+        result->next = m_sort(a->next, b);
     }else{
         result = b;
-        result->next = sort(a, b->next);
+        result->next = m_sort(a, b->next);
     }
 
     return result;
 }
 
 void Linked_List::split(Node* start, Node** front, Node** back){
-    Node* one;
-    Node* two;
-    one = start;
-    two = start->next;
+    Node* fast = nullptr;
+    Node* slow = nullptr;
 
-    while(one != nullptr){
-        one = one->next;
-        if(one != nullptr){
-            two = two->next;
-            one = one->next;
+    slow = start;
+    fast = start->next;
+
+    while(fast != nullptr){
+        fast = fast->next;
+        if(fast != nullptr){
+            slow = slow->next;
+            fast = fast->next;
+
         }
     }
 
     *front = start;
-    *back = two->next;
-    two->next = NULL;
+    *back = slow->next;
+    slow->next = nullptr;
 }
 
 void Linked_List::sort_descending(){
+    if(this->length < 2){
+        return;
+    }
 
+    this->head = this->selection_sort(this->head);
+}
+
+Node* Linked_List::selection_sort(Node* head){
+    if (head->next == nullptr){
+        return head;
+    }
+
+    Node* max = head;
+    Node* beforeMax = nullptr;
+    Node* ptr = nullptr;
+
+    for (ptr = head; ptr->next != nullptr; ptr = ptr->next) {
+        if (ptr->next->val > max->val) {
+            max = ptr->next;
+            beforeMax = ptr;
+        }
+    }
+
+    if (max != head)
+        this->swapNodes(&head, head, max, beforeMax);
+
+    head->next = this->selection_sort(head->next);
+
+    return head;
+}
+
+void Linked_List::swapNodes(Node** href, Node* curr1, Node* curr2, Node* prev2){
+    *href = curr2;
+
+    prev2->next = curr1;
+
+    Node* temp = curr2->next;
+    curr2->next = curr1->next;
+    curr1->next = temp;
+}
+
+Node* Linked_List::get_head(){
+    return this->head;
 }
 
 Linked_List::~Linked_List(){
     this->clear();
 }
 
-unsigned int count_prime(Linked_List&){
+unsigned int count_prime(Linked_List& list){
+    unsigned int count = 0;
 
+    if(list.get_length() == 0){
+        return count;
+    }
+
+    Node* temp = list.get_head();
+
+    for(int i = 0; i < list.get_length(); i++){
+        if(temp->val < 1){
+            continue;
+        }
+
+        for(int j = 2; j <= temp->val/2; j++){
+            if(temp->val % j == 0){
+                continue;
+            }else{
+                count++;
+            }
+        }
+
+        temp = temp->next;
+    }
+
+    return count;
 }

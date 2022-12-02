@@ -11,7 +11,11 @@ private:
 	// anything else you need...
 
 	void merge_sort(Node**);
-	Node* sort(Node*, Node*);
+	void split(Node*, Node**, Node**);
+	Node* m_sort(Node*, Node*);
+
+	Node* selection_sort(Node*);
+	void swapNodes(Node**, Node*, Node*, Node*);
 public:
 	Linked_List();
 
@@ -24,11 +28,12 @@ public:
 	void push_front(int); // insert a new value at the front of the list 
 	void push_back(int); // insert a new value at the back of the list 
 	void insert(int val, unsigned int index); // insert a new value in the list at the specified index 
-	void split(Node*, Node**, Node**);
 
 	void sort_ascending(); // sort the nodes in ascending order. You must implement the recursive Merge Sort algorithm
 	// Note: it's okay if sort_ascending() calls a recursive private function to perform the sorting.
 	void sort_descending(); // sort the nodes in descending order
+
+	Node* get_head();
 
 	// you can add extra member variables or functions as desired
 	~Linked_List();
