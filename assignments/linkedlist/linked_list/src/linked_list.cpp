@@ -72,7 +72,66 @@ void Linked_List::insert(int val, unsigned int index){
 }
 
 void Linked_List::sort_ascending(){
+    if(this->length < 2){
+        return ;
+    }
 
+    this->merge_sort(&this->head);    
+}
+
+void Linked_List::merge_sort(Node** headref){
+    Node* head = *headref;
+    Node* a = nullptr;
+    Node* b = nullptr;
+
+    if(head == NULL || head->next == NULL)
+        return;
+
+    this->split(head, &a, &b);
+
+    this->merge_sort(&a);
+    this->merge_sort(&b);
+
+    *headref = this->sort(a, b);
+}
+
+Node* Linked_List::sort(Node* a, Node* b){
+    Node* result = nullptr;
+
+    if(a == nullptr){
+        return b;
+    }else if(b == nullptr){
+        return a;
+    }
+
+    if(a->val <= b->val){
+        result = a;
+        result->next = sort(a->next, b);
+    }else{
+        result = b;
+        result->next = sort(a, b->next);
+    }
+
+    return result;
+}
+
+void Linked_List::split(Node* start, Node** front, Node** back){
+    Node* one;
+    Node* two;
+    one = start;
+    two = start->next;
+
+    while(one != nullptr){
+        one = one->next;
+        if(one != nullptr){
+            two = two->next;
+            one = one->next;
+        }
+    }
+
+    *front = start;
+    *back = two->next;
+    two->next = NULL;
 }
 
 void Linked_List::sort_descending(){

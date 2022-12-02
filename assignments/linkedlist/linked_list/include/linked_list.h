@@ -9,6 +9,10 @@ private:
 	unsigned int length; // the number of nodes contained in the list
 	Node* head; // a pointer to the first node in the list
 	// anything else you need...
+
+	void merge_sort(Node**);
+	void split(Node*, Node**, Node**);
+	Node* sort(Node*, Node*);
 public:
 	Linked_List();
 
