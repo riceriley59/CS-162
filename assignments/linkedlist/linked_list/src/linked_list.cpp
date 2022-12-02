@@ -10,11 +10,12 @@ void Linked_List::print(){
     std::cout << "[";
     Node* temp = this->head;
 
-    while(temp != nullptr){
+    while(temp->next != nullptr){
         std::cout << temp->val << ", ";
         temp = temp->next;
     }
 
+    std::cout << temp->val;
     std::cout << "]";
 }
 
@@ -22,7 +23,7 @@ void Linked_List::clear(){
     Node* prev = nullptr;
     Node* curr = this->head;
 
-    while(curr != nullptr){
+    while(curr->next != nullptr){
         prev = curr;
         curr = curr->next;
 
@@ -30,6 +31,9 @@ void Linked_List::clear(){
         delete prev;
         prev = nullptr;
     }
+
+    delete curr;
+    curr = nullptr;
 }
 
 void Linked_List::push_front(int value){
@@ -45,7 +49,7 @@ void Linked_List::push_back(int value){
     Node* prev = nullptr;
     Node* curr = this->head;
 
-    while(curr != nullptr){
+    while(curr->next != nullptr){
         prev = curr;
         curr = curr->next;
     }
@@ -67,8 +71,10 @@ void Linked_List::insert(int val, unsigned int index){
         }
 
         Node* newnode = new Node(val);
+        Node* next = curr;
 
         curr = newnode;
+        newnode->next = next;
 
         this->length++;
     }
