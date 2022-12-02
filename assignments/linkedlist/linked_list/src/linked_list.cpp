@@ -1,0 +1,67 @@
+#include "linked_list.h"
+
+Linked_List::Linked_List(){
+    this->head = new Node();
+    this->length = 0;
+}
+
+int Linked_List::get_length(){
+    return this->length;
+}
+
+void Linked_List::print(){
+    std::cout << "(";
+    Node* temp = this->head;
+
+    while(temp != nullptr){
+        std::cout << temp->val << ", ";
+        temp = temp->next;
+    }
+
+    std::cout << ")";
+}
+
+void Linked_List::clear(){
+    Node* prev = nullptr;
+    Node* curr = this->head;
+
+    while(curr->next != nullptr){
+        prev = curr;
+        curr = curr->next;
+
+        prev->next = nullptr;
+        delete prev;
+        prev = nullptr;
+    }
+
+    delete curr;
+    curr = nullptr;
+}
+
+void Linked_List::push_front(int){
+
+}
+
+void Linked_List::push_back(int){
+
+}
+
+void Linked_List::insert(int val, unsigned int index){
+
+}
+
+void Linked_List::sort_ascending(){
+
+}
+
+void Linked_List::sort_descending(){
+
+}
+
+Linked_List::~Linked_List(){
+    this->clear();
+}
+
+unsigned int count_prime(Linked_List&){
+
+}

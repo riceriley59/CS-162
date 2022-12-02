@@ -2,6 +2,7 @@
 #define LINKED_LIST
 
 #include "node.h"
+#include <iostream>
 
 class Linked_List {
 private:
@@ -9,6 +10,7 @@ private:
 	Node* head; // a pointer to the first node in the list
 	// anything else you need...
 public:
+	Linked_List();
 
 	int get_length();
 	// note: there is no set_length(unsigned int) (the reasoning should be intuitive)
@@ -25,7 +27,7 @@ public:
 	void sort_descending(); // sort the nodes in descending order
 
 	// you can add extra member variables or functions as desired
-
+	~Linked_List();
 };
 
 unsigned int count_prime(Linked_List&); //count and return the number of prime numbers within the list
