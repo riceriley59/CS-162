@@ -15,7 +15,7 @@ class Node{
 		int val; // the value that this node stores
 		Node *next; // a pointer to the next node in the list
 		
-		Node();
+		Node(); //defualt constructor
 		Node(int);
 };
 

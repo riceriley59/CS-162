@@ -44,7 +44,8 @@ Some limitations of my linked list class is that it's only a singley linked list
 only iterate through it in one direction, which can make it intensive on your computer to access nodes at the 
 end of the list, especially if the list is longer in length. Additonally, the list doesn't have the ability to 
 initialize a list using the common int arr = [1 , 2, 3, etc.] notation which means you have to use the push or 
-insert methods every time you want to add a node.
+insert methods every time you want to add a node. It also doesn't have the funcitonality to copy lists to each 
+other through copy constructors or an AOO. 
 
 Extra Credit:
 
