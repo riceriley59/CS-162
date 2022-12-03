@@ -19,6 +19,7 @@ private:
 public:
 	Linked_List();
 
+	Node* get_head();
 	int get_length();
 	// note: there is no set_length(unsigned int) (the reasoning should be intuitive)
    
@@ -32,8 +33,6 @@ public:
 	void sort_ascending(); // sort the nodes in ascending order. You must implement the recursive Merge Sort algorithm
 	// Note: it's okay if sort_ascending() calls a recursive private function to perform the sorting.
 	void sort_descending(); // sort the nodes in descending order
-
-	Node* get_head();
 
 	// you can add extra member variables or functions as desired
 	~Linked_List();
