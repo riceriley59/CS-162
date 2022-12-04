@@ -11,7 +11,7 @@ function works.
 
 //include fractal header
 #include "fractal.h"
-
+#include <string>
 
 /*********************************************************************
 ** Function: do_again()
@@ -22,16 +22,62 @@ function works.
 the user enters f then return false and don't run again
 *********************************************************************/
 bool do_again(){
-    char a = ' ';
+    std::string a = "";
 
     std::cout << "Do you want to do another pattern? (t-true, f-false): ";
-    std::cin >> a;
+    std::getline(std::cin, a);
 
-    if(a == 't'){
+    if(a[0] == 't'){
         return true;
-    }else if (a == 'f'){
+    }else if (a[0] == 'f'){
         return false;
     }
+}
+
+/*********************************************************************
+** Function: pow()
+** Description: This function takes a number and raises it to a specified exponent
+** Parameters: int base, int exponent
+** Pre-Conditions: the base and exponent is passed in 
+** Post-Conditions: the base is raised to the power of the exponent then that number 
+is returned
+*********************************************************************/
+int pow(int base, int exponent){
+    int total = 1;
+
+    for(int i = 0; i < exponent; i++){
+        total *= base;
+    }
+
+    return total;
+}
+
+/*********************************************************************
+** Function: string_to_int()
+** Description: this function takes a string and turns it into an integer and stores
+that in an integer value that is passed by reference
+** Parameters: string num, int& value
+** Pre-Conditions: the string and number are passed in
+** Post-Conditions: the string is converted to an integer and then that value is is put
+into the integer value passed by reference
+*********************************************************************/
+int string_to_int(std::string num) {
+	int value = 0; // set the value equal to 0 to get rid of any garbage value stored in there
+
+	//iterate through each character of the given string
+   	for(int i = 0; i < num.length(); i++){
+	   	//if the character is a valid ASCII integer value
+		if((int(num[i]) - 48) >= 0 && (int(num[i]) - 48) <= 9){
+	   		//as the string is iterated multiply the integer value by a power of 10 that is decremented as the for loop increments then add that to value variable	   
+	   		value += pow(10, (num.length() - 1) - i) * (int(num[i]) - 48);
+			//if the first character is a - value and the whole string has already been converted then multiply the value by -1 to make the integer a negative
+			if(num[0] == '-' && i == num.length() - 1){
+				value *= -1;
+			}
+		}
+	}
+
+    return value;
 }
 
 /*********************************************************************
@@ -56,16 +102,16 @@ int main(){
     std::cout << "\n\n";
 
     do{
-        char n = 0;
-        char col = 0;
+        std::string n = "";
+        std::string col = "";
 
         std::cout << "\n\nWhat do you want for n? (positive even number that's greater than 3): ";
-        std::cin >> n;
+        std::getline(std::cin, n);
         std::cout << "What do you want for col?: ";
-        std::cin >> col;
+        std::getline(std::cin, col);
 
         std::cout << "\n\nThis is pattern(" << n << ", " << col << "):\n\n";
-        pattern(int(n - 48), int(col - 48));
+        pattern(string_to_int(n), string_to_int(col));
         std::cout << "\n\n";
     }while(do_again());
 
