@@ -1,28 +1,30 @@
 /*********************************************************************
-** Program Filename:
-** Author:
-** Date:
-** Description:
-** Input:
-** Output:
+** Filename: linked_list.h
+** Author: Riley Rice
+** Date: 12-2-2022
+** Description: This is the header file for my linked list class
 *********************************************************************/
 
+//header guard
 #ifndef LINKED_LIST
 #define LINKED_LIST
 
+//this includes my node class and iostream so the methods can output to the console
 #include "node.h"
 #include <iostream>
 
+//this is the class for my linked list and has all the methods required to do what you want with the list 
 class Linked_List {
 private:
 	unsigned int length; // the number of nodes contained in the list
 	Node* head; // a pointer to the first node in the list
-	// anything else you need...
 
+	//private functions to do a merge sort
 	void merge_sort(Node**);
 	void split(Node*, Node**, Node**);
 	Node* m_sort(Node*, Node*);
 
+	//private functions to do a selection sort
 	Node* selection_sort(Node*);
 	void swapNodes(Node**, Node*, Node*, Node*);
 public:

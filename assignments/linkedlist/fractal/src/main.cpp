@@ -9,7 +9,30 @@ function works.
 ** Output: Prints out fractals based on the parameters given
 *********************************************************************/
 
+//include fractal header
 #include "fractal.h"
+
+
+/*********************************************************************
+** Function: do_again()
+** Description: This gets whether the user wants to see another pattern or not
+** Parameters: NONE
+** Pre-Conditions: user has gone through once and did a pattern
+** Post-Conditions: if user inputs t then return true to run again if
+the user enters f then return false and don't run again
+*********************************************************************/
+bool do_again(){
+    char a = ' ';
+
+    std::cout << "Do you want to do another pattern? (t-true, f-false): ";
+    std::cin >> a;
+
+    if(a == 't'){
+        return true;
+    }else if (a == 'f'){
+        return false;
+    }
+}
 
 /*********************************************************************
 ** Function: main()
@@ -31,6 +54,20 @@ int main(){
     std::cout << "This is pattern(7, 0): \n\n";
     pattern(7, 0);
     std::cout << "\n\n";
+
+    do{
+        char n = 0;
+        char col = 0;
+
+        std::cout << "\n\nWhat do you want for n? (positive even number that's greater than 3): ";
+        std::cin >> n;
+        std::cout << "What do you want for col?: ";
+        std::cin >> col;
+
+        std::cout << "\n\nThis is pattern(" << n << ", " << col << "):\n\n";
+        pattern(int(n - 48), int(col - 48));
+        std::cout << "\n\n";
+    }while(do_again());
 
     return 0;
 }
