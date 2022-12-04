@@ -68,7 +68,7 @@ Complexity Analysis:
    move the starting index to the right 1, so your still in the unsorted section, and do the same process
    again until you have a sorted list.
    Time Complexity: The selection sort algorithm has a time complexity of O(n^2)
-   Space Complexity: The selection sort algorithm has a space complexity of constant space
+   Space Complexity: The selection sort algorithm has a space complexity of constant space or O(1).
 
 3. count_prime():
    count_prime: My count_prime function works by going through the list and checking if the value is a 
@@ -77,4 +77,4 @@ Complexity Analysis:
    if the nubmer is 2 or 3, which means it's prime, and then also check to see if the number is divisible by 3
    or 2 which means it isn't prime, and otherwise it is prime. 
    Time Complexity: The time complexity of my count_prime function is O(n). 
-   Space Complexity: The space complexity of my count_prime function is constant space.
+   Space Complexity: The space complexity of my count_prime function is constant space or O(1).

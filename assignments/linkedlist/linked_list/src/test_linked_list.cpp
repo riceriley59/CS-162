@@ -1,31 +1,41 @@
 /*********************************************************************
-** Program Filename:
-** Author:
-** Date:
-** Description:
-** Input:
-** Output:
-*********************************************************************/
-/*********************************************************************
-** Function:
-** Description:
-** Parameters:
-** Pre-Conditions:
-** Post-Conditions:
+** Program Filename: Linked_List, test_linked_list.cpp
+** Author: Riley Rice
+** Date: 12-2-2022
+** Description: This is my linked list program where I have to write a 
+linked list class along with methods that users can use to do stuff with the
+linked list like sorting, printing, adding nodes, etc., and this file tests
+to make sure those functionalities work properly
 *********************************************************************/
 
+//include linked list class and iostream
 #include <iostream>
 #include "linked_list.h"
 
+//makes using standard library elements like cout easier
 using namespace std;
 
+/*********************************************************************
+** Function: pause()
+** Description: This function pauses program execution until a button is pressed
+** Parameters: NONE
+** Pre-Conditions: program is executing
+** Post-Conditions: program execution is stopped until button press
+*********************************************************************/
 void pause() {
         cout << "\n\nPress <enter> to continue...";
         cin.clear();
         cin.ignore(256, '\n');
 }
 
-
+/*********************************************************************
+** Function: int main()
+** Description: This is the main entry point for the program and this conducts
+all the tests needed for making sure my linked list class works properly
+** Parameters: int argc, char const *argv[]
+** Pre-Conditions: program isn't running
+** Post-Conditions: program enters at main and runs tests on linked list class
+*********************************************************************/
 int main(int argc, char const *argv[])
 {
 	Linked_List l;
